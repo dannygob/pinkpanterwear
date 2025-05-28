@@ -7,20 +7,24 @@
 
     <EditText
         android:id="@+id/cat_search"
-        android:layout_alignParentTop="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <RelativeLayout
-        android:layout_below="@+id/cat_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:hint="Buscar categoría"
+        android:inputType="text"
+        android:padding="12dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/cat_search"
+        android:layout_alignParentBottom="true"
         android:layout_margin="10dp">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_user_category"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/recycler_view_user_category" />
+            android:layout_height="match_parent" />
     </RelativeLayout>
 
 </RelativeLayout>
