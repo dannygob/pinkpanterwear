@@ -1,6 +1,6 @@
 [versions]
-androidGradlePlugin = "8.9.2"
-appcompat = "1.6.1"
+androidGradlePlugin = "8.9.3"
+appcompat = "1.7.0"
 kotlin = "2.0.21"
 kotlinxCoroutinesAndroid = "1.7.3"
 library = "1.0.0"
@@ -17,7 +17,7 @@ lifecycle = "2.9.0"
 retrofit = "2.11.0"
 gsonConverter = "2.11.0"
 glide = "4.16.0"
-hilt = "2.48"
+hilt = "2.51"
 junit = "4.13.2"
 junitExt = "1.2.1"
 espressoCore = "3.6.1"
@@ -75,4 +75,4 @@ androidApplication = { id = "com.android.application", version.ref = "androidGra
 androidLibrary = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinCompose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }

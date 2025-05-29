@@ -50,55 +50,51 @@ android {
         compose = true
     }
 }
-
 dependencies {
     implementation(libs.library)
     implementation(libs.anotherLibrary)
     implementation(libs.transitiveLib)
 
     implementation(libs.androidxCoreKtx)
-    implementation(libs.androidxAppcompat)        // corregido: was androidAppcompat
+    implementation(libs.androidxAppcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
     implementation(libs.recyclerview)
-    implementation(libs.androidxFragmentKtx)       // corregido: was androidxFragment.ktx
-    implementation(libs.androidxActivityKtx)       // corregido: was androidxActivity.ktx
-    implementation(libs.androidxLifecycleLivedataKtx)   // corregido: was androidxLifecycle.livedata.ktx
-    implementation(libs.androidxLifecycleViewmodelKtx)  // corregido: was androidxLifecycle.viewmodel.ktx
-    implementation(libs.kotlinxCoroutinesCore)     // corregido: was kotlinx.coroutines.core
+    implementation(libs.androidxFragmentKtx)
+    implementation(libs.androidxActivityKtx)
+    implementation(libs.androidxLifecycleLivedataKtx)
+    implementation(libs.androidxLifecycleViewmodelKtx)
+    implementation(libs.kotlinxCoroutinesCore)
     implementation(libs.kotlinxCoroutinesAndroid)
 
     implementation(libs.retrofit)
     implementation(libs.gsonConverter)
     implementation(libs.glide)
     implementation(libs.appcompatV161)
-    dependencies {
-        implementation("com.example.library:some-library:1.0.0") {
-            // Exclude a specific transitive dependency
-            exclude(group = "com.conflicting.group", module = "conflicting-module")
-        }
 
-        implementation(libs.androidxLifecycleRuntimeKtx) // corregido: was androidx.lifecycle.runtime.ktx
-        implementation(libs.androidxActivityCompose)
-
-        implementation(platform(libs.androidxComposeBom)) // corregido: was androidx.compose.bom y libs.androidx.compose.bom
-        implementation(libs.androidxUi)
-        implementation(libs.androidxUiGraphics)
-        implementation(libs.androidxUiToolingPreview)
-        implementation(libs.androidxMaterial3)
-
-        androidTestImplementation(platform(libs.androidxComposeBom))
-        androidTestImplementation(libs.androidxUiTestJunit4)
-
-        debugImplementation(libs.androidxUiTooling)
-        debugImplementation(libs.androidxUiTestManifest)
-
-        implementation(libs.hiltAndroid)
-
-
-
-        testImplementation(libs.junit)
-        androidTestImplementation(libs.androidxJunit)
-        androidTestImplementation(libs.androidxEspressoCore)
+    implementation("com.example.library:some-library:1.0.0") {
+        // Exclude a specific transitive dependency
+        exclude(group = "com.conflicting.group", module = "conflicting-module")
     }
+
+    implementation(libs.androidxLifecycleRuntimeKtx)
+    implementation(libs.androidxActivityCompose)
+
+    implementation(platform(libs.androidxComposeBom))
+    implementation(libs.androidxUi)
+    implementation(libs.androidxUiGraphics)
+    implementation(libs.androidxUiToolingPreview)
+    implementation(libs.androidxMaterial3)
+
+    androidTestImplementation(platform(libs.androidxComposeBom))
+    androidTestImplementation(libs.androidxUiTestJunit4)
+
+    debugImplementation(libs.androidxUiTooling)
+    debugImplementation(libs.androidxUiTestManifest)
+
+    implementation(libs.hiltAndroid)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidxJunit)
+    androidTestImplementation(libs.androidxEspressoCore)
 }
