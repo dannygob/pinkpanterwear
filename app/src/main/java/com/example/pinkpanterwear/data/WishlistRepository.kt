@@ -1,7 +1,7 @@
 package com.example.pinkpanterwear.data
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.auth.FirebaseAuth // Potential import for user ID
+//import com.google.firebase.auth.FirebaseAuth // Potential import for user ID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf // Example import if returning empty flow
 import javax.inject.Inject // Example import for Dependency Injection

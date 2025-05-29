@@ -1,0 +1,104 @@
+plugins {
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinCompose)
+    //alias(libs.plugins.kapt)   // <-- eliminar esta línea
+}
+
+apply(plugin = "kotlin-kapt")
+
+android {
+    namespace = "com.example.pinkpanterwear"
+    compileSdk = 35
+
+    defaultConfig {
+        applicationId = "com.example.pinkpanterwear"
+        minSdk = 24
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+
+    packagingOptions {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+
+    buildFeatures {
+        compose = true
+    }
+}
+
+dependencies {
+    implementation(libs.library)
+    implementation(libs.anotherLibrary)
+    implementation(libs.transitiveLib)
+
+    implementation(libs.androidxCoreKtx)
+    implementation(libs.androidxAppcompat)        // corregido: was androidAppcompat
+    implementation(libs.material)
+    implementation(libs.constraintlayout)
+    implementation(libs.recyclerview)
+    implementation(libs.androidxFragmentKtx)       // corregido: was androidxFragment.ktx
+    implementation(libs.androidxActivityKtx)       // corregido: was androidxActivity.ktx
+    implementation(libs.androidxLifecycleLivedataKtx)   // corregido: was androidxLifecycle.livedata.ktx
+    implementation(libs.androidxLifecycleViewmodelKtx)  // corregido: was androidxLifecycle.viewmodel.ktx
+    implementation(libs.kotlinxCoroutinesCore)     // corregido: was kotlinx.coroutines.core
+    implementation(libs.kotlinxCoroutinesAndroid)
+
+    implementation(libs.retrofit)
+    implementation(libs.gsonConverter)
+    implementation(libs.glide)
+    implementation(libs.appcompatV161)
+    dependencies {
+        implementation("com.example.library:some-library:1.0.0") {
+            // Exclude a specific transitive dependency
+            exclude(group = "com.conflicting.group", module = "conflicting-module")
+        }
+
+        implementation(libs.androidxLifecycleRuntimeKtx) // corregido: was androidx.lifecycle.runtime.ktx
+        implementation(libs.androidxActivityCompose)
+
+        implementation(platform(libs.androidxComposeBom)) // corregido: was androidx.compose.bom y libs.androidx.compose.bom
+        implementation(libs.androidxUi)
+        implementation(libs.androidxUiGraphics)
+        implementation(libs.androidxUiToolingPreview)
+        implementation(libs.androidxMaterial3)
+
+        androidTestImplementation(platform(libs.androidxComposeBom))
+        androidTestImplementation(libs.androidxUiTestJunit4)
+
+        debugImplementation(libs.androidxUiTooling)
+        debugImplementation(libs.androidxUiTestManifest)
+
+        implementation(libs.hiltAndroid)
+
+
+
+        testImplementation(libs.junit)
+        androidTestImplementation(libs.androidxJunit)
+        androidTestImplementation(libs.androidxEspressoCore)
+    }
+}
