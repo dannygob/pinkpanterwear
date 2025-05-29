@@ -1,0 +1,80 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt' // For Hilt or Room annotation processing
+    id 'com.google.dagger.hilt.android' // For Hilt
+}
+
+android {
+    compileSdk 34 // Use your desired compile SDK version
+
+    defaultConfig {
+        applicationId "com.example.pinkpanterwear" // Replace with your actual package name
+        minSdk 24 // Use your desired minimum SDK version
+        targetSdk 34 // Use your desired target SDK version
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8 // Match your project's Java version
+        targetCompatibility JavaVersion.VERSION_1_8 // Match your project's Java version
+    }
+    kotlinOptions {
+        jvmTarget = '1.8' // Match your project's JVM target
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+
+    // AndroidX Core
+    implementation 'androidx.core:core-ktx:1.12.0' // Use latest version
+    implementation 'androidx.appcompat:appcompat:1.6.1' // Use latest version
+    implementation 'com.google.android.material:material:1.11.0' // Use latest version
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4' // Use latest version
+
+    // UI
+    implementation 'androidx.recyclerview:recyclerview:1.3.2' // Use latest version
+
+    // Fragment & Activity KTX
+    implementation 'androidx.fragment:fragment-ktx:1.6.2' // Use latest version
+    implementation 'androidx.activity:activity-ktx:1.8.2' // Use latest version
+
+    // Lifecycle
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0' // Use latest version
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0' // Use latest version
+
+    // Kotlin Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1' // Use latest version
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1' // Use latest version
+
+    // Retrofit for Networking
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0' // Use latest version
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0' // Use latest version for JSON conversion
+
+    // Glide for Image Loading
+    implementation 'com.github.bumptech.glide:glide:4.16.0' // Use latest version
+    kapt 'com.github.bumptech.glide:compiler:4.16.0' // For Glide annotation processor
+
+    // Hilt (for Dependency Injection)
+    implementation 'com.google.dagger:hilt-android:2.48' // Use the version specified in project build.gradle
+    kapt 'com.google.dagger:hilt-android-compiler:2.48' // Use the version specified in project build.gradle
+
+    // Testing
+    testImplementation 'junit:junit:4.13.2' // Use latest version
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5' // Use latest version
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1' // Use latest version
+}

@@ -1,14 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".UserHelpFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/help_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Help &amp; Support"
+ android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/help_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="" />
+        android:text="Find answers to your questions here or contact our support team."
+ android:textSize="16sp"/>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/faq_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Frequently Asked Questions"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/faq_q1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Q: How do I place an order?"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/faq_a1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="A: You can place an order by browsing products, adding them to your cart, and proceeding to checkout." />
+
+
+</LinearLayout>
