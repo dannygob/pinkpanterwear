@@ -21,6 +21,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".UserProductDetailsActivity" />
+        <activity
+            android:name=".AdminHomeActivity"
+            android:label="Admin Panel"
+            android:theme="@style/Theme.Pinkpanterwear" />
     </application>
 
 </manifest>

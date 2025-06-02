@@ -6,7 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.content.Intent
 import android.widget.Button
+import com.example.pinkpanterwear.AdminHomeActivity
+import com.example.pinkpanterwear.AuthHelper
 import com.google.android.material.textview.MaterialTextView
 import com.example.pinkpanterwear.R // Make sure this R is correct for your project
 
@@ -22,6 +25,7 @@ class UserAccountFragment : Fragment() {
     private lateinit var adminTextView: MaterialTextView
     private lateinit var settingsTextView: MaterialTextView
     private lateinit var logoutTextView: MaterialTextView
+    private lateinit var authHelper: AuthHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +43,8 @@ class UserAccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        authHelper = AuthHelper()
+
         // Get references to views (Moved from onCreateView)
         userAccountNameTextView = view.findViewById(R.id.user_account_name)
         userRegisterLinkButton = view.findViewById(R.id.user_register_link_btn)
@@ -48,6 +54,19 @@ class UserAccountFragment : Fragment() {
         recentViewsTextView = view.findViewById(R.id.account_my_orders00) // Note: ID seems a bit off
         shippingInfoTextView = view.findViewById(R.id.account_myorders) // Note: ID seems a bit off
         adminTextView = view.findViewById(R.id.user_account_admin)
+        adminTextView.visibility = View.GONE // Initially hide
+
+        if (authHelper.isCurrentUserAdmin()) {
+            adminTextView.visibility = View.VISIBLE
+            adminTextView.setOnClickListener {
+                // Log.d("UserAccountFragment", "Admin clicked - navigating") // Optional: keep or remove log
+                val intent = Intent(activity, AdminHomeActivity::class.java)
+                startActivity(intent)
+            }
+        } else {
+            // Ensure listener is not active or does nothing if user is not admin and somehow visible
+            adminTextView.setOnClickListener(null)
+        }
         settingsTextView = view.findViewById(R.id.user_account_setting)
         logoutTextView = view.findViewById(R.id.logout)
 
@@ -74,9 +93,7 @@ class UserAccountFragment : Fragment() {
         shippingInfoTextView.setOnClickListener {
             Log.d("UserAccountFragment", "Shipping Information clicked")
         }
-        adminTextView.setOnClickListener {
-            Log.d("UserAccountFragment", "Admin clicked")
-        }
+        // adminTextView.setOnClickListener has been handled above based on auth status
         settingsTextView.setOnClickListener {
             Log.d("UserAccountFragment", "Settings clicked")
         }
