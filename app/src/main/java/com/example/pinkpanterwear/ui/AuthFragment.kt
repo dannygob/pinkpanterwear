@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.example.pinkpanterwear.AuthHelper // Assuming AuthHelper is in the root package
 import com.example.pinkpanterwear.R // Assuming this is your R file
-
+import com.example.pinkpanterwear.MainActivity
 import kotlinx.coroutines.launch
 
 class AuthFragment : Fragment() {
@@ -70,7 +70,7 @@ class AuthFragment : Fragment() {
             if (result.isSuccess) {
                 val user = result.getOrNull()
                 Toast.makeText(requireContext(), "Registration successful!", Toast.LENGTH_SHORT).show()
-                // TODO: Navigate to another screen or update UI after successful registration
+                (activity as? MainActivity)?.navigateToHome()
             } else {
                 val exception = result.exceptionOrNull()
                 Toast.makeText(requireContext(), "Registration failed: ${exception?.message}", Toast.LENGTH_SHORT).show()
@@ -85,7 +85,7 @@ class AuthFragment : Fragment() {
             if (result.isSuccess) {
                 val user = result.getOrNull()
                 Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                // TODO: Navigate to the main screen or update UI after successful login
+                (activity as? MainActivity)?.navigateToHome()
             } else {
                 val exception = result.exceptionOrNull()
                 Toast.makeText(requireContext(), "Login failed: ${exception?.message}", Toast.LENGTH_SHORT).show()

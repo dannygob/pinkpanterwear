@@ -1,5 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Theme.Pinkpanterwear" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/pink_500</item>
@@ -13,11 +12,11 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
 
         <!-- Backgrounds and Surfaces -->
-        <item name="android:colorBackground">@color/white</item>
-        <item name="colorSurface">@color/white</item>
+        <item name="android:colorBackground">@color/dark_background</item>
+        <item name="colorSurface">@color/dark_surface</item>
         <item name="colorError">@color/error_color</item>
-        <item name="colorOnBackground">@color/black</item>
-        <item name="colorOnSurface">@color/black</item>
+        <item name="colorOnBackground">@color/white</item>
+        <item name="colorOnSurface">@color/white</item>
         <item name="colorOnError">@color/white</item>
 
         <!-- Typography -->
@@ -36,7 +35,7 @@
         <!-- <item name="materialCardViewStyle">@style/Widget.App.CardView</item> -->
     </style>
 
-    <!-- Typography Styles -->
+    <!-- Typography Styles are inherited or can be re-declared if specific night versions needed -->
     <style name="TextAppearance.App.Headline5" parent="TextAppearance.MaterialComponents.Headline5" />
     <style name="TextAppearance.App.Headline6" parent="TextAppearance.MaterialComponents.Headline6" />
     <style name="TextAppearance.App.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1" />
@@ -47,7 +46,7 @@
     </style>
     <style name="TextAppearance.App.Caption" parent="TextAppearance.MaterialComponents.Caption" />
 
-    <!-- Component Widget Styles -->
+    <!-- Component Widget Styles are inherited or can be re-declared if specific night versions needed -->
     <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button">
         <item name="android:paddingTop">12dp</item>
         <item name="android:paddingBottom">12dp</item>
@@ -62,16 +61,10 @@
     </style>
 
     <style name="Widget.App.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
-        <!-- itemIconTint and itemTextColor are typically handled by the .Colored parent or can be customized with a selector -->
-        <!-- Example for custom selector if needed later:
-        <item name="itemIconTint">@drawable/bottom_nav_item_color_selector</item>
-        <item name="itemTextColor">@drawable/bottom_nav_item_color_selector</item>
-        -->
     </style>
 
     <!-- <style name="Widget.App.CardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardCornerRadius">8dp</item>
         <item name="cardElevation">4dp</item>
     </style> -->
-
 </resources>

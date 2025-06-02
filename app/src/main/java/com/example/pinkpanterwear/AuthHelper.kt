@@ -54,6 +54,14 @@ class AuthHelper {
     }
 
     /**
+     * Checks if a user is currently authenticated.
+     * @return True if a user is authenticated, false otherwise.
+     */
+    fun isAuthenticated(): Boolean {
+        return auth.currentUser != null
+    }
+
+    /**
      * Observe changes in authentication state.
      * @return Flow of FirebaseUser (nullable).
      */
