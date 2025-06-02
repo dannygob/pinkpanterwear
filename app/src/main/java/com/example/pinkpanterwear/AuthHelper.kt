@@ -54,6 +54,14 @@ class AuthHelper {
     }
 
     /**
+     * Checks if a user is currently authenticated.
+     * @return True if a user is authenticated, false otherwise.
+     */
+    fun isAuthenticated(): Boolean {
+        return auth.currentUser != null
+    }
+
+    /**
      * Observe changes in authentication state.
      * @return Flow of FirebaseUser (nullable).
      */
@@ -73,4 +81,18 @@ class AuthHelper {
         auth.removeAuthStateListener(listener)
     }
     */
+
+    /**
+     * Checks if the current authenticated user is an admin.
+     * TODO: This is a temporary simplified check. Replace with robust role management (e.g., Firebase Custom Claims or DB role check).
+     * @return True if the current user is considered an admin, false otherwise.
+     */
+    fun isCurrentUserAdmin(): Boolean {
+        val user = auth.currentUser
+        if (user != null) {
+            // Temporary: Check against a hardcoded admin email
+            return "admin@example.com" == user.email
+        }
+        return false
+    }
 }

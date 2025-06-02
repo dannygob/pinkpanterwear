@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import android.content.Intent
 import androidx.lifecycle.lifecycleScope
 import com.example.pinkpanterwear.AuthHelper // Assuming AuthHelper is in the root package
 import com.example.pinkpanterwear.R // Assuming this is your R file
-
+import com.example.pinkpanterwear.ForgotPasswordActivity
+import com.example.pinkpanterwear.MainActivity
 import kotlinx.coroutines.launch
 
 class AuthFragment : Fragment() {
@@ -61,6 +64,12 @@ class AuthFragment : Fragment() {
             }
         }
 
+        val forgotPasswordLink: TextView = view.findViewById(R.id.forgot_password_link)
+        forgotPasswordLink.setOnClickListener {
+            val intent = Intent(activity, ForgotPasswordActivity::class.java)
+            startActivity(intent)
+        }
+
         return view
     }
 
@@ -70,7 +79,7 @@ class AuthFragment : Fragment() {
             if (result.isSuccess) {
                 val user = result.getOrNull()
                 Toast.makeText(requireContext(), "Registration successful!", Toast.LENGTH_SHORT).show()
-                // TODO: Navigate to another screen or update UI after successful registration
+                (activity as? MainActivity)?.navigateToHome()
             } else {
                 val exception = result.exceptionOrNull()
                 Toast.makeText(requireContext(), "Registration failed: ${exception?.message}", Toast.LENGTH_SHORT).show()
@@ -85,7 +94,7 @@ class AuthFragment : Fragment() {
             if (result.isSuccess) {
                 val user = result.getOrNull()
                 Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                // TODO: Navigate to the main screen or update UI after successful login
+                (activity as? MainActivity)?.navigateToHome()
             } else {
                 val exception = result.exceptionOrNull()
                 Toast.makeText(requireContext(), "Login failed: ${exception?.message}", Toast.LENGTH_SHORT).show()

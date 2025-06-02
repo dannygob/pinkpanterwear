@@ -1,6 +1,7 @@
 package com.example.pinkpanterwear // Replace with your actual package name
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.pinkpanterwear.databinding.ActivityMainBinding
@@ -8,27 +9,54 @@ import com.example.pinkpanterwear.ui.account.UserAccountFragment // Adjust impor
 import com.example.pinkpanterwear.ui.cart.UserCartFragment // Adjust import based on your fragment's package
 import com.example.pinkpanterwear.ui.category.UserCategoryFragment // Adjust import based on your fragment's package
 import com.example.pinkpanterwear.ui.help.UserHelpFragment // Adjust import based on your fragment's package
+import com.example.pinkpanterwear.AuthHelper
+import com.example.pinkpanterwear.ui.AuthFragment
 import com.example.pinkpanterwear.ui.home.HomeFragment // Adjust import based on your fragment's package
 import com.example.pinkpanterwear.ui.store.StorePlaceholderFragment // Create this fragment or replace with actual
 
 class MainActivity : AppCompatActivity() {
 
+    fun navigateToHome() {
+        replaceFragment(HomeFragment())
+        binding.bottomNavigationView.visibility = View.VISIBLE
+    }
+
     private lateinit var binding: ActivityMainBinding
+    private lateinit var authHelper: AuthHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        authHelper = AuthHelper()
 
-        // Load the initial fragment
         if (savedInstanceState == null) {
-            replaceFragment(HomeFragment())
+            if (authHelper.isAuthenticated()) {
+                replaceFragment(HomeFragment())
+                binding.bottomNavigationView.visibility = View.VISIBLE
+            } else {
+                replaceFragment(AuthFragment())
+                binding.bottomNavigationView.visibility = View.GONE
+            }
         }
 
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
+            // If user gets here and is not authenticated (e.g. back button), and tries to navigate, send to AuthFragment
+            // Allow Home selection to proceed to default auth check logic
+            if (!authHelper.isAuthenticated() && item.itemId != R.id.bottom_nav_home) {
+                replaceFragment(AuthFragment())
+                binding.bottomNavigationView.visibility = View.GONE;
+                return@setOnItemSelectedListener false; // Or true if you want to mark it as handled but still go to auth
+            }
             when (item.itemId) {
                 R.id.bottom_nav_home -> {
-                    replaceFragment(HomeFragment())
+                    // Handled by the auth check logic or navigateToHome
+                    if (authHelper.isAuthenticated()) {
+                        replaceFragment(HomeFragment())
+                    } else {
+                        replaceFragment(AuthFragment())
+                        binding.bottomNavigationView.visibility = View.GONE
+                    }
                     true
                 }
                 R.id.bottom_nav_category -> {

@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 import java.text.NumberFormat
 import java.util.Locale
 import com.example.pinkpanterwear.R // Make sure this matches your project's package structure
+import android.widget.Button
+import com.example.pinkpanterwear.ui.CheckoutPlaceholderFragment
 import kotlinx.coroutines.launch
 
 class UserCartFragment : Fragment() {
@@ -69,6 +71,14 @@ class UserCartFragment : Fragment() {
                     }
                 }
             }
+
+        val checkoutButton: Button = view.findViewById(R.id.proceed_to_checkout_button)
+        checkoutButton.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, CheckoutPlaceholderFragment())
+                .addToBackStack(null)
+                .commit()
+        }
 
         return view
     }
