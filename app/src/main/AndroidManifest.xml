@@ -25,6 +25,18 @@
             android:name=".AdminHomeActivity"
             android:label="Admin Panel"
             android:theme="@style/Theme.Pinkpanterwear" />
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:label="Forgot Password"
+            android:theme="@style/Theme.Pinkpanterwear" />
+        <activity
+            android:name=".ResetCodeActivity"
+            android:label="Enter Reset Code"
+            android:theme="@style/Theme.Pinkpanterwear" />
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:label="Reset Password"
+            android:theme="@style/Theme.Pinkpanterwear" />
     </application>
 
 </manifest>

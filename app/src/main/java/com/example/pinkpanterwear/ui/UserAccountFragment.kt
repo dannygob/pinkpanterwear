@@ -12,6 +12,8 @@ import com.example.pinkpanterwear.AdminHomeActivity
 import com.example.pinkpanterwear.AuthHelper
 import com.google.android.material.textview.MaterialTextView
 import com.example.pinkpanterwear.R // Make sure this R is correct for your project
+import com.example.pinkpanterwear.ui.UserOrderHistoryFragment
+import com.example.pinkpanterwear.ui.UserWishlistFragment
 
 class UserAccountFragment : Fragment() {
 
@@ -79,10 +81,18 @@ class UserAccountFragment : Fragment() {
         }
 
         myWishlistTextView.setOnClickListener {
-            Log.d("UserAccountFragment", "My Wishlist clicked")
+            // Log.d("UserAccountFragment", "My Wishlist clicked - navigating") // Optional log
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, UserWishlistFragment())
+                .addToBackStack(null)
+                .commit()
         }
         myOrdersTextView.setOnClickListener {
-            Log.d("UserAccountFragment", "My Orders clicked")
+            // Log.d("UserAccountFragment", "My Orders clicked - navigating") // Optional log
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, UserOrderHistoryFragment())
+                .addToBackStack(null)
+                .commit()
         }
         recentSearchesTextView.setOnClickListener {
             Log.d("UserAccountFragment", "Recent searches clicked")

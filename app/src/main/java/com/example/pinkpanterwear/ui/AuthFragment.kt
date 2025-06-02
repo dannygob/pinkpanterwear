@@ -7,10 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import android.content.Intent
 import androidx.lifecycle.lifecycleScope
 import com.example.pinkpanterwear.AuthHelper // Assuming AuthHelper is in the root package
 import com.example.pinkpanterwear.R // Assuming this is your R file
+import com.example.pinkpanterwear.ForgotPasswordActivity
 import com.example.pinkpanterwear.MainActivity
 import kotlinx.coroutines.launch
 
@@ -59,6 +62,12 @@ class AuthFragment : Fragment() {
             } else {
                 Toast.makeText(requireContext(), "Please enter email and password", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        val forgotPasswordLink: TextView = view.findViewById(R.id.forgot_password_link)
+        forgotPasswordLink.setOnClickListener {
+            val intent = Intent(activity, ForgotPasswordActivity::class.java)
+            startActivity(intent)
         }
 
         return view
