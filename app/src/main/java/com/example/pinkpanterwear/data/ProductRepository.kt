@@ -1,35 +1,35 @@
 package com.example.pinkpanterwear.data
 
-import com.example.pinkpanterwear.data.Product // Assuming Product data class is in this package
 import com.example.pinkpanterwear.data.api.FakeStoreApiService
+import com.example.pinkpanterwear.data.api.RetrofitInstance
 
-
+// TODO: Consider using constructor injection for FakeStoreApiService for better testability.
 class ProductRepository {
 
-    // TODO: Inject FakeStoreApiService here using Dependency Injection (e.g., Hilt)
-    private val apiService: FakeStoreApiService = TODO("Inject FakeStoreApiService")
+    private val apiService: FakeStoreApiService = RetrofitInstance.api
 
-    suspend fun getProductDetails(productId: String): Product? {
+    suspend fun getAllProducts(): List<Product> {
+        // TODO: Add proper error handling (e.g., try-catch, return Result<T>)
+        return apiService.getAllProducts()
+    }
+
+    suspend fun getProductById(productId: Int): Product? { // Return nullable for not found or error
+        // TODO: Add proper error handling
         return try {
             apiService.getProductDetails(productId)
         } catch (e: Exception) {
-            // TODO: Handle network errors or other exceptions (logging, etc.)
-            e.printStackTrace()
-            null
+            // Log error e.g., Log.e("ProductRepository", "Error fetching product \${productId}", e)
+            null // Or throw a custom domain exception
         }
     }
 
-    suspend fun getCategories(): List<String> {
-        return try {
-            apiService.getCategories()
-        } catch (e: Exception) {
-            // TODO: Handle network errors or other exceptions
-            e.printStackTrace()
-            emptyList()
-        }
+    suspend fun getProductsByCategory(category: String): List<Product> {
+        // TODO: Add proper error handling
+        return apiService.getProductsByCategory(category)
     }
 
-    suspend fun getProductsByCategory(categoryName: String): List<Product> {
-        return apiService.getProductsByCategory(categoryName)
+    suspend fun getAllCategories(): List<String> {
+        // TODO: Add proper error handling
+        return apiService.getAllCategories()
     }
 }

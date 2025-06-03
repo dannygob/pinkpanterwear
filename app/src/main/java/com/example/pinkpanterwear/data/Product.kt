@@ -1,7 +1,7 @@
 package com.example.pinkpanterwear.data
 
 data class Product(
-    val id: String,
+    val id: Int,
     val name: String,
     val description: String,
     val price: Double,
