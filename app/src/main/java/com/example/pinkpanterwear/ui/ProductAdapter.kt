@@ -5,13 +5,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pinkpanterwear.R
+import com.bumptech.glide.Glide // Assuming Glide is available (used in UserProductDetailsActivity)
 import com.example.pinkpanterwear.data.Product
+import com.example.pinkpanterwear.R
+import java.text.NumberFormat
+import java.util.Locale
 
 class ProductAdapter(
-    private val products: List<Product>,
-    private val onItemClick: (Product) -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+    private val onItemClicked: (Product) -> Unit
+) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -20,29 +25,42 @@ class ProductAdapter(
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        val product = products[position]
-        holder.bind(product)
+        val product = getItem(position)
+        holder.bind(product, onItemClicked)
     }
 
-    override fun getItemCount(): Int {
-        return products.size
-    }
-
-    inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val productImageView: ImageView = itemView.findViewById(R.id.product_image_view)
         private val productNameTextView: TextView = itemView.findViewById(R.id.product_name_text_view)
         private val productPriceTextView: TextView = itemView.findViewById(R.id.product_price_text_view)
-        private val productImageView: ImageView = itemView.findViewById(R.id.product_image_view)
 
-        fun bind(product: Product) {
+        fun bind(product: Product, onItemClicked: (Product) -> Unit) {
             productNameTextView.text = product.name
-            productPriceTextView.text = "$${product.price}" // Display price with a dollar sign
+
+            // Format price (example)
+            val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
+            format.currency = java.util.Currency.getInstance("USD") // Or use device locale currency
+            productPriceTextView.text = format.format(product.price)
+
+            Glide.with(itemView.context)
+                .load(product.imageUrl)
+                .placeholder(R.drawable.placeholder_image)
+                .error(R.drawable.error_image)
+                .into(productImageView)
 
             itemView.setOnClickListener {
-                onItemClick(product)
+                onItemClicked(product)
             }
+        }
+    }
 
-            // Load image using a library like Glide or Coil
-            // e.g., Glide.with(itemView.context).load(product.imageUrl).into(productImageView)
+    class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
+        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
+            return oldItem == newItem // Relies on Product being a data class
         }
     }
 }

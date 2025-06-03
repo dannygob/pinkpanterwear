@@ -3,55 +3,49 @@ package com.example.pinkpanterwear.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pinkpanterwear.R
 
-// Assume this data class exists somewhere in your project
-// data class Category(val id: String, val name: String, val imageUrl: String? = null)
-
 class CategoryAdapter(
-    private val categories: List<Category>,
-    private val onItemClick: (Category) -> Unit
-) :
-    RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+    private val onCategoryClicked: (String) -> Unit
+) : ListAdapter<String, CategoryAdapter.CategoryViewHolder>(CategoryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
+        // Assuming a simple layout item_category.xml with a TextView android:id="@+id/category_name_text_view"
+        // If item_category.xml does not exist or is different, this needs adjustment.
+        // For now, creating a placeholder R.layout.item_category if it's not there.
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_category, parent, false)
         return CategoryViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-        val category = categories[position]
-        holder.bind(category)
-    }
-
-    override fun getItemCount(): Int {
-        return categories.size
+        val categoryName = getItem(position)
+        holder.bind(categoryName, onCategoryClicked)
     }
 
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // Placeholder for the Category data class if it doesn't exist yet
-        data class Category(val id: String, val name: String, val imageUrl: String? = null)
-
-
+        // Assuming item_category.xml has a TextView with this ID
         private val categoryNameTextView: TextView = itemView.findViewById(R.id.category_name_text_view)
-        private val categoryImageView: ImageView = itemView.findViewById(R.id.category_image_view) // Placeholder
 
-        fun bind(category: Category) {
-            categoryNameTextView.text = category.name
-            // TODO: Load image using a library like Glide or Coil
-            // if (category.imageUrl != null) {
-            //     // Load image into categoryImageView
-            // } else {
-            //     // Set a default placeholder image
-            // }
-
+        fun bind(categoryName: String, onCategoryClicked: (String) -> Unit) {
+            categoryNameTextView.text = categoryName
             itemView.setOnClickListener {
-                // The actual Category object will be passed from onBindViewHolder
+                onCategoryClicked(categoryName)
             }
+        }
+    }
+
+    class CategoryDiffCallback : DiffUtil.ItemCallback<String>() {
+        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+            return oldItem == newItem
         }
     }
 }
