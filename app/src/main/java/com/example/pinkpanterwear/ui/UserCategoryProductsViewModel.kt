@@ -27,7 +27,7 @@ class UserCategoryProductsViewModel : ViewModel() {
             _isLoading.value = true
             _error.value = null
             try {
-                _products.value = repository.getProductsByCategory(categoryName)
+                _products.value = repository.getProductsByCategoryFromFirestore(categoryName)
             } catch (e: Exception) {
                 _error.value = "Failed to fetch products for category ${categoryName}: ${e.message}"
                 // Log.e("UserCategoryProductsViewModel", "Error fetching products for category", e)

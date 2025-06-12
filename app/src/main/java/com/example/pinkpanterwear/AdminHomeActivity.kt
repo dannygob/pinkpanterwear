@@ -6,6 +6,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.example.pinkpanterwear.ui.AdminAllOrdersFragment
+import com.example.pinkpanterwear.ui.AdminProductsFragment
 import android.widget.Toast
 
 class AdminHomeActivity : AppCompatActivity() {
@@ -23,7 +24,7 @@ class AdminHomeActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.admin_fragment_container, AdminAllOrdersFragment())
                 .commitNow() // Use commitNow for initial fragment if possible, or ensure navView exists
-            // navView.setCheckedItem(R.id.nav_admin_all_orders) // Check this after navView is initialized
+            navView.setCheckedItem(R.id.nav_admin_all_orders)
         }
 
         supportActionBar?.apply {
@@ -39,15 +40,16 @@ class AdminHomeActivity : AppCompatActivity() {
             drawerLayout.closeDrawers()
 
             when (menuItem.itemId) {
-                R.id.admin_orders_menu -> { // Assuming R.id.admin_orders_menu is for "All Orders"
+                R.id.nav_admin_all_orders -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.admin_fragment_container, AdminAllOrdersFragment())
                         .commit()
                 }
-                // R.id.nav_admin_products -> {
-                //    // TODO: Replace with AdminProductsFragment for example
-                //    Toast.makeText(this, "Products Clicked", Toast.LENGTH_SHORT).show()
-                // }
+                R.id.nav_admin_products -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.admin_fragment_container, AdminProductsFragment())
+                        .commit()
+                }
                 // Add other cases here
             }
             true
@@ -55,7 +57,7 @@ class AdminHomeActivity : AppCompatActivity() {
 
         // Set checked item after listener is set and fragment loaded, if first launch
         if (savedInstanceState == null) {
-            navView.setCheckedItem(R.id.admin_orders_menu); // Assuming R.id.admin_orders_menu is for "All Orders"
+            navView.setCheckedItem(R.id.nav_admin_all_orders);
         }
     }
 
