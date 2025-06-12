@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.example.pinkpanterwear.ui.AdminAllOrdersFragment
+import android.widget.Toast
 
 class AdminHomeActivity : AppCompatActivity() {
 
@@ -17,6 +19,13 @@ class AdminHomeActivity : AppCompatActivity() {
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.main_toolbar)
         setSupportActionBar(toolbar)
 
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.admin_fragment_container, AdminAllOrdersFragment())
+                .commitNow() // Use commitNow for initial fragment if possible, or ensure navView exists
+            // navView.setCheckedItem(R.id.nav_admin_all_orders) // Check this after navView is initialized
+        }
+
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24) // Ensure this drawable exists
@@ -25,13 +34,29 @@ class AdminHomeActivity : AppCompatActivity() {
         drawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
 
-        // TODO: Setup NavigationView item selection listener
-        // navView.setNavigationItemSelectedListener { menuItem ->
-        //     menuItem.isChecked = true
-        //     drawerLayout.closeDrawers()
-        //     // Handle navigation
-        //     true
-        // }
+        navView.setNavigationItemSelectedListener { menuItem ->
+            menuItem.isChecked = true
+            drawerLayout.closeDrawers()
+
+            when (menuItem.itemId) {
+                R.id.admin_orders_menu -> { // Assuming R.id.admin_orders_menu is for "All Orders"
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.admin_fragment_container, AdminAllOrdersFragment())
+                        .commit()
+                }
+                // R.id.nav_admin_products -> {
+                //    // TODO: Replace with AdminProductsFragment for example
+                //    Toast.makeText(this, "Products Clicked", Toast.LENGTH_SHORT).show()
+                // }
+                // Add other cases here
+            }
+            true
+        }
+
+        // Set checked item after listener is set and fragment loaded, if first launch
+        if (savedInstanceState == null) {
+            navView.setCheckedItem(R.id.admin_orders_menu); // Assuming R.id.admin_orders_menu is for "All Orders"
+        }
     }
 
     override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
