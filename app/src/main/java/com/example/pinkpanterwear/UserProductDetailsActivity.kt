@@ -2,17 +2,18 @@ package com.example.pinkpanterwear
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View // Added
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ImageView
 import android.widget.Toast
 import android.widget.TextView
-import android.view.View
-import android.view.LayoutInflater
 import android.widget.EditText
+import android.widget.ProgressBar // Added
+import androidx.core.view.isVisible // Added
 import com.bumptech.glide.Glide
 import android.text.InputFilter
-import com.example.pinkpanterwear.data.CartItem
+// import com.example.pinkpanterwear.data.CartItem // Not directly used in Activity after VM change
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -21,65 +22,119 @@ import com.example.pinkpanterwear.data.Product
 import com.example.pinkpanterwear.ui.ProductDetailsViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-// Import the Product data class (assuming it's in com.example.pinkpanterwear.data)
-// Make sure you have the Product data class imported or defined
+import java.text.NumberFormat // For price formatting
+import java.util.Locale
+
 class UserProductDetailsActivity : AppCompatActivity() {
 
     private var selectedSize: String? = null
     private var selectedSizeTextView: TextView? = null
+    private val viewModel: ProductDetailsViewModel by viewModels()
+
+    private lateinit var productNameTextView: TextView
+    private lateinit var productPriceTextView: TextView
+    private lateinit var productDescriptionTextView: TextView
+    private lateinit var productImageView: ImageView
+    private lateinit var decreaseQuantityButton: Button
+    private lateinit var quantityEditText: EditText
+    private lateinit var increaseQuantityButton: Button
+    private lateinit var addToCartButton: Button
+    private lateinit var sizesLayout: LinearLayout
+    private lateinit var progressBar: ProgressBar
+    private lateinit var errorTextView: TextView
+    private lateinit var contentLayout: LinearLayout // ID given to the main content LinearLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_products_details)
 
-        // Retrieve product ID from intent extras
-        val productId = intent.getStringExtra("PRODUCT_ID") ?: return // Handle missing ID
+        // Initialize Views
+        productNameTextView = findViewById(R.id.user_product_details_name)
+        productPriceTextView = findViewById(R.id.user_product_details_price)
+        productDescriptionTextView = findViewById(R.id.user_product_details_description)
+        productImageView = findViewById(R.id.user_product_details_image)
+        decreaseQuantityButton = findViewById(R.id.decrease_quantity_button)
+        quantityEditText = findViewById(R.id.quantity_edit_text)
+        increaseQuantityButton = findViewById(R.id.increase_quantity_button)
+        addToCartButton = findViewById(R.id.add_to_cart_button)
+        sizesLayout = findViewById(R.id.user_product_details_size)
+        progressBar = findViewById(R.id.details_progress_bar)
+        errorTextView = findViewById(R.id.details_error_text_view)
+        contentLayout = findViewById(R.id.product_details_content_layout) // Assuming this ID was added
 
-        // Get ViewModel
-        val viewModel: ProductDetailsViewModel by viewModels()
+        val productId = intent.getStringExtra("PRODUCT_ID")
+        if (productId == null) {
+            Toast.makeText(this, "Product ID missing.", Toast.LENGTH_LONG).show()
+            finish()
+            return
+        }
 
-        // Load product details
-        viewModel.loadProduct(productId)
+        viewModel.loadProductById(productId)
 
-        val productNameTextView: TextView = findViewById(R.id.user_product_details_name)
-        val productPriceTextView: TextView = findViewById(R.id.user_product_details_price)
-        val productDescriptionTextView: TextView = findViewById(R.id.user_product_details_description)
-        val productImageview: ImageView = findViewById(R.id.user_product_details_image)
-        val decreaseQuantityButton: Button = findViewById(R.id.decrease_quantity_button)
-        val quantityEditText: EditText = findViewById(R.id.quantity_edit_text)
-        val increaseQuantityButton: Button = findViewById(R.id.increase_quantity_button)
-        val addToCartButton: Button = findViewById(R.id.add_to_cart_button)
-
-        // Add InputFilter to allow only digits in quantityEditText
         quantityEditText.filters = arrayOf<InputFilter>(InputFilter.Digits())
+        setupQuantityButtons()
+        setupAddToCartButton()
+        observeViewModel()
+    }
 
-        // Observe product details
+    private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.productDetails.collectLatest { product ->
-                    if (product != null) {
-                        productNameTextView.text = product.name
-                        productPriceTextView.text = "$${product.price}" // Format as currency
-                        productDescriptionTextView.text = product.description
-                        Glide.with(this@UserProductDetailsActivity).load(product.imageUrl).into(productImageview)
-                    } else {
-                        // Handle case where product is not found
-                        Toast.makeText(this@UserProductDetailsActivity, "Product not found", Toast.LENGTH_SHORT).show()
-                        finish() // Optionally close the activity
+                    if (product != null && !viewModel.isLoading.value && viewModel.error.value == null) {
+                        updateProductUI(product)
                     }
                 }
             }
         }
 
-        // Observe available sizes
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.availableSizes.collectLatest { sizes ->
-                    displayProductSizes(sizes)
+                    displayProductSizes(sizes) // This will display default sizes for now
                 }
             }
         }
 
-        // Set up quantity buttons
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.isLoading.collectLatest { isLoading ->
+                    progressBar.isVisible = isLoading
+                    contentLayout.isVisible = !isLoading // Hide content while loading
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.error.collectLatest { errorMsg ->
+                    errorTextView.isVisible = errorMsg != null
+                    errorTextView.text = errorMsg
+                    contentLayout.isVisible = errorMsg == null // Hide content on error
+                    if (errorMsg != null) {
+                        Toast.makeText(this@UserProductDetailsActivity, errorMsg, Toast.LENGTH_LONG).show()
+                        // Optionally finish() after a delay or if error is critical
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateProductUI(product: Product) {
+        productNameTextView.text = product.name
+        val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
+        format.currency = java.util.Currency.getInstance("USD") // Or use device locale
+        productPriceTextView.text = format.format(product.price)
+        productDescriptionTextView.text = product.description
+        Glide.with(this@UserProductDetailsActivity)
+            .load(product.imageUrl)
+            .placeholder(R.drawable.placeholder_image) // Ensure these exist
+            .error(R.drawable.error_image)
+            .into(productImageView)
+        contentLayout.isVisible = true // Ensure content is visible after successful load
+    }
+
+    private fun setupQuantityButtons() {
         decreaseQuantityButton.setOnClickListener {
             var quantity = quantityEditText.text.toString().toIntOrNull() ?: 1
             if (quantity > 1) {
@@ -87,73 +142,79 @@ class UserProductDetailsActivity : AppCompatActivity() {
                 quantityEditText.setText(quantity.toString())
             }
         }
-
         increaseQuantityButton.setOnClickListener {
             var quantity = quantityEditText.text.toString().toIntOrNull() ?: 1
             quantity++
             quantityEditText.setText(quantity.toString())
         }
+    }
 
-        // Set up Add to Cart button
+    private fun setupAddToCartButton() {
         addToCartButton.setOnClickListener {
             val quantityString = quantityEditText.text.toString()
             val quantity = quantityString.toIntOrNull()
 
             if (quantity == null || quantity <= 0) {
-                Toast.makeText(this, "Please enter a valid quantity (at least 1)", Toast.LENGTH_SHORT).show()
-                quantityEditText.setText("1") // Reset to 1
+                Toast.makeText(this, "Please enter a valid quantity", Toast.LENGTH_SHORT).show()
+                quantityEditText.setText("1")
                 return@setOnClickListener
             }
 
             val currentProduct = viewModel.productDetails.value
-
             if (currentProduct != null) {
                 if (selectedSize == null && viewModel.availableSizes.value.isNotEmpty()) {
                     Toast.makeText(this, "Please select a size", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener // Stop if size is required but not selected
+                    return@setOnClickListener
                 }
-                viewModel.addToCart(currentProduct, selectedSize, quantity)
+                viewModel.addToCart(currentProduct, selectedSize, quantity) // ViewModel handles cart logic
                 Toast.makeText(this, "${currentProduct.name} added to cart!", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Error adding item to cart. Product details not loaded.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error adding item: Product details not available.", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun displayProductSizes(sizes: List<String>) {
-        val sizesLayout: LinearLayout = findViewById(R.id.user_product_details_size)
-        sizesLayout.removeAllViews() // Clear previous size views
-        selectedSizeTextView = null // Reset selected size TV when sizes are redisplayed
-        selectedSize = null // Reset selected size string
+        sizesLayout.removeAllViews()
+        selectedSizeTextView = null
+        selectedSize = null
+
+        if (sizes.isEmpty()) {
+            // Optionally hide the sizes section or show a "Not available" message
+            // For now, it will just be empty.
+            val noSizeTextView = TextView(this).apply {
+                 text = "Sizes not specified for this product."
+                 layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                 ).apply { setMargins(16,8,16,8)}
+            }
+            // sizesLayout.addView(noSizeTextView) // Uncomment to show message
+            return
+        }
 
         for (size in sizes) {
             val sizeTextView = TextView(this).apply {
                 layoutParams = LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                ).apply { // Use apply for LayoutParams
-                    setMargins(16, 8, 16, 8) // Add margins
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    setMargins(16, 8, 16, 8)
                 }
                 text = size
-                // TODO: Define background drawables (e.g., R.drawable.bg_size_unselected)
-                setBackgroundResource(R.drawable.size_indicator_background) // Use the drawable selector
-                setPadding(16, 8, 16, 8)
+                setBackgroundResource(R.drawable.size_indicator_background)
+                setPadding(16, 8, 16, 8) // Padding might be better in the drawable itself
                 isClickable = true
-                focusable = View.FOCUSABLE
+                isFocusable = true // For accessibility
+                // Text color will be handled by the theme (colorOnPrimary for selected, colorOnSurface for default)
             }
 
             sizeTextView.setOnClickListener { clickedView ->
-                // If there was a previously selected TextView, deselect it
-                if (selectedSizeTextView != null && selectedSizeTextView != clickedView) {
-                    selectedSizeTextView?.isSelected = false
-                }
-                // Set the clicked TextView as selected
+                selectedSizeTextView?.isSelected = false // Deselect previous
                 clickedView.isSelected = true
-
-                // Update the selectedSize and selectedSizeTextView variables
-                selectedSize = sizeTextView.text.toString()
+                selectedSize = (clickedView as TextView).text.toString()
+                selectedSizeTextView = clickedView
                 Toast.makeText(this, "Selected size: $selectedSize", Toast.LENGTH_SHORT).show()
-                selectedSizeTextView = clickedView as TextView // Store the clicked TextView
             }
             sizesLayout.addView(sizeTextView)
         }
