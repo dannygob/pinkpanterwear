@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pinkpanterwear.R
 import com.example.pinkpanterwear.data.CartItem // CartItem for adapter callbacks
+import com.example.pinkpanterwear.ui.CheckoutShippingFragment
 import com.google.android.material.textview.MaterialTextView // For total price
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -95,7 +96,7 @@ class UserCartFragment : Fragment() {
     private fun setupCheckoutButton() {
         checkoutButton.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, CheckoutPlaceholderFragment())
+                .replace(R.id.fragment_container, CheckoutShippingFragment())
                 .addToBackStack(null)
                 .commit()
         }
