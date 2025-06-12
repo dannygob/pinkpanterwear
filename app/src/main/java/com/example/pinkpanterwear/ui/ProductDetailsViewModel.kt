@@ -45,7 +45,7 @@ class ProductDetailsViewModel : ViewModel() {
                     return@launch
                 }
 
-                val product = productRepository.getProductById(productIdInt)
+                val product = productRepository.getProductByIdFromFirestore(productIdInt)
                 if (product != null) {
                     _productDetails.value = product
                     // Potentially fetch/set real sizes if product object had them

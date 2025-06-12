@@ -30,7 +30,7 @@ class UserCategoryViewModel : ViewModel() {
             _isLoading.value = true
             _error.value = null
             try {
-                _categories.value = repository.getAllCategories()
+                _categories.value = repository.getAllCategoriesFromFirestore()
             } catch (e: Exception) {
                 _error.value = "Failed to fetch categories: ${e.message}"
                 // Log.e("UserCategoryViewModel", "Error fetching categories", e)

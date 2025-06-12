@@ -37,6 +37,10 @@
             android:name=".ResetPasswordActivity"
             android:label="Reset Password"
             android:theme="@style/Theme.Pinkpanterwear" />
+        <activity
+            android:name=".AdminProductAddEditActivity"
+            android:label="Manage Product"
+            android:theme="@style/Theme.Pinkpanterwear" />
     </application>
 
 </manifest>
