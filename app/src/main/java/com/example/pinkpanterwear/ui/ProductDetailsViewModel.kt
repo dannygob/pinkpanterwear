@@ -6,6 +6,7 @@ import com.example.pinkpanterwear.data.CartItem
 import com.example.pinkpanterwear.data.CartRepository
 import com.example.pinkpanterwear.data.Product
 import com.example.pinkpanterwear.data.ProductRepository
+import com.example.pinkpanterwear.AuthHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,6 +18,7 @@ class ProductDetailsViewModel : ViewModel() {
     // TODO: Use dependency injection for repositories
     private val productRepository = ProductRepository()
     private val cartRepository = CartRepository() // Assuming CartRepository exists and is set up
+    private val authHelper = AuthHelper() // TODO: Use dependency injection
 
     private val _productDetails = MutableStateFlow<Product?>(null)
     val productDetails: StateFlow<Product?> = _productDetails.asStateFlow()
@@ -60,14 +62,27 @@ class ProductDetailsViewModel : ViewModel() {
         }
     }
 
-    fun addToCart(product: Product, selectedSize: String?, quantity: Int) {
+    fun addToCart(product: Product, selectedSize: String?, quantity: Int) { // Start of addToCart method body
         viewModelScope.launch {
-            // TODO: Ensure CartRepository and CartItem can handle selectedSize if necessary
-            val cartItem = CartItem(product, quantity /* add size here if CartItem model supports it */)
-            // For now, assuming CartRepository().addCartItem() handles this.
-            // cartRepository.addCartItem(cartItem) // This needs CartRepository to be fully implemented
-            // Log.d("ProductDetailsVM", "Add to cart: \${product.name}, Qty: \$quantity, Size: \$selectedSize")
-            // Placeholder for actual cart logic for now if CartRepository isn't ready for this subtask
+            val userId = authHelper.getCurrentUser()?.uid
+            if (userId.isNullOrEmpty()) {
+                _error.value = "User not logged in. Cannot add to cart."
+                // Log.w("ProductDetailsVM", "User not logged in, cannot add to cart")
+                return@launch
+            }
+
+            // TODO: Handle selectedSize. Currently not stored in FirestoreCartItem or CartItem for simplicity.
+            // If size needs to be stored, CartItem, FirestoreCartItem, and CartRepository methods would need updates.
+            android.util.Log.d("ProductDetailsVM", "Adding to cart: User: $userId, ProductID: ${product.id}, Qty: $quantity, Size: $selectedSize")
+
+            val success = cartRepository.addCartItem(userId, product, quantity)
+            if (success) {
+                // TODO: Expose a success message StateFlow for the Activity to observe (e.g., for a Toast)
+                android.util.Log.i("ProductDetailsVM", "${product.name} added/updated in cart for user $userId.")
+            } else {
+                _error.value = "Failed to add item to cart. Please try again."
+                // Log.e("ProductDetailsVM", "Failed to add/update \${product.name} in cart for user \$userId.")
+            }
         }
-    }
+    } // End of addToCart method body
 }
