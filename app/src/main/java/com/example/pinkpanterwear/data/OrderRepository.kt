@@ -68,4 +68,45 @@ class OrderRepository {
             return@withContext null
         }
     }
+
+    /**
+     * Creates a new order and its associated items in Firestore using a batch write.
+     * @param order The Order object (orderId can be empty, will be generated).
+     * @param items The list of OrderItem objects for this order.
+     * @return The generated orderId if successful, null otherwise.
+     */
+    suspend fun createOrder(order: Order, items: List<OrderItem>): String? = withContext(Dispatchers.IO) {
+        try {
+            val newOrderRef = ordersCollection.document() // Auto-generate ID for the order
+
+            // The @DocumentId field in Order.kt (order.orderId) will be populated by Firestore
+            // when toObject is called. For saving, we ensure the object passed to set()
+            // doesn't necessarily need the ID if Firestore is generating it.
+            // However, if we want to use this ID immediately, or if Order.kt expects it,
+            // it's good to assign it. Let's assume Order.kt has @DocumentId var orderId.
+            // The 'order' object passed in might have an empty orderId.
+            // We will use the newOrderRef.id. The passed 'order' object is more like a template.
+
+            val orderDataToSave = order.copy(orderId = newOrderRef.id) // Ensure the ID is part of the object saved
+
+            val batch = firestore.batch()
+
+            // 1. Set the main order document
+            batch.set(newOrderRef, orderDataToSave)
+
+            // 2. Add each OrderItem to the subcollection
+            for (item in items) {
+                // Use product ID as the document ID for order items for easy lookup/overwrite if needed
+                val itemRef = newOrderRef.collection("orderItems").document(item.productId.toString())
+                batch.set(itemRef, item)
+            }
+
+            batch.commit().await()
+            Log.d("OrderRepository", "Order created successfully with ID: ${newOrderRef.id}")
+            return@withContext newOrderRef.id
+        } catch (e: Exception) {
+            Log.e("OrderRepository", "Error creating order", e)
+            return@withContext null
+        }
+    }
 }
