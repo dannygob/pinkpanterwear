@@ -2,19 +2,17 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kotlinCompose)
-    //alias(libs.plugins.kapt)   // <-- eliminar esta línea
+    alias(libs.plugins.kapt)
 }
-
-apply(plugin = "kotlin-kapt")
 
 android {
     namespace = "com.example.pinkpanterwear"
-    compileSdk = 35
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.pinkpanterwear"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -93,6 +91,7 @@ dependencies {
     debugImplementation(libs.androidxUiTestManifest)
 
     implementation(libs.hiltAndroid)
+    kapt(libs.hiltAndroidCompiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidxJunit)

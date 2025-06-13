@@ -1,7 +1,7 @@
 [versions]
-androidGradlePlugin = "8.9.3"
+androidGradlePlugin = "8.3.2"
 appcompat = "1.7.0"
-kotlin = "2.0.21"
+kotlin = "1.9.22"
 kotlinxCoroutinesAndroid = "1.7.3"
 library = "1.0.0"
 libraryVersion = "2.0.0"
@@ -23,7 +23,7 @@ junitExt = "1.2.1"
 espressoCore = "3.6.1"
 coroutines = "1.7.1"
 activityCompose = "1.10.1"
-composeBom = "2025.05.01"
+composeBom = "2024.02.01"
 transitiveLib = "1.5.0"
 
 [libraries]
