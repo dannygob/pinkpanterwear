@@ -1,8 +1,9 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.kotlinCompose)
+    // alias(libs.plugins.kotlinCompose) // Removed
     alias(libs.plugins.kapt)
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -47,8 +48,13 @@ android {
     buildFeatures {
         compose = true
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
 }
 dependencies {
+    implementation(project(":presentation"))
+
     implementation(libs.library)
     implementation(libs.anotherLibrary)
     implementation(libs.transitiveLib)
