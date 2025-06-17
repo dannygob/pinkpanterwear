@@ -14,12 +14,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pinkpanterwear.R
+import com.example.pinkpanterwear.presentation.features.category.UserCategoryViewModel // Added new import
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class UserCategoryFragment : Fragment() {
 
-    private val categoryViewModel: UserCategoryViewModel by viewModels()
+    private val categoryViewModel: UserCategoryViewModel by viewModels() // Type will now resolve to new import
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar

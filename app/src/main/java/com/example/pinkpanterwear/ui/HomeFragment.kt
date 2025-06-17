@@ -15,13 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pinkpanterwear.R
 import com.example.pinkpanterwear.UserProductDetailsActivity // Assuming this is the correct details activity
-import com.example.pinkpanterwear.data.Product
+import com.example.pinkpanterwear.domain.entities.Product // Changed import for Product
+import com.example.pinkpanterwear.presentation.features.home.HomeViewModel // Added new import for HomeViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
-    private val homeViewModel: HomeViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels() // Type will now resolve to new import
     private lateinit var productAdapter: ProductAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
