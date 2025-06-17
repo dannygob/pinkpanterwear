@@ -1,4 +1,4 @@
-package com.example.pinkpanterwear.data
+package com.example.pinkpanterwear.domain.entities
 
 import com.google.firebase.Timestamp // Correct import for Firebase Timestamp
 import com.google.firebase.firestore.DocumentId

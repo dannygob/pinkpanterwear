@@ -25,9 +25,16 @@ coroutines = "1.7.1"
 activityCompose = "1.10.1"
 composeBom = "2024.02.01"
 composeCompiler = "1.5.7"
+firebaseBom = "32.7.0"
+room = "2.6.1"
 transitiveLib = "1.5.0"
 
 [libraries]
+roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+roomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+firebaseBom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebaseFirestoreKtx = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 anotherLibrary = { module = "another:library", version.ref = "libraryVersion" }
 appcompatV161 = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
