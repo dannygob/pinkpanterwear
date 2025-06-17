@@ -1,4 +1,4 @@
-package com.example.pinkpanterwear.data
+package com.example.pinkpanterwear.domain.entities
 
 // Note: @DocumentId could be used for a String field if Firestore auto-generated IDs were primary.
 // Here, 'id' (Int) is the business key, and Firestore document ID will be id.toString().

@@ -28,4 +28,14 @@ dependencies {
     // Other dependencies will be added later
     implementation(libs.hiltAndroid)
     kapt(libs.hiltAndroidCompiler)
+
+    implementation(libs.retrofit)
+    implementation(libs.gsonConverter)
+
+    implementation(platform(libs.firebaseBom))
+    implementation(libs.firebaseFirestoreKtx)
+
+    implementation(libs.roomRuntime)
+    kapt(libs.roomCompiler)
+    implementation(libs.roomKtx)
 }

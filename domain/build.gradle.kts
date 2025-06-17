@@ -27,4 +27,7 @@ dependencies {
     // Other dependencies will be added later
     implementation(libs.hiltAndroid)
     kapt(libs.hiltAndroidCompiler)
+
+    implementation(platform(libs.firebaseBom))
+    implementation(libs.firebaseFirestoreKtx)
 }

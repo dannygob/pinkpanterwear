@@ -1,4 +1,4 @@
-package com.example.pinkpanterwear.data.api
+package com.example.pinkpanterwear.data.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory // Assuming Gson is used

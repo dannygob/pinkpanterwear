@@ -1,4 +1,4 @@
-package com.example.pinkpanterwear.data
+package com.example.pinkpanterwear.domain.entities
 
 data class Category(
     val id: String,

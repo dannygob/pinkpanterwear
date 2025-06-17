@@ -1,6 +1,6 @@
-package com.example.pinkpanterwear.data.api
+package com.example.pinkpanterwear.data.network
 
-import com.example.pinkpanterwear.data.Product // Assuming your Product data class is here
+import com.example.pinkpanterwear.domain.entities.Product // Corrected import
 import retrofit2.http.GET
 import retrofit2.http.Path
 
