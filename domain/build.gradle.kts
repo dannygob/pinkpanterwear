@@ -26,7 +26,7 @@ dependencies {
     implementation(kotlin("stdlib"))
     // Other dependencies will be added later
     implementation(libs.hiltAndroid)
-    kapt(libs.hiltAndroidCompiler)
+    kapt(libs.hiltCompiler)
 
     implementation(platform(libs.firebaseBom))
     implementation(libs.firebaseFirestoreKtx)
