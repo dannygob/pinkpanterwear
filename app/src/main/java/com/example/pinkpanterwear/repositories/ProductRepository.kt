@@ -1,11 +1,7 @@
-package com.example.pinkpanterwear.data
+package com.example.pinkpanterwear.repositories
 
 import android.util.Log
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
-import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 class ProductRepository {
@@ -28,31 +24,40 @@ class ProductRepository {
         }
     }
 
-    suspend fun getProductByIdFromFirestore(productId: Int): Product? = withContext(Dispatchers.IO) {
-        try {
-            val documentSnapshot = productsCollection.document(productId.toString()).get().await()
-            return@withContext documentSnapshot.toObject<Product>()
-        } catch (e: Exception) {
-            Log.e("ProductRepository", "Error fetching product ${productId} from Firestore", e)
-            return@withContext null
+    suspend fun getProductByIdFromFirestore(productId: Int): Product? =
+        withContext(Dispatchers.IO) {
+            try {
+                val documentSnapshot =
+                    productsCollection.document(productId.toString()).get().await()
+                return@withContext documentSnapshot.toObject<Product>()
+            } catch (e: Exception) {
+                Log.e("ProductRepository", "Error fetching product ${productId} from Firestore", e)
+                return@withContext null
+            }
         }
-    }
 
-    suspend fun getProductsByCategoryFromFirestore(categoryName: String): List<Product> = withContext(Dispatchers.IO) {
-        try {
-            val snapshot = productsCollection.whereEqualTo("category", categoryName).get().await()
-            return@withContext snapshot.documents.mapNotNull { it.toObject<Product>() }
-        } catch (e: Exception) {
-            Log.e("ProductRepository", "Error fetching products for category '${categoryName}' from Firestore", e)
-            return@withContext emptyList()
+    suspend fun getProductsByCategoryFromFirestore(categoryName: String): List<Product> =
+        withContext(Dispatchers.IO) {
+            try {
+                val snapshot =
+                    productsCollection.whereEqualTo("category", categoryName).get().await()
+                return@withContext snapshot.documents.mapNotNull { it.toObject<Product>() }
+            } catch (e: Exception) {
+                Log.e(
+                    "ProductRepository",
+                    "Error fetching products for category '${categoryName}' from Firestore",
+                    e
+                )
+                return@withContext emptyList()
+            }
         }
-    }
 
     suspend fun getAllCategoriesFromFirestore(): List<String> = withContext(Dispatchers.IO) {
         try {
             val snapshot = productsCollection.get().await()
             val products = snapshot.documents.mapNotNull { it.toObject<Product>() }
-            return@withContext products.map { it.category }.distinct().filter { it.isNotBlank() }.sorted()
+            return@withContext products.map { it.category }.distinct().filter { it.isNotBlank() }
+                .sorted()
         } catch (e: Exception) {
             Log.e("ProductRepository", "Error fetching categories from Firestore products", e)
             return@withContext emptyList()
@@ -83,7 +88,7 @@ class ProductRepository {
     }
 
     suspend fun updateProduct(product: Product): Boolean = withContext(Dispatchers.IO) {
-         if (product.id == 0) {
+        if (product.id == 0) {
             Log.e("ProductRepository", "Product ID must be valid for updating.")
             return@withContext false
         }
@@ -91,7 +96,8 @@ class ProductRepository {
             // Using set with SetOptions.merge() to only update fields present in the product object,
             // or .update() with specific fields if preferred. SetOptions.merge() is safer for partial updates.
             // However, if 'product' contains all fields, .set() is fine and acts as overwrite.
-            productsCollection.document(product.id.toString()).set(product, SetOptions.merge()).await()
+            productsCollection.document(product.id.toString()).set(product, SetOptions.merge())
+                .await()
             return@withContext true
         } catch (e: Exception) {
             Log.e("ProductRepository", "Error updating product ${product.id} in Firestore", e)

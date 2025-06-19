@@ -1,11 +1,7 @@
-package com.example.pinkpanterwear.data
+package com.example.pinkpanterwear.repositories
 
 import android.util.Log
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
-import kotlinx.coroutines.tasks.await
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

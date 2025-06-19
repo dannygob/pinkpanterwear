@@ -1,9 +1,5 @@
 package com.example.pinkpanterwear
 
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import kotlinx.coroutines.tasks.await
-import kotlin.Result // Import Kotlin's Result class
 
 class AuthHelper {
 

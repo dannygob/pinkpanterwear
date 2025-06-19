@@ -1,12 +1,13 @@
 [versions]
-androidGradlePlugin = "8.0.2"          # compatible con Kotlin 1.9 y AGP estable
-appcompat = "1.7.1"
-kotlin = "1.9.10"                      # versión Kotlin estable compatible, no existe 2.0.21
-kotlinxCoroutinesAndroid = "1.7.3"
-library = "1.0.0"
-libraryVersion = "2.0.0"
-sdk = "34"                            # coincide con compileSdk y targetSdk en gradle
+androidGradlePlugin = "8.0.2"
+kotlin = "1.9.10"
 composeCompiler = "1.5.3"
+sdk = "34"
+
+firebaseBom = "32.7.0" # o la versión que prefieras
+firebaseFirestoreKtx = "25.0.0" # o la versión actual
+
+appcompat = "1.7.1"
 androidxCore = "1.16.0"
 androidxAppcompat = "1.7.0"
 material = "1.12.0"
@@ -14,32 +15,39 @@ constraintlayout = "2.2.1"
 recyclerview = "1.4.0"
 fragment = "1.8.7"
 activity = "1.10.1"
-lifecycle = "2.6.1"                   # mejor usar 2.6.1 que 2.9.0 para estabilidad
+lifecycle = "2.6.1"
+
+kotlinxCoroutinesAndroid = "1.7.3"
+coroutines = "1.7.1"
+
 retrofit = "2.11.0"
 gsonConverter = "2.11.0"
 glide = "4.16.0"
-hilt = "2.47"                        # última versión estable compatible con Kotlin 1.9
-junit = "4.13.2"
-junitExt = "1.1.5"                   # última versión estable
-espressoCore = "3.6.1"
-coroutines = "1.7.1"
-activityCompose = "1.7.2"             # estable con Compose BOM 2025.05.01
+
+activityCompose = "1.7.2"
 composeBom = "2025.05.01"
+
+hilt = "2.47"
+room = "2.6.1"
+ksp = "1.9.10-1.0.13"
+
+firebaseAuthKtx = "23.2.1"
+firebaseCommonKtx = "21.0.0"
+googleServices = "4.4.1"
+firebasePlugin = "2.9.0"
+
+junit = "4.13.2"
+junitExt = "1.1.5"
+espressoCore = "3.6.1"
 transitiveLib = "1.5.0"
 
 [libraries]
-androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
-anotherLibrary = { module = "another:library", version.ref = "libraryVersion" }
-appcompatV161 = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-
 androidxCoreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 androidxAppcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppcompat" }
-kotlinxCoroutinesAndroid = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
-library = { module = "some:library", version.ref = "library" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+
 androidxFragmentKtx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment" }
 androidxActivityKtx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
 androidxLifecycleViewmodelKtx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
@@ -47,13 +55,13 @@ androidxLifecycleLivedataKtx = { group = "androidx.lifecycle", name = "lifecycle
 androidxLifecycleRuntimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 
 kotlinxCoroutinesCore = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinxCoroutinesAndroid = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 gsonConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "gsonConverter" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 
 androidxActivityCompose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-
 androidxComposeBom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidxUi = { group = "androidx.compose.ui", name = "ui", version.ref = "composeBom" }
 androidxUiGraphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "composeBom" }
@@ -64,12 +72,30 @@ androidxUiTestJunit4 = { group = "androidx.compose.ui", name = "ui-test-junit4",
 androidxMaterial3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeBom" }
 
 hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hiltAndroidCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hiltCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+
+roomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+roomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+roomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
+firebaseAuthKtx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+firebaseCommonKtx = { group = "com.google.firebase", name = "firebase-common-ktx", version.ref = "firebaseCommonKtx" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidxJunit = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
 androidxEspressoCore = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+
 transitiveLib = { module = "com.example.transitive:transitive-lib", version.ref = "transitiveLib" }
+firebaseBom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebaseFirestoreKtx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
+
+[libraries.library]
+module = "com.example.library:library"
+version = "1.0.0"
+
+[libraries.anotherLibrary]
+module = "com.example.another:another-library"
+version = "1.0.0"
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -77,4 +103,8 @@ androidLibrary = { id = "com.android.library", version.ref = "androidGradlePlugi
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinCompose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
-hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+firebase = { id = "com.google.firebase.crashlytics", version.ref = "firebasePlugin" }
+

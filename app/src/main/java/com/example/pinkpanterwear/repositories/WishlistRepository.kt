@@ -1,11 +1,8 @@
-package com.example.pinkpanterwear.data
+package com.example.pinkpanterwear.repositories
 
-import com.google.firebase.firestore.FirebaseFirestore
-//import com.google.firebase.auth.FirebaseAuth // Potential import for user ID
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf // Example import if returning empty flow
-import javax.inject.Inject // Example import for Dependency Injection
-
+import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
 
 class WishlistRepository @Inject constructor(
     private val firestore: FirebaseFirestore
@@ -21,7 +18,8 @@ class WishlistRepository @Inject constructor(
 
 
     // Reference to the user's wishlists collection
-    private val userWishlistsCollection = firestore.collection("wishlists").document(userId).collection("userWishlists")
+    private val userWishlistsCollection =
+        firestore.collection("wishlists").document(userId).collection("userWishlists")
 
 
     suspend fun createWishlist(name: String) {
@@ -61,5 +59,3 @@ class WishlistRepository @Inject constructor(
     // suspend fun addProductToFavorites(productId: String) { ... }
     // suspend fun removeProductFromFavorites(productId: String) { ... }
 }
-
-// TODO: Define your Wishlist data class (e.g., data class Wishlist(val id: String, val name: String, val productIds: List<String> = emptyList()))
