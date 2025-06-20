@@ -1,4 +1,4 @@
-[[versions]
+[versions]
 androidGradlePlugin = "8.10.1"      # OK, última estable
 kotlin = "1.9.22"                   # OK, última estable
 kotlinxCoroutinesAndroid = "1.7.3" # OK
