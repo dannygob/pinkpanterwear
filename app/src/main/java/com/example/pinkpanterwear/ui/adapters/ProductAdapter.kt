@@ -1,5 +1,6 @@
 package com.example.pinkpanterwear.ui.adapters
 
+import android.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.pinkpanterwear.entities.Product
 import java.text.NumberFormat
 import java.util.Currency
 import java.util.Locale

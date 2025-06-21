@@ -1,10 +1,11 @@
 package com.example.pinkpanterwear.repositories
 
 import android.util.Log
+import com.example.pinkpanterwear.entities.Product
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class ProductRepository {
+open class ProductRepository {
 
     private val firestore = FirebaseFirestore.getInstance()
     private val productsCollection = firestore.collection("products")

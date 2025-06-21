@@ -12,9 +12,14 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.dynamicanimation.R
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
+import com.example.pinkpanterwear.entities.Product
+import com.example.pinkpanterwear.ui.ViewModel.ProductDetailsViewModel
+import com.google.android.gms.analytics.ecommerce.Product
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.NumberFormat

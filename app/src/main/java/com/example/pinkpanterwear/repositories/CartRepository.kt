@@ -1,6 +1,9 @@
 package com.example.pinkpanterwear.repositories
 
 import android.util.Log
+import com.example.pinkpanterwear.entities.CartItem
+import com.example.pinkpanterwear.entities.Product
+import com.google.firebase.auth.FirebaseAuth
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

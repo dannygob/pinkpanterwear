@@ -1,5 +1,6 @@
 package com.example.pinkpanterwear.ui.Fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pinkpanterwear.HomeViewModel
+import com.example.pinkpanterwear.entities.Product
+import com.example.pinkpanterwear.ui.activities.UserProductDetailsActivity
+import com.example.pinkpanterwear.ui.adapters.ProductAdapter
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

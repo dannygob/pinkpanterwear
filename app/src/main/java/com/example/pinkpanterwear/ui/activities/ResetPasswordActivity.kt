@@ -2,6 +2,7 @@ package com.example.pinkpanterwear.ui.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.dynamicanimation.R
 
 class ResetPasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

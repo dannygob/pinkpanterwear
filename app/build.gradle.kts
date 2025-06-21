@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.androidxUiGraphics)
     implementation(libs.androidxUiToolingPreview)
     implementation(libs.androidxMaterial3)
+    implementation(libs.firebaseFirestoreKtx)
     debugImplementation(libs.androidxUiTooling)
     debugImplementation(libs.androidxUiTestManifest)
 

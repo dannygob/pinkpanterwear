@@ -1,5 +1,6 @@
 package com.example.pinkpanterwear.repositories
 
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject

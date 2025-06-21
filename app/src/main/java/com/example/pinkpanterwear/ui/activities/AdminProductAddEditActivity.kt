@@ -18,6 +18,9 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.pinkpanterwear.entities.Product
+import com.example.pinkpanterwear.ui.ViewModel.AdminProductAddEditViewModel
+import com.google.android.gms.analytics.ecommerce.Product
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

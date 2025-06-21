@@ -22,6 +22,7 @@ junitExt = "1.2.1"                  # OK
 espressoCore = "3.6.1"              # OK
 coroutines = "1.7.1"                # OK
 activityCompose = "1.10.1"          # OK
+firebase-firestore = "24.10.0"          # Asumo interna o local, OK si es válida
 
 # Aquí vienen las correcciones importantes para Compose:
 # composeBom: NO existe la versión 2025.06.01, usa versión estable actual:
@@ -30,7 +31,11 @@ composeCompiler = "1.6.7"             # OK última estable compatible con Compos
 
 firebaseBom = "32.7.0"                # OK
 room = "2.6.1"                       # OK
-transitiveLib = "1.5.0"              # Supongo interna o local, OK si es válida
+transitiveLib = "1.5.0"
+firebaseFirestoreKtx = "25.1.4"
+playServicesAnalyticsImpl = "18.2.0"
+playServicesAnalyticsImplVersion = "18.2.0"
+googlePlayServicesAnalyticsImpl = "18.2.0"              # Supongo interna o local, OK si es válida
 
 [libraries]
 androidxCoreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
@@ -78,7 +83,11 @@ androidxEspressoCore = { group = "androidx.test.espresso", name = "espresso-core
 
 transitiveLib = { module = "com.example.transitive:transitive-lib", version.ref = "transitiveLib" }
 firebaseBom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
-firebaseFirestoreKtx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
+firebaseFirestoreKtx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }googleFirebaseFirestoreKtx = { }
+
+gsomeOtherLibrary = { module = "com.example:somelib", version = "1.0" }
+google-firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestore" }play-services-analytics-impl = { }play-services-analytics-impl = { }play-services-analytics-impl = { }
+#
 
 [libraries.library]
 module = "com.example.library:library"
@@ -99,3 +108,6 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 firebase = { id = "com.google.firebase.crashlytics", version.ref = "firebasePlugin" }
 
+
+[bundles]
+firebase = ["googleFirebaseAnalyticsKtx", "googleFirebaseAuthKtx", "googleFirebaseFirestoreKtx"]

@@ -1,6 +1,9 @@
 package com.example.pinkpanterwear.repositories
 
+import android.app.DownloadManager.Query
 import android.util.Log
+import com.example.pinkpanterwear.entities.Order
+import com.example.pinkpanterwear.entities.OrderItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
