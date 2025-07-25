@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
-import androidx.paging.PagedList
+import androidx.paging.PagingConfig
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pink.Activities.AdminProductsDetailsActivity
@@ -16,7 +16,7 @@ import com.example.pink.R
 import com.example.pink.ViewHolder.CategoryCategoryViewHolder
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter
 import com.firebase.ui.firestore.paging.FirestorePagingOptions
-import com.firebase.ui.firestore.paging.LoadingState
+
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.squareup.picasso.Picasso
@@ -52,13 +52,17 @@ class UserCategoryFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        val config = PagedList.Config.Builder()
-            .setInitialLoadSizeHint(10)
-            .setPageSize(5)
-            .build()
+        val config = PagingConfig(
+            pageSize = 5,
+            prefetchDistance = 10,
+            enablePlaceholders = true,
+            initialLoadSize = 10,
+            maxSize = 20
+        )
 
         val options = FirestorePagingOptions.Builder<Categories>()
             .setQuery(queryCategory, config, Categories::class.java)
+            .setLifecycleOwner(this)
             .build()
 
         val adapter =
@@ -77,12 +81,12 @@ class UserCategoryFragment : Fragment() {
                     position: Int,
                     model: Categories,
                 ) {
-                    holder.txtCategoryName.text = model.getCategoryName()
-                    Picasso.get().load(model.getCategoryImage()).into(holder.txtCategoryImage)
+                    holder.txtCategoryName.text = model.categoryName
+                    Picasso.get().load(model.categoryImage).into(holder.txtCategoryImage)
 
                     holder.itemView.setOnClickListener {
                         val intent = Intent(context, AdminProductsDetailsActivity::class.java)
-                        intent.putExtra("ProductUniqueID", model.getCategoryUniqueID())
+                        intent.putExtra("ProductUniqueID", model.categoryUniqueID)
                         startActivity(intent)
                     }
                 }

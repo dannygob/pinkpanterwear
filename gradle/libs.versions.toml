@@ -2,6 +2,7 @@
 agp = "8.11.1"
 autoimageslider = "1.4.0"
 firebaseBomVersion = "33.16.0"
+firebaseuiFirebaseUiFirestore = "8.0.2"
 firebaseUiFirestoreVersion = "9.0.0"
 kotlin = "2.2.0"
 
@@ -47,6 +48,7 @@ androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref =
 autoimageslider = { module = "com.github.smarteist:autoimageslider", version.ref = "autoimageslider" }
 firebase-bom-v3310 = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBomVersion" }
 firebase-ui-firestore-v802 = { module = "com.firebaseui:firebase-ui-firestore", version.ref = "firebaseUiFirestoreVersion" }
+firebaseui-firebase-ui-firestore-v802 = { module = "com.firebaseui:firebase-ui-firestore", version.ref = "firebaseuiFirebaseUiFirestore" }
 google-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 google-firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx" }
 google-firebase-firestore-ktx = { module = "com.google.firebase:firebase-firestore-ktx" }
