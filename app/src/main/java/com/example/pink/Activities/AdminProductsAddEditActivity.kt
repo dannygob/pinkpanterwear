@@ -26,7 +26,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class AdminProductsAddEditActivity : AppCompatActivity() {
 
@@ -120,7 +121,7 @@ class AdminProductsAddEditActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
 
-            productCategoryID?.isBlank() ?: -> Toast.makeText(
+            productCategoryID == null || productCategoryID.isBlank() -> Toast.makeText(
                 this,
                 "Please select a category.",
                 Toast.LENGTH_SHORT
