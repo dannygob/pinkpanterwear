@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_margin="6dp"
+    android:layout_weight="1"
+    android:padding="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="6dp"
+    android:background="?android:attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="6dp">
+
+        <ImageView
+            android:id="@+id/user_home_products_image"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_baseline_insert_photo_24"
+            android:contentDescription="@string/home_product_image"
+            android:background="@drawable/image_placeholder_rounded" />
+
+        <TextView
+            android:id="@+id/user_home_products_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_home_products_image"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:text="Product name"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:maxLines="2"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/user_home_products_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_home_products_name"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="Ksh 0.00"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textAppearance="?attr/textAppearanceCaption" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

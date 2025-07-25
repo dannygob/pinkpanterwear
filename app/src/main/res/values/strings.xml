@@ -1,0 +1,31 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- App Title -->
+    <string name="app_name">Pink</string>
+
+    <!-- Navigation Drawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openNavDrawer">Open drawer</string>
+    <string name="closeNavDrawer">Close drawer</string>
+
+    <!-- Activity Titles -->
+    <string name="title_activity_admin_home">Admin Home</string>
+
+    <!-- UI Messages -->
+    <string name="welcome_message">Welcome to my app, it\'s great!</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="test_string">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="today_deals">Today\'s Deals</string>
+    <string name="error">Something went wrong</string>
+    <string name="received_message">Received message</string>
+
+    <!-- Links -->
+    <string name="register_intent_login_link">LOGIN</string>
+    <string name="login_register_link">REGISTER</string>
+    <string name="forgot_password">FORGOT PASSWORD?</string>
+    <string name="verify_resend_code">RESEND</string>
+
+    <!-- Resources -->
+    <string name="banner_image">Banner Image</string>
+    <string name="home_product_image">home_product_image</string>
+</resources>

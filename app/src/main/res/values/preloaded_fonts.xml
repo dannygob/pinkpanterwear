@@ -1,0 +1,12 @@
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <!-- Serif Fonts -->
+        <item>@font/jacques_francois</item>
+        <item>@font/lusitana</item>
+        <item>@font/yeseva_one</item>
+
+        <!-- Sans-serif Fonts -->
+        <item>@font/roboto</item>
+        <item>@font/secular_one</item>
+    </array>
+</resources>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.pink">
+
+    <!-- 📡 SMS + Internet Permissions -->
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/app_launcher_logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/app_launcher_logo"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.pink">
+
+        <!-- 🔐 Combined Broadcast Receiver -->
+        <receiver
+            android:name=".Fragment.SmsBroadcastReceiver"
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS">
+            <intent-filter>
+                <!-- SMS Retriever (Google Consent API) -->
+                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED" />
+                <!-- Direct Telephony Broadcast -->
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- ✨ Metadata (optional fonts) -->
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <!-- 📱 Activities -->
+        <activity android:name="com.example.pink.Activities.ResetPasswordActivity" />
+        <activity android:name="com.example.pink.Activities.ResetCodeActivity" />
+        <activity android:name="com.example.pink.Activities.ForgotPasswordActivity" />
+        <activity android:name="com.example.pink.Activities.UserProductsDetailsActivity" />
+        <activity android:name="com.example.pink.Activities.adminCategoriesAddEditActivity" />
+        <activity android:name="com.example.pink.Activities.SearchableActivity" />
+        <activity android:name="com.example.pink.Activities.AdminProductsDetailsActivity" />
+        <activity android:name="com.example.pink.Activities.AdminOrdersActivity" />
+        <activity android:name="com.example.pink.Activities.AdminProductsAddEditActivity" />
+        <activity android:name="com.example.pink.Activities.AdminSettingsActivity" />
+        <activity android:name="com.example.pink.Activities.adminAssistantActivity" />
+        <activity android:name="com.example.pink.Activities.adminDeliveryActivity" />
+        <activity android:name="com.example.pink.Activities.AdminProductsActivity" />
+        <activity android:name="com.example.pink.Activities.adminCategoriesActivity" />
+        <activity
+            android:name="com.example.pink.Activities.adminHomeActivity"
+            android:label="@string/title_activity_admin_home"
+            android:theme="@style/Theme.pink.NoActionBar" />
+        <activity android:name="com.example.pink.Activities.PhoneVerificationActivity" />
+        <activity android:name="com.example.pink.Activities.LoginActivity" />
+        <activity android:name="com.example.pink.Activities.RegisterActivity" />
+        <activity
+            android:name="com.example.pink.MainActivity"
+            android:windowSoftInputMode="adjustNothing"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
