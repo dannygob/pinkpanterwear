@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "362046889873",
+    "firebase_url": "https://gentiontienda2-default-rtdb.firebaseio.com",
+    "project_id": "gentiontienda2",
+    "storage_bucket": "gentiontienda2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362046889873:android:b62516dfba92d516194430",
+        "android_client_info": {
+          "package_name": "com.example.pink"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKZ-FA9trd-m7Br94vB7o0IeRumj6-adY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
