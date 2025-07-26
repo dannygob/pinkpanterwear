@@ -34,12 +34,12 @@ class MainActivity : AppCompatActivity() {
             .commit()
 
         // Load CartItems from Shared Preferences
-        Prevalent.CartItems = Prevalent.getCartItems(this)
+        Prevalent.getCartItems(this)
 
         // Badge del carrito
         bottomNavigationView.getOrCreateBadge(R.id.bottom_nav_cart).apply {
             isVisible = true
-            number = Prevalent.CartItems
+            number = Prevalent.getCartItemsCount()
         }
     }
 
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             AlertDialog.Builder(this)
                 .setTitle(getString(R.string.app_name))
-                .setMessage("Are you sure you want to exit?")
+                .setMessage(getString(R.string.exit_message))
                 .setPositiveButton("Yes") { _, _ ->
                     finishAffinity()
                 }
@@ -79,6 +79,6 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         // Save CartItems to Shared Preferences
-        Prevalent.saveCartItems(this, Prevalent.CartItems)
+        Prevalent.saveCartItems(this, Prevalent.getCartItemsCount())
     }
 }

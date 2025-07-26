@@ -8,19 +8,30 @@ object Prevalent {
     const val UserLoggedIn: String = "UserLoggedIn"
     const val UserPhoneKey: String = "UserPhone"
     const val UserPasswordKey: String = "UserPassword"
-    var CartItems: Int = 0
+    private var cartItems: Int = 0
 
     const val CART_ITEMS_KEY = "CartItems"
+
+    fun getCartItemsCount(): Int {
+        return cartItems
+    }
+
+    fun setCartItemsCount(count: Int) {
+        cartItems = count
+    }
 
     fun saveCartItems(context: Context, cartItems: Int) {
         val sharedPreferences = context.getSharedPreferences(UserRememberMe, Context.MODE_PRIVATE)
         sharedPreferences.edit {
             putInt(CART_ITEMS_KEY, cartItems)
         }
+        setCartItemsCount(cartItems)
     }
 
     fun getCartItems(context: Context): Int {
         val sharedPreferences = context.getSharedPreferences(UserRememberMe, Context.MODE_PRIVATE)
-        return sharedPreferences.getInt(CART_ITEMS_KEY, 0)
+        val count = sharedPreferences.getInt(CART_ITEMS_KEY, 0)
+        setCartItemsCount(count)
+        return count
     }
 }
