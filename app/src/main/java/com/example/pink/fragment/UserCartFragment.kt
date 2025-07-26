@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pink.R
-import com.example.pink.activities.CheckoutActivity
 import com.example.pink.adapter.CartAdapter
 import com.example.pink.viewmodel.CartViewModel
 
