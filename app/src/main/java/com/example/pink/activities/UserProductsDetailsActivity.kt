@@ -34,7 +34,7 @@ class UserProductsDetailsActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.main_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.navigationIcon = getDrawable(R.drawable.ic_baseline_arrow_back_ios_24)
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_24)
 
         productID = intent.getStringExtra("ProductUniqueID")
 
@@ -44,70 +44,66 @@ class UserProductsDetailsActivity : AppCompatActivity() {
         userProductDetailsDescription = findViewById(R.id.user_product_details_description)
         userProductDetailsSize = findViewById(R.id.user_product_details_size)
 
-        productSize()
+        generateSizeViews()
 
         productRef = FirebaseFirestore.getInstance()
-
-        getProductDetails(productID)
+        productID?.let { loadProductDetails(it) }
+            ?: showToast(getString(R.string.product_not_specified))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
+        return if (item.itemId == android.R.id.home) {
+            finish()
+            true
+        } else super.onOptionsItemSelected(item)
     }
 
-    private fun getProductDetails(productID: String?) {
-        if (productID.isNullOrEmpty()) {
-            Toast.makeText(this, getString(R.string.product_not_specified), Toast.LENGTH_SHORT)
-                .show()
-            return
-        }
-
-        val productItem = productRef.collection("Products").document(productID)
-        productItem.get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    Picasso.get().load(documentSnapshot.getString("ProductImage"))
+    private fun loadProductDetails(productID: String) {
+        productRef.collection("Products").document(productID).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    Picasso.get()
+                        .load(document.getString("ProductImage"))
+                        .placeholder(R.drawable.ic_baseline_insert_photo_24)
+                        .error(R.drawable.ic_error)
                         .into(productImage)
-                    userProductDetailsName.text = documentSnapshot.getString("ProductName")
+
+                    userProductDetailsName.text = document.getString("ProductName")
                     userProductDetailsPrice.text =
-                        "${getString(R.string.currency)} ${documentSnapshot.getString("ProductPrice")}"
-                    userProductDetailsDescription.text =
-                        documentSnapshot.getString("ProductDescription")
+                        "${getString(R.string.currency)} ${document.getString("ProductPrice")}"
+                    userProductDetailsDescription.text = document.getString("ProductDescription")
                 } else {
-                    Toast.makeText(
-                        this@UserProductsDetailsActivity,
-                        getString(R.string.product_does_not_exist),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showToast(getString(R.string.product_does_not_exist))
                 }
             }
+            .addOnFailureListener {
+                showToast(getString(R.string.could_not_load_product))
+            }
     }
 
-    private fun productSize() {
-        for (i in 36..42) {
-            val valueTV = TextView(applicationContext)
-            valueTV.text = Html.fromHtml(
-                "<strike><font color='#757575'>$i</font></strike>",
-                Html.FROM_HTML_MODE_LEGACY
-            )
-            valueTV.id = "102$i".toInt()
-            valueTV.setPadding(15, 15, 15, 15)
-            valueTV.setBackgroundResource(R.drawable.user_product_details_size_bg)
-            valueTV.gravity = Gravity.CENTER
-            val params = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            params.setMargins(5, 5, 5, 5)
-            valueTV.layoutParams = params
-
-            userProductDetailsSize.addView(valueTV)
+    private fun generateSizeViews() {
+        (36..42).forEach { size ->
+            val sizeView = TextView(this).apply {
+                text = Html.fromHtml(
+                    "<strike><font color='#757575'>$size</font></strike>",
+                    Html.FROM_HTML_MODE_LEGACY
+                )
+                id = "102$size".toInt()
+                setPadding(15, 15, 15, 15)
+                setBackgroundResource(R.drawable.user_product_details_size_bg)
+                gravity = Gravity.CENTER
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    setMargins(5, 5, 5, 5)
+                }
+            }
+            userProductDetailsSize.addView(sizeView)
         }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

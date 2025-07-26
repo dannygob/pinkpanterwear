@@ -35,10 +35,9 @@ class AdminProductsActivity : AppCompatActivity(), NavigationView.OnNavigationIt
     private lateinit var navigationView: NavigationView
     private lateinit var addProductButton: MaterialButton
     private lateinit var recyclerView: RecyclerView
-    private lateinit var progressBar2: ProgressBar
+    private lateinit var progressBar: ProgressBar
 
-    private val productsRef = FirebaseFirestore.getInstance()
-    private val query: Query = productsRef.collection("Products")
+    private val query: Query = FirebaseFirestore.getInstance().collection("Products")
     private var adapter: FirestorePagingAdapter<Products, ProductViewHolder>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +49,7 @@ class AdminProductsActivity : AppCompatActivity(), NavigationView.OnNavigationIt
 
         drawerLayout = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.nav_view)
-        progressBar2 = findViewById(R.id.progressBar2)
+        progressBar = findViewById(R.id.progressBar2)
         addProductButton = findViewById(R.id.admin_go_to_add_product_page_btn)
         recyclerView = findViewById(R.id.recycler_view)
 
@@ -76,10 +75,7 @@ class AdminProductsActivity : AppCompatActivity(), NavigationView.OnNavigationIt
     }
 
     private fun setupAdapter() {
-        val config = PagingConfig(
-            pageSize = 10,
-            enablePlaceholders = false
-        )
+        val config = PagingConfig(pageSize = 10, enablePlaceholders = false)
 
         val options = FirestorePagingOptions.Builder<Products>()
             .setLifecycleOwner(this)
@@ -110,21 +106,24 @@ class AdminProductsActivity : AppCompatActivity(), NavigationView.OnNavigationIt
                     .into(holder.txtProductImage)
 
                 holder.itemView.setOnClickListener {
-                    val intent =
-                        Intent(this@AdminProductsActivity, AdminProductsDetailsActivity::class.java)
-                    intent.putExtra("ProductUniqueID", model.productUniqueID)
-                    startActivity(intent)
+                    Intent(
+                        this@AdminProductsActivity,
+                        AdminProductsDetailsActivity::class.java
+                    ).apply {
+                        putExtra("ProductUniqueID", model.productUniqueID)
+                        startActivity(this)
+                    }
                 }
             }
         }
 
         recyclerView.adapter = adapter
-        progressBar2.visibility = View.VISIBLE
+        progressBar.visibility = View.VISIBLE
 
         adapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                 super.onItemRangeInserted(positionStart, itemCount)
-                progressBar2.visibility = View.GONE
+                progressBar.visibility = View.GONE
             }
         })
     }
@@ -140,40 +139,23 @@ class AdminProductsActivity : AppCompatActivity(), NavigationView.OnNavigationIt
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.admin_home_menu -> startActivity(Intent(this, AdminHomeActivity::class.java))
-            R.id.admin_orders_menu -> startActivity(Intent(this, AdminOrdersActivity::class.java))
-            R.id.admin_categories_menu -> startActivity(
-                Intent(
-                    this,
-                    AdminCategoriesActivity::class.java
-                )
-            )
-
-            R.id.admin_products_menu -> {
-                // Do nothing, already in this activity
-            }
-
-            R.id.admin_delivery_menu -> startActivity(
-                Intent(
-                    this,
-                    AdminDeliveryActivity::class.java
-                )
-            )
-
-            R.id.admin_assistant_menu -> startActivity(
-                Intent(
-                    this,
-                    AdminAssistantActivity::class.java
-                )
-            )
-
-            R.id.admin_main_home_menu -> startActivity(Intent(this, MainActivity::class.java))
+        val destination = when (item.itemId) {
+            R.id.admin_home_menu -> AdminHomeActivity::class.java
+            R.id.admin_orders_menu -> AdminOrdersActivity::class.java
+            R.id.admin_categories_menu -> AdminCategoriesActivity::class.java
+            R.id.admin_delivery_menu -> AdminDeliveryActivity::class.java
+            R.id.admin_assistant_menu -> AdminAssistantActivity::class.java
+            R.id.admin_main_home_menu -> MainActivity::class.java
             R.id.admin_logout_menu -> {
-                // Implement logout logic here
                 Toast.makeText(this, getString(R.string.logout_message), Toast.LENGTH_SHORT).show()
+                null
             }
+            // Ya estás en AdminProductsActivity
+            R.id.admin_products_menu -> null
+            else -> null
         }
+
+        destination?.let { startActivity(Intent(this, it)) }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }

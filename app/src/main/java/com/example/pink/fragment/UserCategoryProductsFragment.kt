@@ -13,7 +13,6 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,7 +40,6 @@ class UserCategoryProductsFragment : Fragment() {
     private lateinit var category_products_most_popular_sort: TextView
     private lateinit var category_products_latest_sort: TextView
     private lateinit var category_products_lowest_price_sort: TextView
-    private lateinit var category_products_best_rating_sort: TextView
     private lateinit var category_products_highest_price_sort: TextView
     private lateinit var category_products_sort_layout: LinearLayout
     private lateinit var translucent_layout_sort: LinearLayout
@@ -85,8 +83,6 @@ class UserCategoryProductsFragment : Fragment() {
         category_products_most_popular_sort =
             view.findViewById(R.id.category_products_most_popular_sort)
         category_products_latest_sort = view.findViewById(R.id.category_products_latest_sort)
-        category_products_best_rating_sort =
-            view.findViewById(R.id.category_products_best_rating_sort)
         category_products_lowest_price_sort =
             view.findViewById(R.id.category_products_lowest_price_sort)
         category_products_highest_price_sort =
@@ -115,7 +111,7 @@ class UserCategoryProductsFragment : Fragment() {
             activity?.onBackPressed()
         }
 
-        categoryUniqueID = requireArguments().getString("categoryUniqueID")
+        categoryUniqueID = requireArguments().getString("category")
         queryProducts =
             productRef.collection("Products").whereEqualTo("ProductCategory", categoryUniqueID)
 
@@ -282,7 +278,6 @@ class UserCategoryProductsFragment : Fragment() {
             when (v.id) {
                 R.id.category_products_most_popular_sort -> sortMostPopular()
                 R.id.category_products_latest_sort -> sortLatest()
-                R.id.category_products_best_rating_sort -> sortBestRating()
                 R.id.category_products_lowest_price_sort -> sortLowestPrice()
                 R.id.category_products_highest_price_sort -> sortHighestPrice()
             }
@@ -300,7 +295,6 @@ class UserCategoryProductsFragment : Fragment() {
 
         category_products_most_popular_sort.setOnClickListener(sortClickListener)
         category_products_latest_sort.setOnClickListener(sortClickListener)
-        category_products_best_rating_sort.setOnClickListener(sortClickListener)
         category_products_lowest_price_sort.setOnClickListener(sortClickListener)
         category_products_highest_price_sort.setOnClickListener(sortClickListener)
     }
@@ -313,12 +307,6 @@ class UserCategoryProductsFragment : Fragment() {
             0
         )
         category_products_latest_sort.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
-        category_products_best_rating_sort.setCompoundDrawablesRelativeWithIntrinsicBounds(
-            0,
-            0,
-            0,
-            0
-        )
         category_products_lowest_price_sort.setCompoundDrawablesRelativeWithIntrinsicBounds(
             0,
             0,
@@ -346,14 +334,6 @@ class UserCategoryProductsFragment : Fragment() {
         productsRView()
     }
 
-    private fun sortBestRating() {
-        // Assuming there is a "ProductRating" field to sort by. If not, this won't work.
-        queryProducts =
-            productRef.collection("Products").whereEqualTo("ProductCategory", categoryUniqueID)
-                .orderBy("ProductRating", Query.Direction.DESCENDING)
-        productsRView()
-    }
-
     private fun sortLowestPrice() {
         queryProducts = productRef.collection("Products")
             .whereEqualTo("ProductCategory", categoryUniqueID)
@@ -369,14 +349,14 @@ class UserCategoryProductsFragment : Fragment() {
     }
 
     private fun productsRView() {
-        val config = PagedList.Config.Builder()
-            .setEnablePlaceholders(false)
-            .setPrefetchDistance(5)
-            .setPageSize(10)
-            .build()
+        val config = PagingConfig(
+            pageSize = 10,
+            enablePlaceholders = false
+        )
 
         val options = FirestorePagingOptions.Builder<Products>()
             .setQuery(queryProducts!!, config, Products::class.java)
+            .setLifecycleOwner(this)
             .build()
 
         val adapter =
@@ -386,14 +366,15 @@ class UserCategoryProductsFragment : Fragment() {
                     position: Int,
                     model: Products,
                 ) {
-                    var productName: String = model.getProductName()
+                    var productName: String = model.productName
                     if (productName.length > 20) {
                         productName = productName.substring(0, 19) + "..."
                     }
 
                     holder.txtCategoryProductsName?.text = productName
-                    holder.txtCategoryProductsPrice?.text = "Ksh " + model.getProductPrice()
-                    Picasso.get().load(model.getProductImage())
+                    holder.txtCategoryProductsPrice?.text =
+                        "${getString(R.string.currency)} ${model.productPrice}"
+                    Picasso.get().load(model.productImage)
                         .into(holder.txtCategoryProductsImage)
 
                     holder.itemView.setOnClickListener {

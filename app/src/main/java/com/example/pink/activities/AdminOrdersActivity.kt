@@ -14,7 +14,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.pink.MainActivity
 import com.example.pink.R
 import com.example.pink.adapter.AdminOrdersPagerAdapter
-import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -38,7 +37,8 @@ class AdminOrdersActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         navigationView = findViewById(R.id.nav_view)
 
         val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, toolbar, R.string.openNavDrawer, R.string.closeNavDrawer
+            this, drawerLayout, toolbar,
+            R.string.openNavDrawer, R.string.closeNavDrawer
         )
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
@@ -50,24 +50,25 @@ class AdminOrdersActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         tabLayout = findViewById(R.id.tab_layout)
 
         TabLayoutMediator(tabLayout, viewPager2) { tab, position ->
-            val badgeDrawable: BadgeDrawable = tab.orCreateBadge
-            badgeDrawable.backgroundColor =
-                ContextCompat.getColor(applicationContext, R.color.design_default_color_error)
-            badgeDrawable.isVisible = true
-            badgeDrawable.number = 50
-            badgeDrawable.maxCharacterCount = 10
+            tab.orCreateBadge.apply {
+                backgroundColor = ContextCompat.getColor(
+                    this@AdminOrdersActivity,
+                    R.color.design_default_color_error
+                )
+                isVisible = true
+                number = 50
+                maxCharacterCount = 10
+            }
 
             when (position) {
                 0 -> {
                     tab.text = getString(R.string.new_orders)
                     tab.setIcon(R.drawable.ic_baseline_person_24)
                 }
-
                 1 -> {
                     tab.text = getString(R.string.dispatch_orders)
                     tab.setIcon(R.drawable.ic_baseline_directions_bike_24)
                 }
-
                 2 -> {
                     tab.text = getString(R.string.all_orders)
                     tab.setIcon(R.drawable.ic_baseline_local_grocery_store_24)
@@ -77,47 +78,27 @@ class AdminOrdersActivity : AppCompatActivity(), NavigationView.OnNavigationItem
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.admin_home_menu -> startActivity(Intent(this, AdminHomeActivity::class.java))
-            R.id.admin_orders_menu -> {
-                // Do nothing, already in this activity
-            }
-            R.id.admin_categories_menu -> startActivity(
-                Intent(
-                    this,
-                    AdminCategoriesActivity::class.java
-                )
-            )
-
-            R.id.admin_products_menu -> startActivity(
-                Intent(
-                    this,
-                    AdminProductsActivity::class.java
-                )
-            )
-
-            R.id.admin_delivery_menu -> startActivity(
-                Intent(
-                    this,
-                    AdminDeliveryActivity::class.java
-                )
-            )
-
-            R.id.admin_assistant_menu -> startActivity(
-                Intent(
-                    this,
-                    AdminAssistantActivity::class.java
-                )
-            )
-
-            R.id.admin_main_home_menu -> startActivity(Intent(this, MainActivity::class.java))
+        val destination = when (item.itemId) {
+            R.id.admin_home_menu -> AdminHomeActivity::class.java
+            R.id.admin_categories_menu -> AdminCategoriesActivity::class.java
+            R.id.admin_products_menu -> AdminProductsActivity::class.java
+            R.id.admin_delivery_menu -> AdminDeliveryActivity::class.java
+            R.id.admin_assistant_menu -> AdminAssistantActivity::class.java
+            R.id.admin_main_home_menu -> MainActivity::class.java
             R.id.admin_logout_menu -> {
-                // Implement logout logic here
                 Toast.makeText(this, getString(R.string.logout_message), Toast.LENGTH_SHORT).show()
+                null
             }
+            // Ya estás en AdminOrdersActivity
+            R.id.admin_orders_menu -> null
+            else -> null
         }
+
+        destination?.let {
+            startActivity(Intent(this, it))
+        }
+
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
-
 }

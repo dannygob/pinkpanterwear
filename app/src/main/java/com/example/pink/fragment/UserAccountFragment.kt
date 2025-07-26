@@ -15,33 +15,29 @@ import com.example.pink.activities.RegisterActivity
 import com.google.android.material.textview.MaterialTextView
 
 class UserAccountFragment : Fragment() {
-    private var userAccountAdmin: MaterialTextView? = null
-    private var registerLinkBtn: Button? = null
-    private var loginLinkBtn: TextView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        val view: View = inflater.inflate(R.layout.fragment_user_account, container, false)
+        val view = inflater.inflate(R.layout.fragment_user_account, container, false)
 
-        userAccountAdmin = view.findViewById(R.id.user_account_admin)
-        registerLinkBtn = view.findViewById(R.id.user_register_link_btn)
-        loginLinkBtn = view.findViewById(R.id.account_my_wishlist)
+        val adminLink: MaterialTextView = view.findViewById(R.id.user_account_admin)
+        val registerBtn: Button = view.findViewById(R.id.user_register_link_btn)
+        val loginLink: TextView = view.findViewById(R.id.account_my_wishlist)
 
-        registerLinkBtn?.setOnClickListener {
-            startActivity(Intent(context, RegisterActivity::class.java))
+        registerBtn.setOnClickListener {
+            startActivity(Intent(requireContext(), RegisterActivity::class.java))
         }
 
-        loginLinkBtn?.setOnClickListener {
-            startActivity(Intent(context, LoginActivity::class.java))
+        loginLink.setOnClickListener {
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
         }
 
-        userAccountAdmin?.setOnClickListener {
-            startActivity(Intent(context, AdminHomeActivity::class.java))
+        adminLink.setOnClickListener {
+            startActivity(Intent(requireContext(), AdminHomeActivity::class.java))
         }
 
         return view
     }
 }
-

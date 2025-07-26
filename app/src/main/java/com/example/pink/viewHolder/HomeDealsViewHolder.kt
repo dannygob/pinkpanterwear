@@ -9,19 +9,26 @@ import com.example.pink.R
 
 class HomeDealsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
     View.OnClickListener {
-    var txtDealName: TextView?
-    var txtDealPriceInitial: TextView?
-    var txtDealPriceDiscounted: TextView?
-    var txtDealImage: ImageView?
-    var listener: ItemClickListener? = null
+
+    private val txtDealName: TextView = itemView.findViewById(R.id.user_home_deals_name)
+    private val txtDealPriceInitial: TextView =
+        itemView.findViewById(R.id.user_home_deals_price_initial)
+    private val txtDealPriceDiscounted: TextView =
+        itemView.findViewById(R.id.user_home_deals_price_discounted)
+    private val txtDealImage: ImageView = itemView.findViewById(R.id.user_home_deals_image)
+
+    private var listener: ItemClickListener? = null
 
     init {
-        txtDealImage = itemView.findViewById<View?>(R.id.user_home_deals_image) as ImageView?
-        txtDealName = itemView.findViewById<View?>(R.id.user_home_deals_name) as TextView?
-        txtDealPriceInitial =
-            itemView.findViewById<View?>(R.id.user_home_deals_price_initial) as TextView?
-        txtDealPriceDiscounted =
-            itemView.findViewById<View?>(R.id.user_home_deals_price_discounted) as TextView?
+        itemView.setOnClickListener(this)
+    }
+
+    fun bind(dealName: String, initialPrice: String, discountedPrice: String, imageUrl: String) {
+        txtDealName.text = dealName
+        txtDealPriceInitial.text = initialPrice
+        txtDealPriceDiscounted.text = discountedPrice
+        // Usa Glide, Coil o Picasso para la imagen
+        // Glide.with(itemView.context).load(imageUrl).into(txtDealImage)
     }
 
     fun setItemClickListener(listener: ItemClickListener) {
@@ -29,6 +36,6 @@ class HomeDealsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
     }
 
     override fun onClick(view: View?) {
-        listener!!.onClick(view, adapterPosition, false)
+        listener?.onClick(view, bindingAdapterPosition, false)
     }
 }

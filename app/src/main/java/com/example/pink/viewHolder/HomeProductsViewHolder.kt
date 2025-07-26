@@ -9,19 +9,28 @@ import com.example.pink.R
 
 class HomeProductsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
     View.OnClickListener {
-    var txtProductsName: TextView? =
-        itemView.findViewById<View?>(R.id.user_home_products_name) as TextView?
-    var txtProductsPrice: TextView? =
-        itemView.findViewById<View?>(R.id.user_home_products_price) as TextView?
-    var txtProductsImage: ImageView? =
-        itemView.findViewById<View?>(R.id.user_home_products_image) as ImageView?
-    var listener: ItemClickListener? = null
+
+    private val txtProductsName: TextView = itemView.findViewById(R.id.user_home_products_name)
+    private val txtProductsPrice: TextView = itemView.findViewById(R.id.user_home_products_price)
+    private val txtProductsImage: ImageView = itemView.findViewById(R.id.user_home_products_image)
+
+    private var listener: ItemClickListener? = null
+
+    init {
+        itemView.setOnClickListener(this)
+    }
+
+    fun bind(productName: String, price: String, imageUrl: String) {
+        txtProductsName.text = productName
+        txtProductsPrice.text = price
+        // Glide.with(itemView.context).load(imageUrl).into(txtProductsImage) ← activo si usas imágenes online
+    }
 
     fun setItemClickListener(listener: ItemClickListener) {
         this.listener = listener
     }
 
     override fun onClick(view: View?) {
-        listener!!.onClick(view, adapterPosition, false)
+        listener?.onClick(view, bindingAdapterPosition, false)
     }
 }

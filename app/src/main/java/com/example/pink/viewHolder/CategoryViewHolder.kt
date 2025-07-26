@@ -8,17 +8,24 @@ import com.example.pink.Interface.ItemClickListener
 import com.example.pink.R
 
 class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-    var txtCategoryName: TextView?
-    var txtCategoryStatus: TextView?
-    var txtCategoryImage: ImageView?
-    var listener: ItemClickListener? = null
+
+    private val txtCategoryName: TextView = itemView.findViewById(R.id.admin_category_layout_name)
+    private val txtCategoryStatus: TextView =
+        itemView.findViewById(R.id.admin_category_layout_status)
+    private val txtCategoryImage: ImageView =
+        itemView.findViewById(R.id.admin_category_layout_image)
+
+    private var listener: ItemClickListener? = null
 
     init {
-        txtCategoryImage =
-            itemView.findViewById<View?>(R.id.admin_category_layout_image) as ImageView?
-        txtCategoryName = itemView.findViewById<View?>(R.id.admin_category_layout_name) as TextView?
-        txtCategoryStatus =
-            itemView.findViewById<View?>(R.id.admin_category_layout_status) as TextView?
+        itemView.setOnClickListener(this)  // ⏫ Registramos el click directamente
+    }
+
+    fun bind(categoryName: String, categoryStatus: String, imageUrl: String) {
+        txtCategoryName.text = categoryName
+        txtCategoryStatus.text = categoryStatus
+        // Aquí puedes usar Glide, Coil o Picasso para cargar la imagen
+        // Glide.with(itemView.context).load(imageUrl).into(txtCategoryImage)
     }
 
     fun setItemClickListener(listener: ItemClickListener) {
@@ -26,6 +33,6 @@ class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), Vi
     }
 
     override fun onClick(view: View?) {
-        listener!!.onClick(view, adapterPosition, false)
+        listener?.onClick(view, bindingAdapterPosition, false)
     }
 }

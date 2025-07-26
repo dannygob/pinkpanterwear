@@ -1,7 +1,11 @@
 package com.example.pink.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "products")
 data class Products(
-    val productUniqueID: String = "",
+    @PrimaryKey val productUniqueID: String = "",
     val productName: String = "",
     val productDescription: String = "",
     val productImage: String = "",
@@ -9,5 +13,5 @@ data class Products(
     val productStatus: String = "",
     val dateCreated: String = "",
     val timeCreated: String = "",
-    val productPrice: Int = 0,
+    val productPrice: Double = 0.0,  // ← Mejora: precio decimal para más flexibilidad
 )

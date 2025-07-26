@@ -2,43 +2,46 @@ package com.example.pink.activities
 
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pink.R
 import com.example.pink.fragment.SmsBroadcastReceiver
 import com.google.android.gms.auth.api.phone.SmsRetriever
-import com.google.android.gms.auth.api.phone.SmsRetrieverClient
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.regex.Pattern
 
 class ResetCodeActivity : AppCompatActivity() {
 
-    private lateinit var verify1: TextInputLayout
-    private lateinit var verify2: TextInputLayout
-    private lateinit var verify3: TextInputLayout
-    private lateinit var verify4: TextInputLayout
+    private lateinit var verifyFields: List<TextInputLayout>
     private var smsBroadcastReceiver: SmsBroadcastReceiver? = null
-
     private lateinit var userID: String
     private val userRef = FirebaseFirestore.getInstance()
 
-    companion object {
-        private const val REQ_USER_CONSENT = 200
-    }
+    // ✅ Nuevo launcher para SMS consent
+    private val consentLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val message = result.data?.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE)
+                message?.let { getOtpFromMessage(it) }
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reset_code)
 
-        verify1 = findViewById(R.id.verify_1)
-        verify2 = findViewById(R.id.verify_2)
-        verify3 = findViewById(R.id.verify_3)
-        verify4 = findViewById(R.id.verify_4)
+        verifyFields = listOf(
+            findViewById(R.id.verify_1),
+            findViewById(R.id.verify_2),
+            findViewById(R.id.verify_3),
+            findViewById(R.id.verify_4)
+        )
 
         userID = intent.getStringExtra("userID") ?: ""
 
@@ -47,10 +50,9 @@ class ResetCodeActivity : AppCompatActivity() {
     }
 
     private fun setupOtpFields() {
-        val fields = listOf(verify1, verify2, verify3, verify4)
-
-        fields.forEachIndexed { index, currentField ->
-            currentField.editText?.addTextChangedListener(object : TextWatcher {
+        verifyFields.forEachIndexed { index, field ->
+            field.editText?.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {}
                 override fun beforeTextChanged(
                     s: CharSequence?,
                     start: Int,
@@ -60,60 +62,52 @@ class ResetCodeActivity : AppCompatActivity() {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if (s?.length == 1) {
-                        currentField.error = null
-                        if (index < fields.lastIndex) {
-                            fields[index + 1].editText?.requestFocus()
-                        } else {
-                            validateDataOnBtnClick() // Verifica al escribir el último dígito
+                    when {
+                        s?.length == 1 -> {
+                            field.error = null
+                            if (index < verifyFields.lastIndex) {
+                                verifyFields[index + 1].editText?.requestFocus()
+                            } else {
+                                validateOtp()
+                            }
                         }
-                    } else if (s?.isEmpty() == true && index > 0) {
-                        fields[index - 1].editText?.requestFocus()
+
+                        s.isNullOrEmpty() && index > 0 -> {
+                            verifyFields[index - 1].editText?.requestFocus()
+                        }
                     }
                 }
-
-                override fun afterTextChanged(s: Editable?) {}
             })
         }
     }
 
-    private fun validateDataOnBtnClick() {
-        val otpDigits = listOf(
-            verify1.editText?.text?.toString()?.trim(),
-            verify2.editText?.text?.toString()?.trim(),
-            verify3.editText?.text?.toString()?.trim(),
-            verify4.editText?.text?.toString()?.trim()
-        )
+    private fun validateOtp() {
+        val otp = verifyFields.map { it.editText?.text?.toString()?.trim() }
 
-        if (otpDigits.any { it.isNullOrEmpty() }) {
-            listOf(verify1, verify2, verify3, verify4).forEachIndexed { index, field ->
-                if (otpDigits[index].isNullOrEmpty()) {
-                    field.error = getString(R.string.required)
-                } else {
-                    field.error = null
-                }
+        if (otp.any { it.isNullOrEmpty() }) {
+            verifyFields.forEachIndexed { i, field ->
+                field.error = if (otp[i].isNullOrEmpty()) getString(R.string.required) else null
             }
             return
         }
 
-        val otpMerged = otpDigits.joinToString("")
+        val otpMerged = otp.joinToString("")
 
         userRef.collection("Users").document(userID).get()
-            .addOnSuccessListener { documentSnapshot: DocumentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    val storedOtp = documentSnapshot.getString("UserOTP")
-                    if (otpMerged == storedOtp) {
-                        val intent = Intent(this, ResetPasswordActivity::class.java)
-                        intent.putExtra("userID", userID)
-                        startActivity(intent)
+            .addOnSuccessListener { doc ->
+                val storedOtp = doc.getString("UserOTP")
+                if (otpMerged == storedOtp) {
+                    Intent(this, ResetPasswordActivity::class.java).apply {
+                        putExtra("userID", userID)
+                        startActivity(this)
                         finish()
-                    } else {
-                        Toast.makeText(
-                            this,
-                            getString(R.string.incorrect_reset_code),
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
+                } else {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.incorrect_reset_code),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .addOnFailureListener {
@@ -121,39 +115,25 @@ class ResetCodeActivity : AppCompatActivity() {
                     this,
                     getString(R.string.error_verifying_code, it.message),
                     Toast.LENGTH_SHORT
-                )
-                    .show()
+                ).show()
             }
     }
 
     private fun getOtpFromMessage(message: String) {
-        val pattern = Pattern.compile("\\d{4}")
-        val matcher = pattern.matcher(message)
+        val matcher = Pattern.compile("\\d{4}").matcher(message)
         if (matcher.find()) {
             val otp = matcher.group(0)
-            if (!otp.isNullOrEmpty() && otp.length == 4) {
-                verify1.editText?.setText("${otp[0]}")
-                verify2.editText?.setText("${otp[1]}")
-                verify3.editText?.setText("${otp[2]}")
-                verify4.editText?.setText("${otp[3]}")
-                validateDataOnBtnClick()
+            otp?.forEachIndexed { index, digit ->
+                verifyFields[index].editText?.setText(digit.toString())
             }
+            validateOtp()
         }
     }
 
     private fun startSmsUserConsent() {
-        val client: SmsRetrieverClient = SmsRetriever.getClient(this)
-        client.startSmsUserConsent(null)
-            .addOnSuccessListener { /* Consent started */ }
-            .addOnFailureListener { /* Handle failure silently */ }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQ_USER_CONSENT && resultCode == RESULT_OK && data != null) {
-            val message = data.getStringExtra(SmsRetriever.EXTRA_SMS_MESSAGE)
-            message?.let { getOtpFromMessage(it) }
-        }
+        SmsRetriever.getClient(this).startSmsUserConsent(null)
+            .addOnSuccessListener { /* SMS consent started */ }
+            .addOnFailureListener { /* Silent fail */ }
     }
 
     private fun registerBroadcastReceiver() {
@@ -161,19 +141,18 @@ class ResetCodeActivity : AppCompatActivity() {
             smsBroadcastReceiverListener =
                 object : SmsBroadcastReceiver.SmsBroadcastReceiverListener {
                     override fun onSuccess(intent: Intent) {
-                        startActivityForResult(intent, REQ_USER_CONSENT)
+                        consentLauncher.launch(intent) // ✅ Activación con nueva API
                     }
 
-                    override fun onFailure() { /* Can log error if needed */
+                    override fun onFailure() { /* Optional logging */
                     }
                 }
         }
 
         val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
-        val receiverFlags =
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU)
-                RECEIVER_EXPORTED else 0
-        registerReceiver(smsBroadcastReceiver, intentFilter, receiverFlags)
+        val flags =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) RECEIVER_EXPORTED else 0
+        registerReceiver(smsBroadcastReceiver, intentFilter, flags)
     }
 
     override fun onStart() {

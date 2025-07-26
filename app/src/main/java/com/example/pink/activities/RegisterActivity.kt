@@ -121,7 +121,6 @@ class RegisterActivity : AppCompatActivity() {
             phone.isEmpty() -> registerPhone.error = getString(R.string.empty_phone_number)
             phone.startsWith("0") || phone.length != 9 -> registerPhone.error =
                 getString(R.string.number_format)
-
             password.isEmpty() -> registerPassword.error = getString(R.string.empty_password)
             password.length < 8 -> registerPassword.error = getString(R.string.password_min_length)
             !isValidPassword(password) -> registerPassword.error =
@@ -163,7 +162,7 @@ class RegisterActivity : AppCompatActivity() {
         saveCurrentDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(now.time)
         saveCurrentTime = SimpleDateFormat("HHmmss", Locale.getDefault()).format(now.time)
         userID = "$saveCurrentDate$saveCurrentTime${(100_000..999_999).random()}"
-        val otp = String.format("%04d", Random().nextInt(10000))
+        val otp = "%04d".format(Random().nextInt(10000))
         hashedPassword = hashPassword(password)
 
         val userMap = mapOf(
@@ -183,7 +182,7 @@ class RegisterActivity : AppCompatActivity() {
                 loadingBar.dismiss()
                 Intent(this, PhoneVerificationActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    putExtra("userID", phoneID) // Pass phoneID as userID for consistency
+                    putExtra("userID", phoneID)
                     startActivity(this)
                 }
             }

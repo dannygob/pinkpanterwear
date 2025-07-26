@@ -13,7 +13,7 @@ import com.example.pink.MainActivity
 import com.example.pink.R
 import com.google.android.material.navigation.NavigationView
 
-class AdminSettingsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class AdminHomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
@@ -21,7 +21,7 @@ class AdminSettingsActivity : AppCompatActivity(), NavigationView.OnNavigationIt
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_admin_settings)
+        setContentView(R.layout.activity_admin_home)
 
         toolbar = findViewById(R.id.main_toolbar)
         setSupportActionBar(toolbar)
@@ -30,8 +30,11 @@ class AdminSettingsActivity : AppCompatActivity(), NavigationView.OnNavigationIt
         navigationView = findViewById(R.id.nav_view)
 
         val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, toolbar,
-            R.string.openNavDrawer, R.string.closeNavDrawer
+            this,
+            drawerLayout,
+            toolbar,
+            R.string.openNavDrawer,
+            R.string.closeNavDrawer
         )
 
         drawerLayout.addDrawerListener(toggle)
@@ -48,16 +51,18 @@ class AdminSettingsActivity : AppCompatActivity(), NavigationView.OnNavigationIt
             R.id.admin_delivery_menu -> AdminDeliveryActivity::class.java
             R.id.admin_assistant_menu -> AdminAssistantActivity::class.java
             R.id.admin_main_home_menu -> MainActivity::class.java
-            R.id.admin_settings_menu -> null // Ya estás aquí
+            R.id.admin_settings_menu -> AdminAssistantActivity::class.java
             R.id.admin_logout_menu -> {
-                Toast.makeText(this, getString(R.string.logout_message), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Logged Out Successfully", Toast.LENGTH_SHORT).show()
                 null
             }
 
             else -> null
         }
 
-        destination?.let { startActivity(Intent(this, it)) }
+        destination?.let {
+            startActivity(Intent(this, it))
+        }
 
         drawerLayout.closeDrawer(GravityCompat.START)
         return true

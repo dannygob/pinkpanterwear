@@ -1,11 +1,11 @@
 package com.example.pink.model
 
 data class Categories(
-    val categoryUniqueID: String? = null,
-    val categoryName: String? = null,
-    val categoryImage: String? = null,
-    val categoryStatus: String? = null,
-    val categoryDeleted: String? = null,
-    val dateCreated: String? = null,
-    val timeCreated: String? = null,
+    val categoryUniqueID: String = "",
+    val categoryName: String = "",
+    val categoryImage: String = "",
+    val categoryStatus: String = "",
+    val categoryDeleted: String = "",
+    val dateCreated: String = "",
+    val timeCreated: String = "",
 )

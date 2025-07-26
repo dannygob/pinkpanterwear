@@ -29,10 +29,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/categoryImage"
             android:layout_marginTop="8dp"
+            android:gravity="center"
             android:text="Category Name"
             android:textColor="@color/black"
             android:textSize="16sp"
-            android:gravity="center"
             android:textStyle="bold" />
 
         <Button

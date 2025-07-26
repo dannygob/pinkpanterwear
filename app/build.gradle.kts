@@ -70,6 +70,10 @@ dependencies {
 
     // Local storage
     implementation("io.github.pilgr:paperdb:2.7.2")
+    implementation(libs.androidx.room.common.jvm)
+    implementation(libs.androidx.room.runtime.android)
+    implementation(libs.androidx.lifecycle.viewmodel.android)
+    implementation(libs.play.services.analytics.impl)
 
     // Tests
     testImplementation(libs.junit)

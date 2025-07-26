@@ -22,8 +22,8 @@ class AdminProductsDetailsActivity : AppCompatActivity() {
     private lateinit var productQuantity: MaterialTextView
     private lateinit var productDescription: MaterialTextView
 
+    private val productRef = FirebaseFirestore.getInstance()
     private var productID: String? = null
-    private lateinit var productRef: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,28 +42,26 @@ class AdminProductsDetailsActivity : AppCompatActivity() {
         editProductButton = findViewById(R.id.edit_product)
         productImage = findViewById(R.id.product_details_image)
 
-        getProductDetails(productID)
+        productID?.let {
+            loadProductDetails(it)
+        } ?: Toast.makeText(this, getString(R.string.product_not_specified), Toast.LENGTH_SHORT)
+            .show()
     }
 
-    private fun getProductDetails(productID: String?) {
-        if (productID.isNullOrEmpty()) {
-            Toast.makeText(this, getString(R.string.product_not_specified), Toast.LENGTH_SHORT)
-                .show()
-            return
-        }
-
-        productRef = FirebaseFirestore.getInstance()
-        val productItem = productRef.collection("Products").document(productID)
-
-        productItem.get()
-            .addOnSuccessListener { documentSnapshot ->
-                if (documentSnapshot.exists()) {
-                    productName.text = documentSnapshot.getString("ProductName")
+    private fun loadProductDetails(productID: String) {
+        productRef.collection("Products").document(productID)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    productName.text = document.getString("ProductName")
                     productPrice.text =
-                        "${getString(R.string.currency)} ${documentSnapshot.getString("ProductPrice")}"
-                    productDescription.text = documentSnapshot.getString("ProductDescription")
-                    productQuantity.text = documentSnapshot.getString("ProductStatus")
-                    Picasso.get().load(documentSnapshot.getString("ProductImage"))
+                        "${getString(R.string.currency)} ${document.getString("ProductPrice")}"
+                    productDescription.text = document.getString("ProductDescription")
+                    productQuantity.text = document.getString("ProductStatus")
+                    Picasso.get()
+                        .load(document.getString("ProductImage"))
+                        .placeholder(R.drawable.ic_baseline_insert_photo_24)
+                        .error(R.drawable.ic_error)
                         .into(productImage)
                 } else {
                     Toast.makeText(
@@ -73,7 +71,7 @@ class AdminProductsDetailsActivity : AppCompatActivity() {
                     ).show()
                 }
             }
-            .addOnFailureListener { e ->
+            .addOnFailureListener {
                 Toast.makeText(this, getString(R.string.could_not_load_product), Toast.LENGTH_SHORT)
                     .show()
             }

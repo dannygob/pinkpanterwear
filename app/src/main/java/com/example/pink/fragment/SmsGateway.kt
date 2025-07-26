@@ -32,25 +32,40 @@ class SmsGateway(
             ""
         }
 
-        return "$baseUrl?apikey=$apiKey&partnerID=$partnerId&shortcode=$shortCode&mobile=$encodedMobile&message=$encodedMessage"
+        val finalUrl =
+            "$baseUrl?apikey=$apiKey&partnerID=$partnerId&shortcode=$shortCode&mobile=$encodedMobile&message=$encodedMessage"
+        println("📡 SMS Gateway URL: $finalUrl") // Debug log
+        return finalUrl
     }
 
-    suspend fun sendSingleSms(message: String?, mobile: String?): String =
-        sendRequestAsync(getFinalURL(mobile, message))
+    suspend fun sendSingleSms(message: String?, mobile: String?): String {
+        if (message.isNullOrBlank() || mobile.isNullOrBlank()) {
+            return "ERROR: Mobile or message is blank"
+        }
+        return sendRequestAsync(getFinalURL(mobile, message))
+    }
 
     suspend fun sendBulkSms(message: String?, mobiles: Array<String?>?): String {
         val numbers = mobiles?.filterNotNull()?.joinToString(",") ?: ""
+        if (message.isNullOrBlank() || numbers.isBlank()) {
+            return "ERROR: One or more mobile numbers are blank"
+        }
         return sendRequestAsync(getFinalURL(numbers, message))
     }
 
     private suspend fun sendRequestAsync(urlString: String): String = withContext(Dispatchers.IO) {
-        val url = URL(urlString)
-        val connection = url.openConnection() as HttpURLConnection
-        connection.requestMethod = "GET"
-        connection.readTimeout = 15000
+        try {
+            val url = URL(urlString)
+            val connection = url.openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+            connection.readTimeout = 15000
 
-        BufferedReader(InputStreamReader(connection.inputStream)).use { reader ->
-            reader.lineSequence().joinToString("\n")
+            BufferedReader(InputStreamReader(connection.inputStream)).use { reader ->
+                reader.lineSequence().joinToString("\n")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            "ERROR: ${e.message ?: "Unknown exception"}"
         }
     }
 }

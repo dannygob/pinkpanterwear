@@ -21,13 +21,20 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
             val extras = intent.extras
             val status = extras?.get(SmsRetriever.EXTRA_STATUS) as? Status
 
-            if (status?.statusCode == CommonStatusCodes.SUCCESS) {
-                val consentIntent = extras.getParcelable<Intent>(SmsRetriever.EXTRA_CONSENT_INTENT)
-                consentIntent?.let {
-                    smsBroadcastReceiverListener?.onSuccess(it)
+            when (status?.statusCode) {
+                CommonStatusCodes.SUCCESS -> {
+                    val consentIntent =
+                        extras.getParcelable<Intent>(SmsRetriever.EXTRA_CONSENT_INTENT)
+                    if (consentIntent != null) {
+                        smsBroadcastReceiverListener?.onSuccess(consentIntent)
+                    } else {
+                        smsBroadcastReceiverListener?.onFailure()
+                    }
                 }
-            } else {
-                smsBroadcastReceiverListener?.onFailure()
+
+                else -> {
+                    smsBroadcastReceiverListener?.onFailure()
+                }
             }
         }
     }

@@ -7,23 +7,15 @@ import com.example.pink.fragment.AdminAllOrdersFragment
 import com.example.pink.fragment.AdminDispatchedOrdersFragment
 import com.example.pink.fragment.AdminNewOrdersFragment
 
-
 class AdminOrdersPagerAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
 
-    companion object {
-        private const val NUM_TABS = 3
-    }
+    override fun getItemCount(): Int = 3
 
-    override fun createFragment(position: Int): Fragment {
-        return when (position) {
-            0 -> AdminNewOrdersFragment()
-            1 -> AdminDispatchedOrdersFragment()
-            else -> AdminAllOrdersFragment()
-        }
-    }
-
-    override fun getItemCount(): Int {
-        return NUM_TABS
+    override fun createFragment(position: Int): Fragment = when (position) {
+        0 -> AdminNewOrdersFragment()
+        1 -> AdminDispatchedOrdersFragment()
+        2 -> AdminAllOrdersFragment()
+        else -> throw IllegalArgumentException("Invalid tab position: $position")
     }
 }

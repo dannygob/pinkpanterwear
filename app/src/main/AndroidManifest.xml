@@ -43,18 +43,18 @@
         <activity android:name="com.example.pink.activities.ResetCodeActivity" />
         <activity android:name="com.example.pink.activities.ForgotPasswordActivity" />
         <activity android:name="com.example.pink.activities.UserProductsDetailsActivity" />
-        <activity android:name="com.example.pink.activities.adminCategoriesAddEditActivity" />
+        <activity android:name="com.example.pink.activities.AdminCategoriesAddEditActivity" />
         <activity android:name="com.example.pink.activities.SearchableActivity" />
         <activity android:name="com.example.pink.activities.AdminProductsDetailsActivity" />
         <activity android:name="com.example.pink.activities.AdminOrdersActivity" />
         <activity android:name="com.example.pink.activities.AdminProductsAddEditActivity" />
         <activity android:name="com.example.pink.activities.AdminSettingsActivity" />
-        <activity android:name="com.example.pink.activities.adminAssistantActivity" />
-        <activity android:name="com.example.pink.activities.adminDeliveryActivity" />
+        <activity android:name="com.example.pink.activities.AdminAssistantActivity" />
+        <activity android:name="com.example.pink.activities.AdminDeliveryActivity" />
         <activity android:name="com.example.pink.activities.AdminProductsActivity" />
-        <activity android:name="com.example.pink.activities.adminCategoriesActivity" />
+        <activity android:name="com.example.pink.activities.AdminCategoriesActivity" />
         <activity
-            android:name="com.example.pink.activities.adminHomeActivity"
+            android:name="com.example.pink.activities.AdminHomeActivity"
             android:label="@string/title_activity_admin_home"
             android:theme="@style/Theme.pink.NoActionBar" />
         <activity android:name="com.example.pink.activities.PhoneVerificationActivity" />

@@ -4,7 +4,6 @@ import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Spinner
@@ -127,10 +126,11 @@ class AdminProductsAddEditActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
 
-            TextUtils.isEmpty(productName) -> addProductName.error = getString(R.string.required)
-            TextUtils.isEmpty(productPrice) -> addProductPrice.error = getString(R.string.required)
-            TextUtils.isEmpty(productDescription) -> addProductDescription.error =
+            productName.isBlank() -> addProductName.error = getString(R.string.required)
+            productPrice.isBlank() -> addProductPrice.error = getString(R.string.required)
+            productDescription.isBlank() -> addProductDescription.error =
                 getString(R.string.required)
+
             else -> storeProductDetails(
                 productName,
                 productPrice,
