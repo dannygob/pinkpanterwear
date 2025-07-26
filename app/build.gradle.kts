@@ -28,6 +28,11 @@ android {
         }
     }
 
+    buildFeatures {
+        // 👇 ¡Aquí activamos ViewBinding!
+        viewBinding = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -39,7 +44,6 @@ android {
         }
     }
 }
-
 
 dependencies {
     // AndroidX base
@@ -59,16 +63,13 @@ dependencies {
     // Firebase UI with Paging3
     implementation(libs.firebase.ui.firestore.v802)
     implementation(libs.androidx.paging.runtime.ktx.v321)
-
     implementation("com.firebaseui:firebase-ui-firestore:8.0.2")
-// Or the latest version
 
-
-
+    // Otros
     implementation(libs.picasso)
     implementation("com.airbnb.android:lottie:5.2.0")
 
-    // Local storage
+    // Almacenamiento local
     implementation("io.github.pilgr:paperdb:2.7.2")
     implementation(libs.androidx.room.common.jvm)
     implementation(libs.androidx.room.runtime.android)
@@ -81,5 +82,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.paging.runtime.ktx.v336)
+
 
 }

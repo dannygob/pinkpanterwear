@@ -9,8 +9,8 @@ import com.example.pink.R
 
 class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-    private val txtCategoryName: TextView = itemView.findViewById(R.id.admin_category_layout_name)
-    private val txtCategoryStatus: TextView =
+    val txtCategoryName: TextView = itemView.findViewById(R.id.admin_category_layout_name)
+    val txtCategoryStatus: TextView =
         itemView.findViewById(R.id.admin_category_layout_status)
     private val txtCategoryImage: ImageView =
         itemView.findViewById(R.id.admin_category_layout_image)

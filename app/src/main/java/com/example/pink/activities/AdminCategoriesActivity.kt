@@ -22,7 +22,6 @@ import com.example.pink.model.Categories
 import com.example.pink.viewHolder.CategoryViewHolder
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter
 import com.firebase.ui.firestore.paging.FirestorePagingOptions
-import com.firebase.ui.firestore.paging.LoadingState
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -102,8 +101,8 @@ class AdminCategoriesActivity : AppCompatActivity(),
                 position: Int,
                 model: Categories,
             ) {
-                holder.txtCategoryName?.text = model.categoryName
-                holder.txtCategoryStatus?.text = model.categoryStatus
+                holder.txtCategoryName.text = model.categoryName
+                holder.txtCategoryStatus.text = model.categoryStatus
                 Picasso.get().load(model.categoryImage).into(holder.txtCategoryImage)
 
                 holder.itemView.setOnClickListener {
