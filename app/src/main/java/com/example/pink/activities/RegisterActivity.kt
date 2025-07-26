@@ -177,13 +177,13 @@ class RegisterActivity : AppCompatActivity() {
             "CategoryDeleted" to "false"
         )
 
-        userRef.collection("Users").document(userID).set(userMap)
+        userRef.collection("Users").document(phoneID).set(userMap)
             .addOnSuccessListener {
                 sendOtp(phoneID, otp)
                 loadingBar.dismiss()
                 Intent(this, PhoneVerificationActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    putExtra("userID", userID)
+                    putExtra("userID", phoneID) // Pass phoneID as userID for consistency
                     startActivity(this)
                 }
             }

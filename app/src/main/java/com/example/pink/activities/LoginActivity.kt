@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }
 
-        validateLiveUserData()
+        addInputValidation()
 
         loginBtn.setOnClickListener {
             validateOnBtnClick()

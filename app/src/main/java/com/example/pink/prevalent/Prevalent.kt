@@ -1,37 +1,50 @@
 package com.example.pink.prevalent
 
 import android.content.Context
-import androidx.core.content.edit
+import com.example.pink.model.Products
+import io.paperdb.Paper
 
 object Prevalent {
     const val UserRememberMe: String = "UserRememberMe"
     const val UserLoggedIn: String = "UserLoggedIn"
     const val UserPhoneKey: String = "UserPhone"
     const val UserPasswordKey: String = "UserPassword"
-    private var cartItems: Int = 0
+    private var cartItems: MutableList<Products> = ArrayList()
 
     const val CART_ITEMS_KEY = "CartItems"
 
-    fun getCartItemsCount(): Int {
+    fun getCartItems(): MutableList<Products> {
         return cartItems
     }
 
-    fun setCartItemsCount(count: Int) {
-        cartItems = count
+    fun setCartItems(items: MutableList<Products>) {
+        cartItems = items
     }
 
-    fun saveCartItems(context: Context, cartItems: Int) {
-        val sharedPreferences = context.getSharedPreferences(UserRememberMe, Context.MODE_PRIVATE)
-        sharedPreferences.edit {
-            putInt(CART_ITEMS_KEY, cartItems)
+    fun getCartItemsCount(): Int {
+        return cartItems.size
+    }
+
+    fun saveCartItems(context: Context) {
+        Paper.init(context)
+        Paper.book().write(CART_ITEMS_KEY, cartItems)
+    }
+
+    fun getCartItems(context: Context): MutableList<Products> {
+        Paper.init(context)
+        val savedItems = Paper.book().read<MutableList<Products>>(CART_ITEMS_KEY)
+        if (savedItems != null) {
+            cartItems = savedItems
         }
-        setCartItemsCount(cartItems)
+        return cartItems
     }
 
-    fun getCartItems(context: Context): Int {
-        val sharedPreferences = context.getSharedPreferences(UserRememberMe, Context.MODE_PRIVATE)
-        val count = sharedPreferences.getInt(CART_ITEMS_KEY, 0)
-        setCartItemsCount(count)
-        return count
+    fun addCartItem(product: Products) {
+        cartItems.add(product)
     }
+
+    fun removeCartItem(product: Products) {
+        cartItems.remove(product)
+    }
+}
 }

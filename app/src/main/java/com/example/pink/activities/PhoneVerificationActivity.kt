@@ -238,75 +238,66 @@ class PhoneVerificationActivity : AppCompatActivity() {
     }
 
     private fun submitVerificationCode() {
-        listOf(
+        val otpDigits = listOf(
             verify1.editText?.text?.toString()?.trim(),
             verify2.editText?.text?.toString()?.trim(),
             verify3.editText?.text?.toString()?.trim(),
             verify4.editText?.text?.toString()?.trim()
         )
 
-        private fun submitVerificationCode() {
-            val otpDigits = listOf(
-                verify1.editText?.text?.toString()?.trim(),
-                verify2.editText?.text?.toString()?.trim(),
-                verify3.editText?.text?.toString()?.trim(),
-                verify4.editText?.text?.toString()?.trim()
-            )
-
-            if (otpDigits.any { it.isNullOrEmpty() }) {
-                val fields = listOf(verify1, verify2, verify3, verify4)
-                otpDigits.forEachIndexed { index, digit ->
-                    fields[index].error =
-                        if (digit.isNullOrEmpty()) getString(R.string.required) else null
-                }
-                return
+        if (otpDigits.any { it.isNullOrEmpty() }) {
+            val fields = listOf(verify1, verify2, verify3, verify4)
+            otpDigits.forEachIndexed { index, digit ->
+                fields[index].error =
+                    if (digit.isNullOrEmpty()) getString(R.string.required) else null
             }
+            return
+        }
 
-            val otpMerged = otpDigits.joinToString("")
+        val otpMerged = otpDigits.joinToString("")
 
-            userRef.collection("Users").document(userID).get()
-                .addOnSuccessListener { doc ->
-                    if (doc.exists()) {
-                        val storedOtp = doc.getString("UserOTP")
-                        if (otpMerged == storedOtp) {
-                            userRef.collection("Users").document(userID)
-                                .update("UserVerified", "true")
-                                .addOnSuccessListener {
-                                    Toast.makeText(
-                                        this,
-                                        getString(R.string.verification_successful),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    val intent = Intent(this, LoginActivity::class.java)
-                                    intent.flags =
-                                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    startActivity(intent)
-                                }
-                                .addOnFailureListener {
-                                    Toast.makeText(
-                                        this,
-                                        getString(R.string.verification_failed),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                        } else {
-                            Toast.makeText(
-                                this,
-                                getString(R.string.incorrect_otp),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+        userRef.collection("Users").document(userID).get()
+            .addOnSuccessListener { doc ->
+                if (doc.exists()) {
+                    val storedOtp = doc.getString("UserOTP")
+                    if (otpMerged == storedOtp) {
+                        userRef.collection("Users").document(userID)
+                            .update("UserVerified", "true")
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    this,
+                                    getString(R.string.verification_successful),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                val intent = Intent(this, LoginActivity::class.java)
+                                intent.flags =
+                                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                startActivity(intent)
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(
+                                    this,
+                                    getString(R.string.verification_failed),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                     } else {
                         Toast.makeText(
                             this,
-                            getString(R.string.user_record_not_found),
+                            getString(R.string.incorrect_otp),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
+                } else {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.user_record_not_found),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-                .addOnFailureListener {
-                    Toast.makeText(this, getString(R.string.failed_to_verify), Toast.LENGTH_SHORT)
-                        .show()
-                }
-        }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, getString(R.string.failed_to_verify), Toast.LENGTH_SHORT)
+                    .show()
+            }
     }

@@ -10,6 +10,11 @@ import com.example.pink.fragment.AdminNewOrdersFragment
 
 class AdminOrdersPagerAdapter(fragmentActivity: FragmentActivity) :
     FragmentStateAdapter(fragmentActivity) {
+
+    companion object {
+        private const val NUM_TABS = 3
+    }
+
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> AdminNewOrdersFragment()
@@ -19,6 +24,6 @@ class AdminOrdersPagerAdapter(fragmentActivity: FragmentActivity) :
     }
 
     override fun getItemCount(): Int {
-        return 3
+        return NUM_TABS
     }
 }

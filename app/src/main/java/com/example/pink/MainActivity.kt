@@ -68,10 +68,10 @@ class MainActivity : AppCompatActivity() {
             AlertDialog.Builder(this)
                 .setTitle(getString(R.string.app_name))
                 .setMessage(getString(R.string.exit_message))
-                .setPositiveButton("Yes") { _, _ ->
+                .setPositiveButton(getString(R.string.yes)) { _, _ ->
                     finishAffinity()
                 }
-                .setNegativeButton("No", null)
+                .setNegativeButton(getString(R.string.no), null)
                 .show()
         }
     }
@@ -79,6 +79,6 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         // Save CartItems to Shared Preferences
-        Prevalent.saveCartItems(this, Prevalent.getCartItemsCount())
+        Prevalent.saveCartItems(this)
     }
 }

@@ -33,7 +33,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         loadingBar = ProgressDialog(this)
         userRef = FirebaseFirestore.getInstance()
 
-        validateLiveData()
+        addPhoneNumberValidation()
 
         forgotPasswordButton.setOnClickListener {
             validateDataOnBtnClick()

@@ -171,7 +171,7 @@ class AdminProductsAddEditActivity : AppCompatActivity() {
                     "TimeCreated" to saveCurrentTime,
                     "ProductName" to productName,
                     "ProductImage" to downloadImageUrl,
-                    "ProductPrice" to productPrice.toIntOrNull(),
+                    "ProductPrice" to productPrice,
                     "ProductDescription" to productDescription,
                     "ProductCategory" to productCategoryID,
                     "ProductStatus" to "active"

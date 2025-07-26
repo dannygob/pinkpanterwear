@@ -17,12 +17,12 @@ import java.security.NoSuchAlgorithmException
 
 class ResetPasswordActivity : AppCompatActivity() {
 
-    private var resetPasswordLayout: TextInputLayout? = null
-    private var resetConfirmPasswordLayout: TextInputLayout? = null
-    private var resetButton: Button? = null
-    private var loadingBar: ProgressDialog? = null
-    private var userRef: FirebaseFirestore? = null
-    private var userID: String = ""
+    private lateinit var resetPasswordLayout: TextInputLayout
+    private lateinit var resetConfirmPasswordLayout: TextInputLayout
+    private lateinit var resetButton: Button
+    private lateinit var loadingBar: ProgressDialog
+    private lateinit var userRef: FirebaseFirestore
+    private lateinit var userID: String
     private var generatedPassword: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,67 +43,73 @@ class ResetPasswordActivity : AppCompatActivity() {
         setupLiveValidation()
 
         // Acción de botón
-        resetButton?.setOnClickListener {
+        resetButton.setOnClickListener {
             validateInputsAndSave()
         }
     }
 
     private fun setupLiveValidation() {
-        resetPasswordLayout?.editText?.addTextChangedListener(object : TextWatcher {
+        resetPasswordLayout.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable?) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 when {
-                    s.isNullOrEmpty() -> resetPasswordLayout?.error = "Password cannot be empty!"
-                    s.length < 8 -> resetPasswordLayout?.error = "Minimum of 8 characters required"
-                    !isValidPassword(s) -> resetPasswordLayout?.error =
-                        "Must contain numbers and letters"
+                    s.isNullOrEmpty() -> resetPasswordLayout.error =
+                        getString(R.string.empty_password)
 
-                    else -> resetPasswordLayout?.error = null
+                    s.length < 8 -> resetPasswordLayout.error =
+                        getString(R.string.password_min_length)
+
+                    !isValidPassword(s) -> resetPasswordLayout.error =
+                        getString(R.string.password_invalid)
+
+                    else -> resetPasswordLayout.error = null
                 }
             }
         })
 
-        resetConfirmPasswordLayout?.editText?.addTextChangedListener(object : TextWatcher {
+        resetConfirmPasswordLayout.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable?) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val password = resetPasswordLayout?.editText?.text.toString()
+                val password = resetPasswordLayout.editText?.text.toString()
                 when {
-                    s.isNullOrEmpty() -> resetConfirmPasswordLayout?.error =
-                        "Password cannot be empty!"
+                    s.isNullOrEmpty() -> resetConfirmPasswordLayout.error =
+                        getString(R.string.empty_password)
 
-                    s.toString() != password -> resetConfirmPasswordLayout?.error =
-                        "Passwords do not match!"
+                    s.toString() != password -> resetConfirmPasswordLayout.error =
+                        getString(R.string.passwords_do_not_match)
 
-                    else -> resetConfirmPasswordLayout?.error = null
+                    else -> resetConfirmPasswordLayout.error = null
                 }
             }
         })
     }
 
     private fun validateInputsAndSave() {
-        val password = resetPasswordLayout?.editText?.text.toString()
-        val confirmPassword = resetConfirmPasswordLayout?.editText?.text.toString()
+        val password = resetPasswordLayout.editText?.text.toString()
+        val confirmPassword = resetConfirmPasswordLayout.editText?.text.toString()
 
         when {
-            password.isEmpty() -> resetPasswordLayout?.error = "Password cannot be empty!"
-            password.length < 8 -> resetPasswordLayout?.error = "Minimum of 8 characters required"
-            !isValidPassword(password) -> resetPasswordLayout?.error =
-                "Must contain numbers and letters"
+            password.isEmpty() -> resetPasswordLayout.error = getString(R.string.empty_password)
+            password.length < 8 -> resetPasswordLayout.error =
+                getString(R.string.password_min_length)
 
-            confirmPassword.isEmpty() -> resetConfirmPasswordLayout?.error =
-                "Password cannot be empty!"
+            !isValidPassword(password) -> resetPasswordLayout.error =
+                getString(R.string.password_invalid)
 
-            confirmPassword != password -> resetConfirmPasswordLayout?.error =
-                "Passwords do not match!"
+            confirmPassword.isEmpty() -> resetConfirmPasswordLayout.error =
+                getString(R.string.empty_password)
+
+            confirmPassword != password -> resetConfirmPasswordLayout.error =
+                getString(R.string.passwords_do_not_match)
 
             else -> {
-                loadingBar?.apply {
-                    setTitle("Resetting Password")
-                    setMessage("Please wait...")
+                loadingBar.apply {
+                    setTitle(getString(R.string.resetting_password_title))
+                    setMessage(getString(R.string.please_wait))
                     setCanceledOnTouchOutside(false)
                     show()
                 }
@@ -116,12 +122,16 @@ class ResetPasswordActivity : AppCompatActivity() {
     private fun saveNewPassword(password: String) {
         hashPassword(password)
 
-        userRef?.collection("Users")
-            ?.document(userID)
-            ?.update("UserPassword", generatedPassword)
-            ?.addOnSuccessListener(OnSuccessListener<Void?> {
-                loadingBar?.dismiss()
-                Toast.makeText(this, "Password reset successful!", Toast.LENGTH_SHORT).show()
+        userRef.collection("Users")
+            .document(userID)
+            .update("UserPassword", generatedPassword)
+            .addOnSuccessListener(OnSuccessListener<Void?> {
+                loadingBar.dismiss()
+                Toast.makeText(
+                    this,
+                    getString(R.string.password_reset_successful),
+                    Toast.LENGTH_SHORT
+                ).show()
                 val intent = Intent(applicationContext, LoginActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
@@ -130,7 +140,7 @@ class ResetPasswordActivity : AppCompatActivity() {
 
     private fun hashPassword(password: String) {
         try {
-            val md = MessageDigest.getInstance("MD5")
+            val md = MessageDigest.getInstance("SHA-256")
             val digestBytes = md.digest(password.toByteArray())
             val sb = StringBuilder()
             for (b in digestBytes) {
@@ -139,7 +149,7 @@ class ResetPasswordActivity : AppCompatActivity() {
             generatedPassword = sb.toString()
         } catch (e: NoSuchAlgorithmException) {
             e.printStackTrace()
-            Toast.makeText(this, "Hashing failed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.hashing_failed), Toast.LENGTH_SHORT).show()
         }
     }
 
