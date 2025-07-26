@@ -21,4 +21,4 @@ class AdminNewOrdersFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_admin_new_orders, container, false)
     }
 }
-}
+

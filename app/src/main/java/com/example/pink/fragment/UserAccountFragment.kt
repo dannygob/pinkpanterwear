@@ -44,4 +44,4 @@ class UserAccountFragment : Fragment() {
         return view
     }
 }
-}
+

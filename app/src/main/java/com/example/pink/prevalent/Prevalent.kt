@@ -47,4 +47,4 @@ object Prevalent {
         cartItems.remove(product)
     }
 }
-}
+

@@ -33,7 +33,7 @@ class CategoriesAdapter(
 
     class CategoriesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val name: TextView = itemView.findViewById(R.id.txtCategoryName)
-        private val image: ImageView = itemView.findViewById(R.id.txtCategoryImage)
+        private val image: ImageView = itemView.findViewById(R.id.txtcategoryimage)
 
         fun bind(category: Categories) {
             name.text = category.categoryName

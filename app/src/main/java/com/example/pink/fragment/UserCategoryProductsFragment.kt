@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
@@ -159,7 +160,7 @@ class UserCategoryProductsFragment : Fragment() {
             AnimationUtils.loadAnimation(context, R.anim.slide_out_right)
 
         category_products_filter_btn.setOnClickListener {
-            if (category_products_filter_layout.visibility == View.GONE) {
+            if (category_products_filter_layout.isGone) {
                 translucent_layout_filter.visibility = View.VISIBLE
                 category_products_filter_layout.visibility = View.VISIBLE
                 category_products_filter_layout.startAnimation(slideInRight)
@@ -232,7 +233,7 @@ class UserCategoryProductsFragment : Fragment() {
         val slideUp: Animation? = AnimationUtils.loadAnimation(context, R.anim.slide_up)
 
         category_products_sort_btn.setOnClickListener {
-            if (category_products_sort_layout.visibility == View.GONE) {
+            if (category_products_sort_layout.isGone) {
                 translucent_layout_sort.visibility = View.VISIBLE
                 category_products_sort_layout.visibility = View.VISIBLE
                 category_products_sort_layout.startAnimation(slideUp)

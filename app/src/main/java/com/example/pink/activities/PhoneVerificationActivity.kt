@@ -301,3 +301,5 @@ class PhoneVerificationActivity : AppCompatActivity() {
                     .show()
             }
     }
+}
+

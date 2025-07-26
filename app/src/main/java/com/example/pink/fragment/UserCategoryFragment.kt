@@ -11,7 +11,6 @@ import androidx.paging.PagingConfig
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pink.R
-import com.example.pink.activities.AdminProductsDetailsActivity
 import com.example.pink.model.Categories
 import com.example.pink.viewHolder.CategoryCategoryViewHolder
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter
@@ -84,8 +83,8 @@ class UserCategoryFragment : Fragment() {
                     Picasso.get().load(model.categoryImage).into(holder.txtCategoryImage)
 
                     holder.itemView.setOnClickListener {
-                        val intent = Intent(context, AdminProductsDetailsActivity::class.java)
-                        intent.putExtra("ProductUniqueID", model.categoryUniqueID)
+                        val intent = Intent(context, UserCategoryProductsFragment::class.java)
+                        intent.putExtra("category", model.categoryName)
                         startActivity(intent)
                     }
                 }

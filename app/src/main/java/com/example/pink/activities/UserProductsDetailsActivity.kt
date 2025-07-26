@@ -63,7 +63,8 @@ class UserProductsDetailsActivity : AppCompatActivity() {
 
     private fun getProductDetails(productID: String?) {
         if (productID.isNullOrEmpty()) {
-            Toast.makeText(this, "Product not specified", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.product_not_specified), Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
@@ -75,14 +76,13 @@ class UserProductsDetailsActivity : AppCompatActivity() {
                         .into(productImage)
                     userProductDetailsName.text = documentSnapshot.getString("ProductName")
                     userProductDetailsPrice.text =
-                        "Ksh " + documentSnapshot.getLong("ProductPrice")
-                            .toString()
+                        "${getString(R.string.currency)} ${documentSnapshot.getString("ProductPrice")}"
                     userProductDetailsDescription.text =
                         documentSnapshot.getString("ProductDescription")
                 } else {
                     Toast.makeText(
                         this@UserProductsDetailsActivity,
-                        "Product doesn't exists!!",
+                        getString(R.string.product_does_not_exist),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
