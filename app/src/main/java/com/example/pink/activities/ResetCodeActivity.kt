@@ -1,6 +1,5 @@
 package com.example.pink.activities
 
-import android.app.Activity
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
@@ -89,7 +88,7 @@ class ResetCodeActivity : AppCompatActivity() {
         if (otpDigits.any { it.isNullOrEmpty() }) {
             listOf(verify1, verify2, verify3, verify4).forEachIndexed { index, field ->
                 if (otpDigits[index].isNullOrEmpty()) {
-                    field.error = "Required!"
+                    field.error = getString(R.string.required)
                 } else {
                     field.error = null
                 }
@@ -109,12 +108,20 @@ class ResetCodeActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     } else {
-                        Toast.makeText(this, "Incorrect Reset Code!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            getString(R.string.incorrect_reset_code),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
             .addOnFailureListener {
-                Toast.makeText(this, "Error verifying code: ${it.message}", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    this,
+                    getString(R.string.error_verifying_code, it.message),
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
     }
@@ -163,7 +170,10 @@ class ResetCodeActivity : AppCompatActivity() {
         }
 
         val intentFilter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
-        registerReceiver(smsBroadcastReceiver, intentFilter)
+        val receiverFlags =
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU)
+                RECEIVER_EXPORTED else 0
+        registerReceiver(smsBroadcastReceiver, intentFilter, receiverFlags)
     }
 
     override fun onStart() {

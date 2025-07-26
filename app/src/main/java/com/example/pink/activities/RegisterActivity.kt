@@ -63,22 +63,22 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun setupFieldValidation() {
         registerName.editText?.addTextChangedListener(fieldWatcher(registerName) {
-            it.isBlank() to "Name cannot be empty!"
+            it.isBlank() to getString(R.string.empty_name)
         })
 
         registerPhone.editText?.addTextChangedListener(fieldWatcher(registerPhone) {
             when {
-                it.isBlank() -> true to "Phone Number cannot be empty!"
-                it.startsWith("0") || it.length != 9 -> true to "Format must be 705..."
+                it.isBlank() -> true to getString(R.string.empty_phone_number)
+                it.startsWith("0") || it.length != 9 -> true to getString(R.string.number_format)
                 else -> false to null
             }
         })
 
         registerPassword.editText?.addTextChangedListener(fieldWatcher(registerPassword) {
             when {
-                it.isBlank() -> true to "Password cannot be empty!"
-                it.length < 8 -> true to "Minimum 8 characters"
-                !isValidPassword(it) -> true to "Include letters and numbers"
+                it.isBlank() -> true to getString(R.string.empty_password)
+                it.length < 8 -> true to getString(R.string.password_min_length)
+                !isValidPassword(it) -> true to getString(R.string.password_invalid)
                 else -> false to null
             }
         })
@@ -89,8 +89,8 @@ class RegisterActivity : AppCompatActivity() {
             ) {
                 val password = registerPassword.editText?.text.toString()
                 when {
-                    it.isBlank() -> true to "Confirm Password required"
-                    it != password -> true to "Passwords do not match"
+                    it.isBlank() -> true to getString(R.string.confirm_password_required)
+                    it != password -> true to getString(R.string.passwords_do_not_match)
                     else -> false to null
                 }
             })
@@ -117,19 +117,22 @@ class RegisterActivity : AppCompatActivity() {
         val confirmPassword = registerConfirmPassword.editText?.text.toString()
 
         when {
-            name.isEmpty() -> registerName.error = "Name cannot be empty!"
-            phone.isEmpty() -> registerPhone.error = "Phone Number cannot be empty!"
+            name.isEmpty() -> registerName.error = getString(R.string.empty_name)
+            phone.isEmpty() -> registerPhone.error = getString(R.string.empty_phone_number)
             phone.startsWith("0") || phone.length != 9 -> registerPhone.error =
-                "Format must be 705..."
+                getString(R.string.number_format)
 
-            password.isEmpty() -> registerPassword.error = "Password cannot be empty!"
-            password.length < 8 -> registerPassword.error = "Minimum 8 characters"
-            !isValidPassword(password) -> registerPassword.error = "Include letters and numbers"
-            confirmPassword != password -> registerConfirmPassword.error = "Passwords do not match"
+            password.isEmpty() -> registerPassword.error = getString(R.string.empty_password)
+            password.length < 8 -> registerPassword.error = getString(R.string.password_min_length)
+            !isValidPassword(password) -> registerPassword.error =
+                getString(R.string.password_invalid)
+
+            confirmPassword != password -> registerConfirmPassword.error =
+                getString(R.string.passwords_do_not_match)
             else -> {
                 loadingBar.apply {
-                    setTitle("Creating Account")
-                    setMessage("Please wait...")
+                    setTitle(getString(R.string.creating_account_title))
+                    setMessage(getString(R.string.please_wait))
                     setCanceledOnTouchOutside(false)
                     show()
                 }
@@ -144,7 +147,11 @@ class RegisterActivity : AppCompatActivity() {
             .addOnSuccessListener { snapshot ->
                 if (snapshot.exists()) {
                     loadingBar.dismiss()
-                    Toast.makeText(this, "User $phoneID already exists", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        getString(R.string.user_already_exists, phoneID),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     saveUserData(phoneID, name, password)
                 }
@@ -160,7 +167,7 @@ class RegisterActivity : AppCompatActivity() {
         hashedPassword = hashPassword(password)
 
         val userMap = mapOf(
-            "UseID" to userID,
+            "UserID" to userID,
             "UserName" to name,
             "UserPhoneNumber" to phoneID,
             "UserPassword" to hashedPassword,
@@ -182,7 +189,8 @@ class RegisterActivity : AppCompatActivity() {
             }
             .addOnFailureListener {
                 loadingBar.dismiss()
-                Toast.makeText(this, "Error! User not created", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.user_not_created), Toast.LENGTH_SHORT)
+                    .show()
             }
     }
 
@@ -206,7 +214,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun hashPassword(password: String): String {
         return try {
-            val md = MessageDigest.getInstance("MD5")
+            val md = MessageDigest.getInstance("SHA-256")
             val bytes = md.digest(password.toByteArray())
             bytes.joinToString("") { "%02x".format(it) }
         } catch (e: Exception) {

@@ -14,6 +14,8 @@
     <string name="adding_product_title">Adding Product</string>
     <string name="sending_reset_code_title">Sending reset code</string>
     <string name="login_title">Logging in</string>
+    <string name="creating_account_title">Creating Account</string>
+    <string name="resetting_password_title">Resetting Password</string>
 
     <!-- UI Messages -->
     <string name="welcome_message">Welcome to my app, it\'s great!</string>
@@ -60,6 +62,17 @@
     <string name="incorrect_otp">Incorrect OTP!</string>
     <string name="user_record_not_found">User record not found.</string>
     <string name="failed_to_verify">Failed to verify. Try again later.</string>
+    <string name="empty_name">Name cannot be empty!</string>
+    <string name="password_min_length">Minimum 8 characters</string>
+    <string name="password_invalid">Include letters and numbers</string>
+    <string name="confirm_password_required">Confirm Password required</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="user_already_exists">User %1$s already exists</string>
+    <string name="user_not_created">Error! User not created</string>
+    <string name="incorrect_reset_code">Incorrect Reset Code!</string>
+    <string name="error_verifying_code">Error verifying code: %1$s</string>
+    <string name="password_reset_successful">Password reset successful!</string>
+    <string name="hashing_failed">Hashing failed</string>
 
     <!-- Links -->
     <string name="register_intent_login_link">LOGIN</string>
