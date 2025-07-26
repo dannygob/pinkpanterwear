@@ -62,15 +62,15 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateLiveUserData() {
+    private fun addInputValidation() {
         loginPhone.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 s?.let {
                     val regex = Regex("^7[0-9]{8}$")
                     loginPhone.error = when {
-                        it.isEmpty() -> "El número no puede estar vacío"
-                        !regex.matches(it) -> "Formato válido: 705xxxxxx"
+                        it.isEmpty() -> getString(R.string.empty_number)
+                        !regex.matches(it) -> getString(R.string.number_format)
                         else -> null
                     }
                 }
@@ -83,7 +83,7 @@ class LoginActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 loginPassword.error =
-                    if (s.isNullOrEmpty()) "La contraseña no puede estar vacía" else null
+                    if (s.isNullOrEmpty()) getString(R.string.empty_password) else null
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -96,22 +96,22 @@ class LoginActivity : AppCompatActivity() {
         val userID = "254$phone"
 
         if (phone.isEmpty()) {
-            loginPhone.error = "El número no puede estar vacío"
+            loginPhone.error = getString(R.string.empty_number)
             return
         }
         if (!Regex("^7[0-9]{8}$").matches(phone)) {
-            loginPhone.error = "Formato válido: 705xxxxxx"
+            loginPhone.error = getString(R.string.number_format)
             return
         }
         if (password.isEmpty()) {
-            loginPassword.error = "La contraseña no puede estar vacía"
+            loginPassword.error = getString(R.string.empty_password)
             return
         }
 
         passWordHash(password)
 
-        loadingBar.setTitle("Iniciando sesión")
-        loadingBar.setMessage("Espera un momento...")
+        loadingBar.setTitle(getString(R.string.login_title))
+        loadingBar.setMessage(getString(R.string.please_wait))
         loadingBar.setCanceledOnTouchOutside(false)
         loadingBar.show()
 
@@ -124,11 +124,19 @@ class LoginActivity : AppCompatActivity() {
                     val isVerified = documentSnapshot.getString("UserVerified") == "true"
 
                     if (firestorePhone != userID) {
-                        Toast.makeText(this, "El número no coincide", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            getString(R.string.number_mismatch),
+                            Toast.LENGTH_SHORT
+                        ).show()
                         return@addOnSuccessListener
                     }
                     if (generatedPassword != firestorePassword) {
-                        Toast.makeText(this, "Contraseña incorrecta", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            getString(R.string.incorrect_password),
+                            Toast.LENGTH_SHORT
+                        ).show()
                         return@addOnSuccessListener
                     }
                     if (!isVerified) {
@@ -138,14 +146,18 @@ class LoginActivity : AppCompatActivity() {
 
                     loginUser(userID, password)
                 } else {
-                    Toast.makeText(this, "El usuario +$userID no existe", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        getString(R.string.user_does_not_exist, userID),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .addOnFailureListener {
                 loadingBar.dismiss()
                 Toast.makeText(
                     this,
-                    "Error al iniciar sesión. Intenta de nuevo.",
+                    getString(R.string.login_error),
                     Toast.LENGTH_SHORT
                 ).show()
             }

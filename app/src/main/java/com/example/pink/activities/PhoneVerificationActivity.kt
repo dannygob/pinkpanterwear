@@ -1,8 +1,6 @@
 package com.example.pink.activities
 
 import android.Manifest
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -113,7 +111,7 @@ class PhoneVerificationActivity : AppCompatActivity() {
 
                 startSmsUserConsent()
                 startResendCounter()
-                Toast.makeText(this, "OTP has been resent!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.otp_resent), Toast.LENGTH_SHORT).show()
             }
     }
 
@@ -137,10 +135,14 @@ class PhoneVerificationActivity : AppCompatActivity() {
         val client: SmsRetrieverClient = SmsRetriever.getClient(this)
         client.startSmsUserConsent(null)
             .addOnSuccessListener {
-                Toast.makeText(this, "Waiting for SMS...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.waiting_for_sms), Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
-                Toast.makeText(this, "Failed to start SMS consent.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    getString(R.string.failed_to_start_sms_consent),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
@@ -155,7 +157,7 @@ class PhoneVerificationActivity : AppCompatActivity() {
                     override fun onFailure() {
                         Toast.makeText(
                             this@PhoneVerificationActivity,
-                            "SMS capture failed.",
+                            getString(R.string.sms_capture_failed),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -236,32 +238,14 @@ class PhoneVerificationActivity : AppCompatActivity() {
     }
 
     private fun submitVerificationCode() {
-        val otpDigits = listOf(
+        listOf(
             verify1.editText?.text?.toString()?.trim(),
             verify2.editText?.text?.toString()?.trim(),
             verify3.editText?.text?.toString()?.trim(),
             verify4.editText?.text?.toString()?.trim()
         )
 
-        if (otpDigits.any { it.isNullOrEmpty() }) {
-            val fields = listOf(verify1, verify2, verify3, verify4)
-            otpDigits.forEachIndexed { index, digit ->
-                fields[index].error = if (digit.isNullOrEmpty()) "Required!" else null
-            }
-            return
-        }
-
-        otpDigits.joinToString("")
-
-        userRef.collection("Users").document(userID).get()
-            .addOnSuccessListener { doc ->
-                // tu lógica de verificación
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Error al verificar", Toast.LENGTH_SHORT).show()
-            }
-
-        fun submitVerificationCode() {
+        private fun submitVerificationCode() {
             val otpDigits = listOf(
                 verify1.editText?.text?.toString()?.trim(),
                 verify2.editText?.text?.toString()?.trim(),
@@ -272,7 +256,8 @@ class PhoneVerificationActivity : AppCompatActivity() {
             if (otpDigits.any { it.isNullOrEmpty() }) {
                 val fields = listOf(verify1, verify2, verify3, verify4)
                 otpDigits.forEachIndexed { index, digit ->
-                    fields[index].error = if (digit.isNullOrEmpty()) "Required!" else null
+                    fields[index].error =
+                        if (digit.isNullOrEmpty()) getString(R.string.required) else null
                 }
                 return
             }
@@ -289,7 +274,7 @@ class PhoneVerificationActivity : AppCompatActivity() {
                                 .addOnSuccessListener {
                                     Toast.makeText(
                                         this,
-                                        "Verification successful!",
+                                        getString(R.string.verification_successful),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                     val intent = Intent(this, LoginActivity::class.java)
@@ -300,21 +285,28 @@ class PhoneVerificationActivity : AppCompatActivity() {
                                 .addOnFailureListener {
                                     Toast.makeText(
                                         this,
-                                        "Verification failed. Try again.",
+                                        getString(R.string.verification_failed),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
                         } else {
-                            Toast.makeText(this, "Incorrect OTP!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                getString(R.string.incorrect_otp),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } else {
-                        Toast.makeText(this, "User record not found.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            getString(R.string.user_record_not_found),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
                 .addOnFailureListener {
-                    Toast.makeText(this, "Failed to verify. Try again later.", Toast.LENGTH_SHORT)
+                    Toast.makeText(this, getString(R.string.failed_to_verify), Toast.LENGTH_SHORT)
                         .show()
                 }
         }
     }
-}

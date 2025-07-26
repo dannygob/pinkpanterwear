@@ -87,7 +87,7 @@ class AdminProductsAddEditActivity : AppCompatActivity() {
     }
 
     private fun loadCategories() {
-        categories = mutableListOf(SpinnerItems("Select category", ""))
+        categories = mutableListOf(SpinnerItems(getString(R.string.select_category), ""))
         productRef.collection("Categories").get().addOnSuccessListener { snapshots ->
             for (result in snapshots) {
                 categories.add(
@@ -117,19 +117,20 @@ class AdminProductsAddEditActivity : AppCompatActivity() {
         when {
             imageUri == null -> Toast.makeText(
                 this,
-                "Product Image cannot be empty!",
+                getString(R.string.empty_product_image),
                 Toast.LENGTH_SHORT
             ).show()
 
             productCategoryID == null || productCategoryID.isBlank() -> Toast.makeText(
                 this,
-                "Please select a category.",
+                getString(R.string.please_select_category),
                 Toast.LENGTH_SHORT
             ).show()
 
-            TextUtils.isEmpty(productName) -> addProductName.error = "Required!"
-            TextUtils.isEmpty(productPrice) -> addProductPrice.error = "Required!"
-            TextUtils.isEmpty(productDescription) -> addProductDescription.error = "Required!"
+            TextUtils.isEmpty(productName) -> addProductName.error = getString(R.string.required)
+            TextUtils.isEmpty(productPrice) -> addProductPrice.error = getString(R.string.required)
+            TextUtils.isEmpty(productDescription) -> addProductDescription.error =
+                getString(R.string.required)
             else -> storeProductDetails(
                 productName,
                 productPrice,
@@ -145,8 +146,8 @@ class AdminProductsAddEditActivity : AppCompatActivity() {
         productDescription: String,
         productCategoryID: String?,
     ) {
-        loadingBar.setTitle("Adding Product")
-        loadingBar.setMessage("Please wait...")
+        loadingBar.setTitle(getString(R.string.adding_product_title))
+        loadingBar.setMessage(getString(R.string.please_wait))
         loadingBar.setCanceledOnTouchOutside(false)
         loadingBar.show()
 
@@ -182,7 +183,7 @@ class AdminProductsAddEditActivity : AppCompatActivity() {
                     loadingBar.dismiss()
                     Toast.makeText(
                         this@AdminProductsAddEditActivity,
-                        "Product Added Successfully!",
+                        getString(R.string.product_added_successfully),
                         Toast.LENGTH_SHORT
                     ).show()
                     startActivity(

@@ -47,7 +47,8 @@ class AdminProductsDetailsActivity : AppCompatActivity() {
 
     private fun getProductDetails(productID: String?) {
         if (productID.isNullOrEmpty()) {
-            Toast.makeText(this, "Producto no especificado", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.product_not_specified), Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
@@ -58,17 +59,23 @@ class AdminProductsDetailsActivity : AppCompatActivity() {
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
                     productName.text = documentSnapshot.getString("ProductName")
-                    productPrice.text = documentSnapshot.getString("ProductPrice")
+                    productPrice.text =
+                        "${getString(R.string.currency)} ${documentSnapshot.getString("ProductPrice")}"
                     productDescription.text = documentSnapshot.getString("ProductDescription")
                     productQuantity.text = documentSnapshot.getString("ProductStatus")
                     Picasso.get().load(documentSnapshot.getString("ProductImage"))
                         .into(productImage)
                 } else {
-                    Toast.makeText(this, "¡El producto no existe!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        getString(R.string.product_does_not_exist),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "No se pudo cargar el producto.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.could_not_load_product), Toast.LENGTH_SHORT)
+                    .show()
             }
     }
 }

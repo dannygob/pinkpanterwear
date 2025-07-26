@@ -11,6 +11,9 @@
     <!-- Activity Titles -->
     <string name="title_activity_admin_home">Admin Home</string>
     <string name="adding_category_title">Adding Category</string>
+    <string name="adding_product_title">Adding Product</string>
+    <string name="sending_reset_code_title">Sending reset code</string>
+    <string name="login_title">Logging in</string>
 
     <!-- UI Messages -->
     <string name="welcome_message">Welcome to my app, it\'s great!</string>
@@ -25,6 +28,38 @@
     <string name="select_image">Select an image!</string>
     <string name="please_wait">Please wait...</string>
     <string name="category_added_successfully">Category Added Successfully</string>
+    <string name="new_orders">New</string>
+    <string name="dispatch_orders">Dispatch</string>
+    <string name="all_orders">All</string>
+    <string name="currency">Ksh</string>
+    <string name="select_category">Select category</string>
+    <string name="empty_product_image">Product Image cannot be empty!</string>
+    <string name="please_select_category">Please select a category.</string>
+    <string name="required">Required!</string>
+    <string name="product_added_successfully">Product Added Successfully!</string>
+    <string name="product_not_specified">Product not specified</string>
+    <string name="product_does_not_exist">Product does not exist!</string>
+    <string name="could_not_load_product">Could not load product.</string>
+    <string name="empty_number">Number cannot be empty!</string>
+    <string name="number_format">Number format: 705...</string>
+    <string name="empty_phone_number">Phone Number cannot be empty!</string>
+    <string name="user_does_not_exist">User +%1$s does not exist!</string>
+    <string name="error_accessing_user_data">Error accessing user data.</string>
+    <string name="could_not_save_reset_code">Could not save reset code.</string>
+    <string name="empty_password">Password cannot be empty</string>
+    <string name="number_mismatch">Number does not match</string>
+    <string name="incorrect_password">Incorrect password</string>
+    <string name="login_error">Error logging in. Try again.</string>
+    <string name="otp_resent">OTP has been resent!</string>
+    <string name="waiting_for_sms">Waiting for SMS...</string>
+    <string name="failed_to_start_sms_consent">Failed to start SMS consent.</string>
+    <string name="sms_capture_failed">SMS capture failed.</string>
+    <string name="error_verifying">Error verifying</string>
+    <string name="verification_successful">Verification successful!</string>
+    <string name="verification_failed">Verification failed. Try again.</string>
+    <string name="incorrect_otp">Incorrect OTP!</string>
+    <string name="user_record_not_found">User record not found.</string>
+    <string name="failed_to_verify">Failed to verify. Try again later.</string>
 
     <!-- Links -->
     <string name="register_intent_login_link">LOGIN</string>

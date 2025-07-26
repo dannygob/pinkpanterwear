@@ -99,7 +99,8 @@ class AdminProductsActivity : AppCompatActivity(), NavigationView.OnNavigationIt
                 model: Products,
             ) {
                 holder.txtProductName?.text = model.productName
-                holder.txtProductPrice?.text = "Ksh ${model.productPrice}"
+                holder.txtProductPrice?.text =
+                    "${getString(R.string.currency)} ${model.productPrice}"
                 holder.txtProductDescription?.text = model.productDescription
 
                 Picasso.get()
@@ -140,40 +141,37 @@ class AdminProductsActivity : AppCompatActivity(), NavigationView.OnNavigationIt
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.admin_home_menu -> startActivity(Intent(this, adminHomeActivity::class.java))
+            R.id.admin_home_menu -> startActivity(Intent(this, AdminHomeActivity::class.java))
             R.id.admin_orders_menu -> startActivity(Intent(this, AdminOrdersActivity::class.java))
             R.id.admin_categories_menu -> startActivity(
                 Intent(
                     this,
-                    adminCategoriesActivity::class.java
+                    AdminCategoriesActivity::class.java
                 )
             )
 
-            R.id.admin_products_menu -> startActivity(
-                Intent(
-                    this,
-                    AdminProductsActivity::class.java
-                )
-            )
+            R.id.admin_products_menu -> {
+                // Do nothing, already in this activity
+            }
 
             R.id.admin_delivery_menu -> startActivity(
                 Intent(
                     this,
-                    adminDeliveryActivity::class.java
+                    AdminDeliveryActivity::class.java
                 )
             )
 
             R.id.admin_assistant_menu -> startActivity(
                 Intent(
                     this,
-                    adminAssistantActivity::class.java
+                    AdminAssistantActivity::class.java
                 )
             )
 
             R.id.admin_main_home_menu -> startActivity(Intent(this, MainActivity::class.java))
             R.id.admin_logout_menu -> {
                 // Implement logout logic here
-                Toast.makeText(this, "Logged Out Successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.logout_message), Toast.LENGTH_SHORT).show()
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)

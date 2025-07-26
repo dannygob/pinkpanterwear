@@ -40,18 +40,19 @@ class ForgotPasswordActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateLiveData() {
+    private fun addPhoneNumberValidation() {
         forgotPasswordPhone.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val number = s.toString()
                 when {
-                    number.isEmpty() -> forgotPasswordPhone.error = "Number cannot be empty!"
+                    number.isEmpty() -> forgotPasswordPhone.error = getString(R.string.empty_number)
                     number.startsWith("0") && number.length == 10 -> forgotPasswordPhone.error =
-                        "Number format: 705..."
+                        getString(R.string.number_format)
 
-                    number.length != 9 -> forgotPasswordPhone.error = "Number format: 705..."
+                    number.length != 9 -> forgotPasswordPhone.error =
+                        getString(R.string.number_format)
                     else -> forgotPasswordPhone.error = null
                 }
             }
@@ -64,17 +65,17 @@ class ForgotPasswordActivity : AppCompatActivity() {
         val phone = forgotPasswordPhone.editText?.text.toString()
 
         if (TextUtils.isEmpty(phone)) {
-            forgotPasswordPhone.error = "Phone Number cannot be empty!"
+            forgotPasswordPhone.error = getString(R.string.empty_phone_number)
             return
         } else if (phone.startsWith("0") || phone.length != 9) {
-            forgotPasswordPhone.error = "Phone Number format: 705..."
+            forgotPasswordPhone.error = getString(R.string.number_format)
             return
         }
 
         userID = "254$phone"
 
-        loadingBar.setTitle("Sending reset code")
-        loadingBar.setMessage("Please wait ...")
+        loadingBar.setTitle(getString(R.string.sending_reset_code_title))
+        loadingBar.setMessage(getString(R.string.please_wait))
         loadingBar.setCanceledOnTouchOutside(false)
         loadingBar.show()
 
@@ -84,12 +85,20 @@ class ForgotPasswordActivity : AppCompatActivity() {
                     saveResetCode(userID)
                 } else {
                     loadingBar.dismiss()
-                    Toast.makeText(this, "User +$userID does not exist!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        getString(R.string.user_does_not_exist, userID),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .addOnFailureListener {
                 loadingBar.dismiss()
-                Toast.makeText(this, "Error accessing user data.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    getString(R.string.error_accessing_user_data),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
@@ -102,7 +111,11 @@ class ForgotPasswordActivity : AppCompatActivity() {
             }
             .addOnFailureListener {
                 loadingBar.dismiss()
-                Toast.makeText(this, "Could not save reset code.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    getString(R.string.could_not_save_reset_code),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 

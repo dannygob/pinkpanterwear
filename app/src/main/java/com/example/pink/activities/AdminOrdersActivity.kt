@@ -59,17 +59,17 @@ class AdminOrdersActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
             when (position) {
                 0 -> {
-                    tab.text = "New"
+                    tab.text = getString(R.string.new_orders)
                     tab.setIcon(R.drawable.ic_baseline_person_24)
                 }
 
                 1 -> {
-                    tab.text = "Dispatch"
+                    tab.text = getString(R.string.dispatch_orders)
                     tab.setIcon(R.drawable.ic_baseline_directions_bike_24)
                 }
 
                 2 -> {
-                    tab.text = "All"
+                    tab.text = getString(R.string.all_orders)
                     tab.setIcon(R.drawable.ic_baseline_local_grocery_store_24)
                 }
             }
@@ -78,12 +78,14 @@ class AdminOrdersActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.admin_home_menu -> startActivity(Intent(this, adminHomeActivity::class.java))
-            R.id.admin_orders_menu -> startActivity(Intent(this, AdminOrdersActivity::class.java))
+            R.id.admin_home_menu -> startActivity(Intent(this, AdminHomeActivity::class.java))
+            R.id.admin_orders_menu -> {
+                // Do nothing, already in this activity
+            }
             R.id.admin_categories_menu -> startActivity(
                 Intent(
                     this,
-                    adminCategoriesActivity::class.java
+                    AdminCategoriesActivity::class.java
                 )
             )
 
@@ -97,28 +99,25 @@ class AdminOrdersActivity : AppCompatActivity(), NavigationView.OnNavigationItem
             R.id.admin_delivery_menu -> startActivity(
                 Intent(
                     this,
-                    adminDeliveryActivity::class.java
+                    AdminDeliveryActivity::class.java
                 )
             )
 
             R.id.admin_assistant_menu -> startActivity(
                 Intent(
                     this,
-                    adminAssistantActivity::class.java
+                    AdminAssistantActivity::class.java
                 )
             )
 
             R.id.admin_main_home_menu -> startActivity(Intent(this, MainActivity::class.java))
             R.id.admin_logout_menu -> {
                 // Implement logout logic here
-                Toast.makeText(this, "Logged Out Successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.logout_message), Toast.LENGTH_SHORT).show()
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
 
-    override fun onPointerCaptureChanged(hasCapture: Boolean) {
-        // Si necesitas detectar cambios del puntero, implementa aquí
-    }
 }
