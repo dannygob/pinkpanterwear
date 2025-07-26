@@ -10,11 +10,11 @@ import com.example.pink.R
 class UserCategoryProductsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
     View.OnClickListener {
 
-    private val txtCategoryProductsName: TextView =
+    val txtCategoryProductsName: TextView =
         itemView.findViewById(R.id.user_category_products_name)
-    private val txtCategoryProductsPrice: TextView =
+    val txtCategoryProductsPrice: TextView =
         itemView.findViewById(R.id.user_category_products_price)
-    private val txtCategoryProductsImage: ImageView =
+    val txtCategoryProductsImage: ImageView =
         itemView.findViewById(R.id.user_category_products_image)
 
     private var listener: ItemClickListener? = null

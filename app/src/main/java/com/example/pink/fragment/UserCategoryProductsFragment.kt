@@ -13,10 +13,12 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
+import androidx.paging.PagingConfig
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
+import com.bumptech.glide.Glide
 import com.example.pink.R
 import com.example.pink.activities.UserProductsDetailsActivity
 import com.example.pink.model.Products
@@ -28,7 +30,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.squareup.picasso.Picasso
 
 class UserCategoryProductsFragment : Fragment() {
 
@@ -374,7 +375,7 @@ class UserCategoryProductsFragment : Fragment() {
                     holder.txtCategoryProductsName?.text = productName
                     holder.txtCategoryProductsPrice?.text =
                         "${getString(R.string.currency)} ${model.productPrice}"
-                    Picasso.get().load(model.productImage)
+                    Glide.with(holder.itemView.context).load(model.productImage)
                         .into(holder.txtCategoryProductsImage)
 
                     holder.itemView.setOnClickListener {
