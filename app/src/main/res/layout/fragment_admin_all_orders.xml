@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="All Orders"
-        android:paddingLeft="50dp"
+        android:paddingStart="50dp"
         android:paddingTop="50dp"
         android:textColor="@color/white" />
 

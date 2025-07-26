@@ -47,15 +47,15 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1" />
 
-                    <!--            <TextView-->
-                    <!--                android:layout_width="wrap_content"-->
-                    <!--                android:layout_height="match_parent"-->
-                    <!--                app:drawableStartCompat="@drawable/ic_baseline_grid_24"-->
-                    <!--                android:id="@+id/category_products_change_layout_btn"-->
-                    <!--                app:drawableTint="@color/black"-->
-                    <!--                android:layout_marginEnd="20dp"-->
-                    <!--                android:clickable="true"-->
-                    <!--                android:gravity="center"/>-->
+                    <TextView
+                        android:id="@+id/category_products_change_layout_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="20dp"
+                        android:clickable="true"
+                        android:gravity="center"
+                        app:drawableStartCompat="@drawable/ic_baseline_grid_24"
+                        app:drawableTint="@color/black" />
 
                     <TextView
                         android:id="@+id/category_products_filter_btn"
@@ -134,12 +134,12 @@
 
             </LinearLayout>
 
-            <!--            <LinearLayout-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="match_parent"-->
-            <!--                >-->
+            <!--                        <LinearLayout-->
+            <!--                            android:layout_width="match_parent"-->
+            <!--                            android:layout_height="match_parent"-->
+            <!--                            >-->
 
-            <!--            </LinearLayout>-->
+            <!--                        </LinearLayout>-->
             <LinearLayout
                 android:id="@+id/translucent_layout_sort"
                 android:layout_width="match_parent"

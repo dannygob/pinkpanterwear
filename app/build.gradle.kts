@@ -60,7 +60,9 @@ dependencies {
     implementation(libs.firebase.ui.firestore.v802)
     implementation(libs.androidx.paging.runtime.ktx.v321)
 
-    implementation(libs.firebaseui.firebase.ui.firestore.v802)
+    implementation("com.firebaseui:firebase-ui-firestore:8.0.2")
+// Or the latest version
+
 
 
     implementation(libs.picasso)

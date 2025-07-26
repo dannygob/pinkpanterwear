@@ -23,6 +23,7 @@
             android:background="?colorPrimary"
             android:textColor="@color/white"
             android:gravity="center_vertical"
+
             android:paddingLeft="10dp" />
 
         <RelativeLayout
@@ -34,11 +35,11 @@
                 android:id="@+id/cart_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_shopping_cart_24"
-                android:drawableTint="@color/white"
                 android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:background="?colorPrimary" />
+                android:layout_alignParentStart="true"
+                android:background="?colorPrimary"
+                app:drawableStartCompat="@drawable/ic_baseline_shopping_cart_24"
+                app:drawableTint="@color/white" />
 
             <TextView
                 android:id="@+id/cart_main_badge"
@@ -49,7 +50,7 @@
                 android:textSize="10sp"
                 android:fontFamily="@font/roboto"
                 android:gravity="center"
-                android:layout_alignRight="@id/cart_main"
+                android:layout_alignEnd="@id/cart_main"
                 android:textColor="@color/white" />
 
         </RelativeLayout>
