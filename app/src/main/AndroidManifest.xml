@@ -22,7 +22,7 @@
 
         <!-- 🔐 Combined Broadcast Receiver -->
         <receiver
-            android:name=".Fragment.SmsBroadcastReceiver"
+            android:name=".fragment.SmsBroadcastReceiver"
             android:exported="true"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter>
@@ -39,27 +39,27 @@
             android:resource="@array/preloaded_fonts" />
 
         <!-- 📱 Activities -->
-        <activity android:name="com.example.pink.Activities.ResetPasswordActivity" />
-        <activity android:name="com.example.pink.Activities.ResetCodeActivity" />
-        <activity android:name="com.example.pink.Activities.ForgotPasswordActivity" />
-        <activity android:name="com.example.pink.Activities.UserProductsDetailsActivity" />
-        <activity android:name="com.example.pink.Activities.adminCategoriesAddEditActivity" />
-        <activity android:name="com.example.pink.Activities.SearchableActivity" />
-        <activity android:name="com.example.pink.Activities.AdminProductsDetailsActivity" />
-        <activity android:name="com.example.pink.Activities.AdminOrdersActivity" />
-        <activity android:name="com.example.pink.Activities.AdminProductsAddEditActivity" />
-        <activity android:name="com.example.pink.Activities.AdminSettingsActivity" />
-        <activity android:name="com.example.pink.Activities.adminAssistantActivity" />
-        <activity android:name="com.example.pink.Activities.adminDeliveryActivity" />
-        <activity android:name="com.example.pink.Activities.AdminProductsActivity" />
-        <activity android:name="com.example.pink.Activities.adminCategoriesActivity" />
+        <activity android:name="com.example.pink.activities.ResetPasswordActivity" />
+        <activity android:name="com.example.pink.activities.ResetCodeActivity" />
+        <activity android:name="com.example.pink.activities.ForgotPasswordActivity" />
+        <activity android:name="com.example.pink.activities.UserProductsDetailsActivity" />
+        <activity android:name="com.example.pink.activities.adminCategoriesAddEditActivity" />
+        <activity android:name="com.example.pink.activities.SearchableActivity" />
+        <activity android:name="com.example.pink.activities.AdminProductsDetailsActivity" />
+        <activity android:name="com.example.pink.activities.AdminOrdersActivity" />
+        <activity android:name="com.example.pink.activities.AdminProductsAddEditActivity" />
+        <activity android:name="com.example.pink.activities.AdminSettingsActivity" />
+        <activity android:name="com.example.pink.activities.adminAssistantActivity" />
+        <activity android:name="com.example.pink.activities.adminDeliveryActivity" />
+        <activity android:name="com.example.pink.activities.AdminProductsActivity" />
+        <activity android:name="com.example.pink.activities.adminCategoriesActivity" />
         <activity
-            android:name="com.example.pink.Activities.adminHomeActivity"
+            android:name="com.example.pink.activities.adminHomeActivity"
             android:label="@string/title_activity_admin_home"
             android:theme="@style/Theme.pink.NoActionBar" />
-        <activity android:name="com.example.pink.Activities.PhoneVerificationActivity" />
-        <activity android:name="com.example.pink.Activities.LoginActivity" />
-        <activity android:name="com.example.pink.Activities.RegisterActivity" />
+        <activity android:name="com.example.pink.activities.PhoneVerificationActivity" />
+        <activity android:name="com.example.pink.activities.LoginActivity" />
+        <activity android:name="com.example.pink.activities.RegisterActivity" />
         <activity
             android:name="com.example.pink.MainActivity"
             android:windowSoftInputMode="adjustNothing"

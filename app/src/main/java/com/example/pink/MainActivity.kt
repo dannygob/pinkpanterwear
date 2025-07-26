@@ -4,14 +4,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import com.example.pink.Fragment.UserHomeFragment
-import com.example.pink.Fragment.UserCategoryFragment
-import com.example.pink.Fragment.UserCartFragment
-import com.example.pink.Fragment.UserHelpFragment
-import com.example.pink.Fragment.UserAccountFragment
-import com.example.pink.Prevalent.Prevalent
+import com.example.pink.fragment.UserAccountFragment
+import com.example.pink.fragment.UserCartFragment
+import com.example.pink.fragment.UserCategoryFragment
+import com.example.pink.fragment.UserHelpFragment
+import com.example.pink.fragment.UserHomeFragment
+import com.example.pink.prevalent.Prevalent
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import android.content.Context
 
 class MainActivity : AppCompatActivity() {
 

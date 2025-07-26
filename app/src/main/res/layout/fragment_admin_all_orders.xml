@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#FF5233"
-    tools:context="com.example.pink.Fragment.AdminAllOrdersFragment">
+    tools:context="com.example.pink.fragment.AdminAllOrdersFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
