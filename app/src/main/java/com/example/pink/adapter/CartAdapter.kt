@@ -29,9 +29,9 @@ class CartAdapter(
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
         val item = items[position]
-        holder.name.text = item.name
+        holder.name.text = item.productName
         holder.quantity.text = "x${item.quantity}"
-        holder.price.text = "€%.2f".format(item.price * item.quantity)
+        holder.price.text = "€%.2f".format(item.productPrice * item.quantity)
         holder.deleteBtn.setOnClickListener {
             onDelete(item)
         }
