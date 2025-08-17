@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
-import com.bumptech.glide.Glide
+import com.bumptech.glide.request.Glide
 import com.example.pink.R
 import com.example.pink.activities.UserProductsDetailsActivity
 import com.example.pink.model.Products

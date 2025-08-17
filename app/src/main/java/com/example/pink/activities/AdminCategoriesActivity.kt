@@ -13,7 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.paging.PagedList
+import androidx.paging.LoadState
+import androidx.paging.PagingConfig
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pink.MainActivity
@@ -80,12 +81,14 @@ class AdminCategoriesActivity : AppCompatActivity(),
     override fun onStart() {
         super.onStart()
 
-        val config = PagedList.Config.Builder()
-            .setInitialLoadSizeHint(3)
-            .setPageSize(2)
-            .build()
+        val config = PagingConfig(
+            pageSize = 2,
+            initialLoadSize = 3,
+            enablePlaceholders = false
+        )
 
         val options = FirestorePagingOptions.Builder<Categories>()
+            .setLifecycleOwner(this)
             .setQuery(query, config, Categories::class.java)
             .build()
 
@@ -114,20 +117,20 @@ class AdminCategoriesActivity : AppCompatActivity(),
                     startActivity(intent)
                 }
             }
+        }
 
-            override fun onLoadingStateChanged(state: LoadingState) {
-                when (state) {
-                    LoadingState.LOADING_MORE, LoadingState.LOADING_INITIAL -> progressBar.visibility =
-                        View.VISIBLE
-
-                    LoadingState.LOADED, LoadingState.FINISHED -> progressBar.visibility = View.GONE
-                    LoadingState.ERROR -> retry()
+        adapter.addLoadStateListener { loadStates ->
+            when (loadStates.refresh) {
+                is LoadState.Loading -> progressBar.visibility = View.VISIBLE
+                is LoadState.NotLoading -> progressBar.visibility = View.GONE
+                is LoadState.Error -> {
+                    Toast.makeText(this, "Error al cargar categorías", Toast.LENGTH_SHORT).show()
+                    progressBar.visibility = View.GONE
                 }
             }
         }
 
         recyclerView.adapter = adapter
-        adapter.startListening()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -141,7 +144,7 @@ class AdminCategoriesActivity : AppCompatActivity(),
             R.id.admin_main_home_menu -> MainActivity::class.java
             R.id.admin_settings_menu -> AdminAssistantActivity::class.java
             R.id.admin_logout_menu -> {
-                Toast.makeText(this, "Logged Out Successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Sesión cerrada correctamente", Toast.LENGTH_SHORT).show()
                 null
             }
 
