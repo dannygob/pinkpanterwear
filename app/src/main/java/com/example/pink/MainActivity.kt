@@ -1,6 +1,7 @@
 package com.example.pink
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         loadInitialFragment()
         loadCartData()
         updateCartBadge()
+        setupBackPressHandler()
     }
 
     private fun setupToolbar() {
@@ -69,12 +71,16 @@ class MainActivity : AppCompatActivity() {
         badge.number = Prevalent.getCartItemsCount()
     }
 
-    override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount > 0) {
-            super.onBackPressed()
-        } else {
-            showExitDialog()
-        }
+    private fun setupBackPressHandler() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (supportFragmentManager.backStackEntryCount > 0) {
+                    supportFragmentManager.popBackStack()
+                } else {
+                    showExitDialog()
+                }
+            }
+        })
     }
 
     private fun showExitDialog() {
