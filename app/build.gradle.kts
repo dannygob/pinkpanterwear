@@ -68,6 +68,8 @@ dependencies {
     // Otros
     implementation(libs.picasso)
     implementation("com.airbnb.android:lottie:5.2.0")
+    implementation(libs.glide)
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
     // Almacenamiento local
     implementation("io.github.pilgr:paperdb:2.7.2")

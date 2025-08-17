@@ -3,36 +3,39 @@ package com.example.pink.data
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.pink.model.Categories
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 
 class FirestoreCategoryPagingSource(
-    private val query: Query,
-) : PagingSource<Query, Categories>() {
+    private val baseQuery: Query,
+) : PagingSource<DocumentSnapshot, Categories>() {
 
-    override suspend fun load(params: LoadParams<Query>): LoadResult<Query, Categories> {
+    override suspend fun load(params: LoadParams<DocumentSnapshot>): LoadResult<DocumentSnapshot, Categories> {
         return try {
             val currentQuery = if (params.key != null) {
-                params.key!!.startAfterDocument(params.key!!.get().await().documents.last())
+                baseQuery.startAfter(params.key)
             } else {
-                query
+                baseQuery
             }.limit(params.loadSize.toLong())
 
             val snapshot = currentQuery.get().await()
+            val documents = snapshot.documents
 
-            val data = snapshot.documents.mapNotNull { it.toObject(Categories::class.java) }
-
-            val nextKey = if (snapshot.documents.isNotEmpty()) currentQuery else null
+            val data = documents.mapNotNull { it.toObject(Categories::class.java) }
+            val lastDocument = documents.lastOrNull()
 
             LoadResult.Page(
                 data = data,
                 prevKey = null,
-                nextKey = nextKey
+                nextKey = lastDocument
             )
         } catch (e: Exception) {
             LoadResult.Error(e)
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Query, Categories>): Query? = null
+    override fun getRefreshKey(state: PagingState<DocumentSnapshot, Categories>): DocumentSnapshot? {
+        return null
+    }
 }

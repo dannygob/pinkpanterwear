@@ -28,6 +28,7 @@ pagingRuntimeKtx = "3.2.1"
 pagingRuntimeKtxVersion = "3.3.6"
 picasso = "2.71828"
 paperdb = "2.7.2"
+glide = "4.16.0"
 
 # Testing
 junit = "4.13.2"
@@ -77,6 +78,7 @@ firebase-ui-firestore = { module = "com.firebaseui:firebase-ui-firestore", versi
 # 💾 Persistence & Images
 paperdb = { module = "io.github.pilgr:paperdb", version.ref = "paperdb" }
 picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 
 # 🧪 Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }

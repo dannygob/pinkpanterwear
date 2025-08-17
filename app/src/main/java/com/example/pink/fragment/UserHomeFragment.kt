@@ -23,9 +23,11 @@ class UserHomeFragment : Fragment() {
     private lateinit var recyclerViewTrending: RecyclerView
     private lateinit var recyclerViewSuggested: RecyclerView
 
-    private val sliderRunnable = Runnable {
-        imageSlider.currentItem = (imageSlider.currentItem + 1) % sliderAdapter.itemCount
-        sliderHandler.postDelayed(sliderRunnable, 4000)
+    private val sliderRunnable: Runnable = object : Runnable {
+        override fun run() {
+            imageSlider.currentItem = (imageSlider.currentItem + 1) % sliderAdapter.itemCount
+            sliderHandler.postDelayed(this, 4000)
+        }
     }
 
     override fun onCreateView(
