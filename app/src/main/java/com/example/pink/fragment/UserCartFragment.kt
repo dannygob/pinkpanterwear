@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pink.R
 import com.example.pink.activities.CheckoutActivity
 import com.example.pink.adapter.CartAdapter
-import com.example.pink.viewmodel.CartViewModel
+import com.example.pink.viewModel.CartViewModel
 
 class UserCartFragment : Fragment() {
 

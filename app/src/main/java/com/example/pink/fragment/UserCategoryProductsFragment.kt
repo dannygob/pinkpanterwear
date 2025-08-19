@@ -25,7 +25,6 @@ import com.example.pink.model.Products
 import com.example.pink.viewHolder.UserCategoryProductsViewHolder
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter
 import com.firebase.ui.firestore.paging.FirestorePagingOptions
-import com.firebase.ui.firestore.paging.LoadingState
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.FirebaseFirestore
@@ -394,21 +393,21 @@ class UserCategoryProductsFragment : Fragment() {
                     return UserCategoryProductsViewHolder(view)
                 }
 
-                override fun onLoadingStateChanged(state: LoadingState) {
+                override fun onLoadingStateChanged(state: com.firebase.ui.firestore.paging.LoadingState) {
                     when (state) {
-                        LoadingState.LOADING_INITIAL -> { /* Show loading indicator */
+                        com.firebase.ui.firestore.paging.LoadingState.LOADING_INITIAL -> { /* Show loading indicator */
                         }
 
-                        LoadingState.LOADING_MORE -> { /* Show loading indicator */
+                        com.firebase.ui.firestore.paging.LoadingState.LOADING_MORE -> { /* Show loading indicator */
                         }
 
-                        LoadingState.LOADED -> { /* Hide loading indicator */
+                        com.firebase.ui.firestore.paging.LoadingState.LOADED -> { /* Hide loading indicator */
                         }
 
-                        LoadingState.FINISHED -> { /* Hide loading indicator */
+                        com.firebase.ui.firestore.paging.LoadingState.FINISHED -> { /* Hide loading indicator */
                         }
 
-                        LoadingState.ERROR -> {
+                        com.firebase.ui.firestore.paging.LoadingState.ERROR -> {
                             retry()
                         }
                     }
