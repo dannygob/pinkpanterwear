@@ -15,13 +15,38 @@
         android:textColor="#000000"
         android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/itemQuantity"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingEnd="8dp"
-        android:text="x1"
-        android:textColor="#666666" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingEnd="8dp">
+
+        <ImageView
+            android:id="@+id/minusBtn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="Disminuir cantidad"
+            android:src="@android:drawable/ic_input_delete"
+            app:tint="#666666" />
+
+        <TextView
+            android:id="@+id/itemQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="x1"
+            android:textColor="#666666" />
+
+        <ImageView
+            android:id="@+id/plusBtn"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="Aumentar cantidad"
+            android:src="@android:drawable/ic_input_add"
+            app:tint="#666666" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/itemPrice"

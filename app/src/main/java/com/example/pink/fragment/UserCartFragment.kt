@@ -37,9 +37,15 @@ class UserCartFragment : Fragment() {
         checkoutButton = view.findViewById(R.id.checkoutBtn)
 
         viewModel = ViewModelProvider(this)[CartViewModel::class.java]
-        adapter = CartAdapter(emptyList()) { itemToDelete ->
-            viewModel.deleteItem(itemToDelete)
-        }
+        adapter = CartAdapter(
+            emptyList(),
+            onDelete = { itemToDelete ->
+                viewModel.deleteItem(itemToDelete)
+            },
+            onUpdate = { itemToUpdate -> // New lambda for update
+                viewModel.updateItem(itemToUpdate)
+            }
+        )
 
         cartRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         cartRecyclerView.adapter = adapter
