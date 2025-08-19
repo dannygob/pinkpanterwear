@@ -7,12 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
-
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pink.R
+import com.example.pink.activities.UserCategoryProductsActivity
 import com.example.pink.adapter.CategoryPagingAdapter
 import com.example.pink.viewModel.UserCategoryViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -56,7 +57,7 @@ class UserCategoryFragment : Fragment() {
         recyclerViewCategory.adapter = adapter
 
         lifecycleScope.launch {
-            viewModel.categoriesFlow.collectLatest { pagingData ->
+            viewModel.categoryFlow.collectLatest { pagingData ->
                 adapter.submitData(pagingData)
             }
         }

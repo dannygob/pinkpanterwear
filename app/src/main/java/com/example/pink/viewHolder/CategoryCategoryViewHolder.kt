@@ -15,7 +15,7 @@ class CategoryCategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemV
     fun bind(category: Categories) {
         txtCategoryName.text = category.categoryName
         Glide.with(itemView.context)
-            .load(category.imageUrl)
+            .load(category.categoryImage)
             .into(txtCategoryImage)
     }
 }

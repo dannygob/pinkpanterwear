@@ -43,6 +43,7 @@
         <activity android:name="com.example.pink.activities.ResetCodeActivity" />
         <activity android:name="com.example.pink.activities.ForgotPasswordActivity" />
         <activity android:name="com.example.pink.activities.UserProductsDetailsActivity" />
+        <activity android:name="com.example.pink.activities.UserCategoryProductsActivity" />
         <activity android:name="com.example.pink.activities.AdminCategoriesAddEditActivity" />
         <activity android:name="com.example.pink.activities.SearchableActivity" />
         <activity android:name="com.example.pink.activities.AdminProductsDetailsActivity" />

@@ -33,7 +33,7 @@ class ProductAsAdapter(
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = products[position]
         holder.name.text = product.productName
-        holder.price.text = "€%.2f".format(product.price)
+        holder.price.text = "€%.2f".format(product.productPrice)
         Glide.with(holder.itemView.context).load(product.productImage).into(holder.image)
         holder.addBtn.setOnClickListener {
             onAddToCart(product)

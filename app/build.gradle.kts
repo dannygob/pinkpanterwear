@@ -66,6 +66,10 @@ dependencies {
     implementation(libs.androidxRoomRuntime)
     implementation(libs.androidxRoomKtx)
     kapt(libs.androidxRoomCompiler)
+    implementation(libs.lifecycleViewmodel)
+
+    implementation("androidx.fragment:fragment-ktx:1.3.0")
+
 
     implementation(libs.picassoLib)
     implementation(libs.lottieLib)

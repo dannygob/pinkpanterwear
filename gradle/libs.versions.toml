@@ -12,7 +12,8 @@ activity = "1.7.2"
 constraintlayout = "2.1.4"
 viewpager2 = "1.1.0"
 paging = "3.2.1"
-lifecycleViewModel = "2.6.1"
+lifecycleViewModel = "2.9.2"
+lifecycleViewModelExt = "2.9.2"
 room = "2.7.2"
 
 firebaseBom = "33.16.0"
@@ -48,6 +49,7 @@ androidxConstraintLayout = { group = "androidx.constraintlayout", name = "constr
 androidxViewPager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 androidxPagingRuntimeKtx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
 androidxLifecycleViewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewModel" }
+androidxLifecycleViewModelExt = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "lifecycleViewModelExt" }
 androidxRoomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidxRoomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidxRoomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
@@ -59,6 +61,7 @@ firebaseFirestoreKtxLib = { group = "com.google.firebase", name = "firebase-fire
 firebaseStorageKtxLib = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 firebaseAnalyticsLib = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 
+lifecycleViewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycleViewModel" }
 lottieLib = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 picassoLib = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
 glideLib = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }

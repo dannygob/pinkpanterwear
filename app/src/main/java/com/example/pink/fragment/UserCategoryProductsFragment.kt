@@ -379,7 +379,7 @@ class UserCategoryProductsFragment : Fragment() {
 
                     holder.itemView.setOnClickListener {
                         val intent = Intent(context, UserProductsDetailsActivity::class.java)
-                        intent.putExtra("ProductUniqueID", model.getProductUniqueID())
+                        intent.putExtra("ProductUniqueID", model.productUniqueID)
                         startActivity(intent)
                     }
                 }
@@ -393,25 +393,6 @@ class UserCategoryProductsFragment : Fragment() {
                     return UserCategoryProductsViewHolder(view)
                 }
 
-                override fun onLoadingStateChanged(state: com.firebase.ui.firestore.paging.LoadingState) {
-                    when (state) {
-                        com.firebase.ui.firestore.paging.LoadingState.LOADING_INITIAL -> { /* Show loading indicator */
-                        }
-
-                        com.firebase.ui.firestore.paging.LoadingState.LOADING_MORE -> { /* Show loading indicator */
-                        }
-
-                        com.firebase.ui.firestore.paging.LoadingState.LOADED -> { /* Hide loading indicator */
-                        }
-
-                        com.firebase.ui.firestore.paging.LoadingState.FINISHED -> { /* Hide loading indicator */
-                        }
-
-                        com.firebase.ui.firestore.paging.LoadingState.ERROR -> {
-                            retry()
-                        }
-                    }
-                }
             }
 
         recyclerViewProducts.adapter = adapter
