@@ -69,7 +69,7 @@ class AdminAllOrdersFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.orders.collectLatest { orders ->
-                    adminOrderAdapter.submitList(orders)
+                    adminOrderAdapter.submitList(orders as List<*>?)
                     updateUIStates(orders, viewModel.isLoading.value, viewModel.error.value)
                 }
             }
