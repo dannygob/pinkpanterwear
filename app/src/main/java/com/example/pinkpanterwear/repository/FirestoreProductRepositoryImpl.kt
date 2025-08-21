@@ -35,7 +35,7 @@ class FirestoreProductRepositoryImpl @Inject constructor(
             } catch (e: Exception) {
                 Log.e(
                     "FirestoreProductRepositoryImpl",
-                    "Error fetching product ${productId} from Firestore",
+                    "Error fetching product $productId from Firestore",
                     e
                 )
                 return@withContext null
@@ -107,7 +107,7 @@ class FirestoreProductRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Log.e(
                 "FirestoreProductRepositoryImpl",
-                "Error deleting product ${productId} from Firestore",
+                "Error deleting product $productId from Firestore",
                 e
             )
             return@withContext false

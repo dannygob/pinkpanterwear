@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+
 class ProductRepositoryImpl @Inject constructor(
     private val apiService: FakeStoreApiService
 ) : ProductRepository {
@@ -40,4 +41,35 @@ class ProductRepositoryImpl @Inject constructor(
             emptyList() // Return empty list on error
         }
     }
+
+    override suspend fun addProduct(product: Product): Boolean = withContext(Dispatchers.IO) {
+        return@withContext try {
+            apiService.addProduct(product)
+            true
+        } catch (e: Exception) {
+            Log.e("ProductRepositoryImpl", "Error adding product", e)
+            false
+        }
+    }
+
+    override suspend fun updateProduct(product: Product): Boolean = withContext(Dispatchers.IO) {
+        return@withContext try {
+            apiService.updateProduct(product.id, product)
+            true
+        } catch (e: Exception) {
+            Log.e("ProductRepositoryImpl", "Error updating product", e)
+            false
+        }
+    }
+
+    override suspend fun deleteProduct(productId: Int): Boolean = withContext(Dispatchers.IO) {
+        return@withContext try {
+            apiService.deleteProduct(productId)
+            true
+        } catch (e: Exception) {
+            Log.e("ProductRepositoryImpl", "Error deleting product", e)
+            false
+        }
+    }
 }
+

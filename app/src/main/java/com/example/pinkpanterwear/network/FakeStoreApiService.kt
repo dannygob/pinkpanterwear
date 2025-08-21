@@ -3,7 +3,11 @@ package com.example.pinkpanterwear.network
 
 import androidx.compose.ui.graphics.vector.Path
 import com.example.pinkpanterwear.entities.Product
+import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface FakeStoreApiService {
@@ -19,4 +23,13 @@ interface FakeStoreApiService {
 
     @GET("products/{id}")
     suspend fun getProductDetails(@Path("id") id: Int): Product // Assuming product ID is an Int based on typical APIs
+
+    @POST("products")
+    suspend fun addProduct(@Body product: Product): Product
+
+    @PUT("products/{id}")
+    suspend fun updateProduct(@Path("id") id: Int, @Body product: Product): Product
+
+    @DELETE("products/{id}")
+    suspend fun deleteProduct(@Path("id") id: Int): Product
 }
