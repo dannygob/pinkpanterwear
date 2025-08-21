@@ -6,7 +6,8 @@ plugins {
     alias(libs.plugins.kotlinKapt)
     alias(libs.plugins.googleServices)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.kotlinComposeCompiler)
+    alias(libs.plugins.kotlinComposeCompiler) // Or directly if not using project-level apply false
+
 }
 
 android {
@@ -64,6 +65,7 @@ android {
 }
 
 dependencies {
+    // Core Android
     implementation(libs.androidxCoreKtx)
     implementation(libs.androidxAppCompat)
     implementation(libs.androidxMaterial)
@@ -74,7 +76,7 @@ dependencies {
     implementation(libs.androidxLifecycleViewModel)
     implementation("androidx.fragment:fragment-ktx:1.6.2")
 
-    // Firebase (BOM)
+    // Firebase
     implementation(platform(libs.firebaseBomLib))
     implementation(libs.firebaseAnalyticsLib)
     implementation(libs.firebaseAuthKtxLib)
@@ -82,23 +84,51 @@ dependencies {
     implementation(libs.firebaseStorageKtxLib)
     implementation(libs.firebaseUiFirestoreLib)
 
-    implementation(libs.glideLib)
-
+    // Jetpack Compose
+    implementation(platform(libs.composeBomLib))
+    implementation(libs.composeUi)
+    implementation(libs.composeUiTooling)
+    implementation(libs.composeUiToolingPreview)
+    implementation(libs.composeFoundation)
+    implementation(libs.composeMaterial)
+    implementation(libs.composeRuntime)
+    implementation(libs.navigationCompose)
 
     // Hilt
     implementation(libs.hiltAndroid)
-    implementation(libs.roomCommonJvm)
-    implementation(libs.uiAndroid)
-    implementation("com.airbnb.android:lottie:6.3.0")
+    implementation(libs.hiltNavigationCompose)
+    kapt(libs.hiltCompiler)
 
-    // Retrofit dependencies
+    // Lottie
+    implementation(libs.lottieLib)
+
+    // Glide
+    implementation(libs.glideLib)
+    kapt(libs.glideCompiler)
+
+    // Picasso
+    implementation(libs.picassoLib)
+
+    // PaperDB
+    implementation(libs.paperdbLib)
+
+    // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    // Room dependencies
-    implementation("androidx.room:room-runtime:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
+    // Room
+    implementation(libs.androidxRoomRuntime)
+    implementation(libs.androidxRoomKtx)
+    kapt(libs.androidxRoomCompiler)
 
-    kapt(libs.hiltCompiler)
+    // Google Analytics
+    implementation(libs.playServicesAnalyticsLib)
+    implementation(libs.playServicesAnalyticsCore)
+    implementation(libs.playServicesAnalyticsV1811)
+
+
+    // Testing
+    testImplementation(libs.junitLib)
+    androidTestImplementation(libs.androidxJunitLib)
+    androidTestImplementation(libs.espressoCoreLib)
 }
