@@ -1,20 +1,22 @@
 [versions]
 agp = "8.11.1"
 kotlin = "2.2.10"
-compileSdk = "35"
+compileSdk = "34"
 minSdk = "28"
-targetSdk = "35"
+targetSdk = "34"
 
 coreKtx = "1.10.1"
 appcompat = "1.7.1"
 material = "1.12.0"
-activity = "1.7.2"
+activity = "1.8.2"
 constraintlayout = "2.1.4"
 viewpager2 = "1.1.0"
 paging = "3.2.1"
-lifecycleViewModel = "2.9.2"
-lifecycleViewModelExt = "2.9.2"
+lifecycleViewModel = "2.7.0"
 room = "2.7.2"
+
+composeBom = "2024.05.00"
+composeCompiler = "1.5.15"
 
 firebaseBom = "33.16.0"
 firebaseUiFirestore = "9.0.0"
@@ -22,6 +24,8 @@ firebaseAuthKtx = "23.2.1"
 firebaseFirestoreKtx = "25.1.4"
 firebaseStorageKtx = "21.0.2"
 firebaseAnalytics = "21.3.0"
+
+hilt = "2.51.1"
 
 lottie = "6.6.7"
 picasso = "2.71828"
@@ -33,26 +37,31 @@ junitExt = "1.2.1"
 espressoCore = "3.6.1"
 
 playServicesAnalytics = "18.0.3"
+roomCommonJvm = "2.7.2"
+uiAndroid = "1.9.0"
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 googleServices = { id = "com.google.gms.google-services", version = "4.4.3" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlinComposeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version = "2.2.10" }
 
 [libraries]
 androidxCoreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidxAppCompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidxMaterial = { group = "com.google.android.material", name = "material", version.ref = "material" }
-androidxActivity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidxActivity = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
 androidxConstraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidxViewPager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 androidxPagingRuntimeKtx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
 androidxLifecycleViewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewModel" }
-androidxLifecycleViewModelExt = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "lifecycleViewModelExt" }
+
 androidxRoomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidxRoomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidxRoomCompiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
 
 firebaseBomLib = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebaseUiFirestoreLib = { group = "com.firebaseui", name = "firebase-ui-firestore", version.ref = "firebaseUiFirestore" }
@@ -61,7 +70,11 @@ firebaseFirestoreKtxLib = { group = "com.google.firebase", name = "firebase-fire
 firebaseStorageKtxLib = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 firebaseAnalyticsLib = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 
-lifecycleViewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycleViewModel" }
+composeBom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+
+hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hiltCompiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+
 lottieLib = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 picassoLib = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
 glideLib = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
@@ -73,3 +86,5 @@ androidxJunitLib = { group = "androidx.test.ext", name = "junit", version.ref = 
 espressoCoreLib = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
 playServicesAnalyticsLib = { group = "com.google.android.gms", name = "play-services-analytics", version.ref = "playServicesAnalytics" }
+roomCommonJvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
+uiAndroid = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroid" }

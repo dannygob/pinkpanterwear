@@ -20,7 +20,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "pinkpanterwear"
-
-include(
-    ":app"
-)
+include(":app")

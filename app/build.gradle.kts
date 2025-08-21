@@ -1,10 +1,13 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.kotlinKapt)
     alias(libs.plugins.googleServices)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlinComposeCompiler)
 }
-
 
 android {
     namespace = "com.example.pink"
@@ -18,9 +21,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -38,17 +39,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
-        languageVersion = "2.0" // Explicitly set Kotlin language version
-        freeCompilerArgs += "-Xskip-prerelease-check" // To suppress the prerelease check warning
-    }
-
-    kapt {
-        correctErrorTypes = true
-        // Explicitly enable language version 2.0+ for Kapt
-        arguments {
-            arg("kotlin.compiler.languageVersion", "2.0")
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+            freeCompilerArgs.add("-Xskip-prerelease-check")
         }
     }
 
@@ -56,12 +50,16 @@ android {
         compose = true
     }
 
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
 
+    kapt {
+        correctErrorTypes = true
+    }
 
     packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+        resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
 }
 
@@ -75,6 +73,7 @@ dependencies {
     implementation(libs.androidxPagingRuntimeKtx)
     implementation(libs.androidxLifecycleViewModel)
 
+    // Firebase (BOM)
     implementation(platform(libs.firebaseBomLib))
     implementation(libs.firebaseAnalyticsLib)
     implementation(libs.firebaseAuthKtxLib)
@@ -82,24 +81,10 @@ dependencies {
     implementation(libs.firebaseStorageKtxLib)
     implementation(libs.firebaseUiFirestoreLib)
 
-    implementation(libs.glideLib)
-    kapt(libs.glideCompiler)
 
-    implementation(libs.androidxRoomRuntime)
-    implementation(libs.androidxRoomKtx)
-    kapt(libs.androidxRoomCompiler)
-    implementation(libs.lifecycleViewmodel)
-
-    implementation("androidx.fragment:fragment-ktx:1.3.0")
-
-
-    implementation(libs.picassoLib)
-    implementation(libs.lottieLib)
-    implementation(libs.paperdbLib)
-
-    implementation(libs.playServicesAnalyticsLib)
-
-    testImplementation(libs.junitLib)
-    androidTestImplementation(libs.androidxJunitLib)
-    androidTestImplementation(libs.espressoCoreLib)
+    // Hilt
+    implementation(libs.hiltAndroid)
+    implementation(libs.roomCommonJvm)
+    implementation(libs.uiAndroid)
+    kapt(libs.hiltCompiler)
 }

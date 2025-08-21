@@ -4,15 +4,16 @@ package com.example.pinkpanterwear.di
 import com.example.pinkpanterwear.repositories.CartRepository
 import com.example.pinkpanterwear.repositories.CategoryRepository
 import com.example.pinkpanterwear.repositories.OrderRepository
-
 import com.example.pinkpanterwear.repositories.WishlistRepository
 import com.example.pinkpanterwear.repository.CartRepositoryImpl
 import com.example.pinkpanterwear.repository.CategoryRepositoryImpl
 import com.example.pinkpanterwear.repository.OrderRepositoryImpl
 import com.example.pinkpanterwear.repository.ProductRepositoryImpl
 import com.example.pinkpanterwear.repository.WishlistRepositoryImpl
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent // Or appropriate component
 
@@ -40,8 +41,12 @@ abstract class RepositoryModule {
         cartRepositoryImpl: CartRepositoryImpl
     ): CartRepository
 
-    @Binds
-    abstract fun bindWishlistRepository(
-        wishlistRepositoryImpl: WishlistRepositoryImpl
-    ): WishlistRepository
+    companion object {
+        @Provides
+        fun provideWishlistRepository(
+            firestore: FirebaseFirestore,
+        ): WishlistRepository {
+            return WishlistRepositoryImpl(firestore)
+        }
+    }
 }

@@ -1,11 +1,13 @@
 package com.example.pinkpanterwear.repository
 
-import com.example.pinkpanterwear.domain.entities.Order
-import com.example.pinkpanterwear.domain.repository.OrderRepository
+import android.util.Log
 import com.example.pinkpanterwear.entities.Order
+import com.example.pinkpanterwear.entities.OrderItem
 import com.example.pinkpanterwear.repositories.OrderRepository
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class OrderRepositoryImpl @Inject constructor(
@@ -13,38 +15,59 @@ class OrderRepositoryImpl @Inject constructor(
 ) : OrderRepository {
 
     private val ordersCollection = firestore.collection("orders")
+    private val orderItemsCollection = firestore.collection("order_items")
 
-    override suspend fun placeOrder(order: Order): Result<String> {
-        return try {
-            // Firestore will automatically generate an ID if order.orderId is empty
-            // and @DocumentId is on a var String field.
-            // Or, if orderId is pre-set, it will use that.
-            // For auto-generated ID to be returned, we can do:
-            val documentReference = ordersCollection.add(order).await()
-            Result.success(documentReference.id)
+    override suspend fun getAllOrders(): List<Order> = withContext(Dispatchers.IO) {
+        try {
+            val querySnapshot = ordersCollection.get().await()
+            querySnapshot.documents.mapNotNull { it.toObject(Order::class.java) }
         } catch (e: Exception) {
-            // Log.e("OrderRepositoryImpl", "Error placing order", e)
-            Result.failure(e)
+            Log.e("OrderRepositoryImpl", "Error fetching all orders", e)
+            emptyList()
         }
     }
 
-    override suspend fun getOrderDetails(orderId: String): Order? {
-        return try {
+    override suspend fun getOrderItems(orderId: String): List<OrderItem> =
+        withContext(Dispatchers.IO) {
+            try {
+                val querySnapshot = orderItemsCollection
+                    .whereEqualTo("orderId", orderId)
+                    .get().await()
+                querySnapshot.documents.mapNotNull { it.toObject(OrderItem::class.java) }
+        } catch (e: Exception) {
+                Log.e("OrderRepositoryImpl", "Error fetching order items for orderId: $orderId", e)
+                emptyList()
+            }
+        }
+
+    override suspend fun getOrderById(orderId: String): Order? = withContext(Dispatchers.IO) {
+        try {
             val documentSnapshot = ordersCollection.document(orderId).get().await()
             documentSnapshot.toObject(Order::class.java)
         } catch (e: Exception) {
-            // Log.e("OrderRepositoryImpl", "Error getting order details for $orderId", e)
+            Log.e("OrderRepositoryImpl", "Error fetching order by id: $orderId", e)
             null
         }
     }
 
-    override suspend fun getUserOrders(userId: String): List<Order> {
-        return try {
-            val querySnapshot = ordersCollection.whereEqualTo("userId", userId).get().await()
-            querySnapshot.documents.mapNotNull { it.toObject(Order::class.java) }
-        } catch (e: Exception) {
-            // Log.e("OrderRepositoryImpl", "Error getting orders for user $userId", e)
-            emptyList()
+    override suspend fun createOrder(order: Order, items: List<OrderItem>): String? =
+        withContext(Dispatchers.IO) {
+            try {
+                val orderDocument = ordersCollection.document()
+                val batch = firestore.batch()
+
+                batch.set(orderDocument, order)
+
+                items.forEach { item ->
+                    val itemDocument = orderItemsCollection.document()
+                    batch.set(itemDocument, item)
+                }
+
+                batch.commit().await()
+                orderDocument.id
+            } catch (e: Exception) {
+                Log.e("OrderRepositoryImpl", "Error creating order", e)
+                null
         }
     }
 }

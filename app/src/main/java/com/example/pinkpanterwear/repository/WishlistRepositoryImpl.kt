@@ -1,81 +1,130 @@
 package com.example.pinkpanterwear.repository
 
-
-
-import com.example.pinkpanterwear.dao.WishlistDao
-import com.example.pinkpanterwear.entities.WishlistItemDbo
+import android.util.Log
+import com.example.pinkpanterwear.entities.Wishlist
 import com.example.pinkpanterwear.repositories.WishlistRepository
-import kotlinx.coroutines.flow.first
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.trySendBlocking
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class WishlistRepositoryImpl @Inject constructor(
-    private val wishlistDao: WishlistDao
-    // private val productRepository: ProductRepository // Would be needed for getUserWishlistProducts
-) : WishlistRepository { // This will cause a compile error if WishlistRepository interface doesn't match
+    private val firestore: FirebaseFirestore,
+) : WishlistRepository {
 
-    // This method is not in the previously defined WishlistRepository interface.
-    // It should be `getWishlist(userId: String): Wishlist?`
-    // For now, creating as per current subtask's text.
-    suspend fun getUserWishlistProductIds(userId: String): List<Int> {
-        // DAO returns Flow<List<WishlistItemDbo>>. We need List<Int> (productIds).
-        val dtoList = wishlistDao.getWishlistItems(userId).first()
-        return dtoList.map { it.productId }
-    }
+    // TODO: Get the actual current user ID. If using Firebase Auth:
+    // private val userId: String? = FirebaseAuth.getInstance().currentUser?.uid
+    // Handle the case where the user is not logged in.
 
-    // This method's signature (productId: Int) differs from the interface (productId: String).
-    // Creating as per current subtask's text.
-    suspend fun addProductToWishlist(userId: String, productId: Int): Result<Unit> {
-        return try {
-            val wishlistItem = WishlistItemDbo(
-                userId = userId,
-                productId = productId,
-                dateAdded = System.currentTimeMillis()
+    // For now, using a placeholder:
+    private val userId: String = "placeholder_user_id"
+
+
+    // Reference to the user's wishlists collection
+    private val userWishlistsCollection =
+        firestore.collection("wishlists").document(userId).collection("userWishlists")
+
+
+    override suspend fun createWishlist(name: String): Unit = withContext(Dispatchers.IO) {
+        try {
+            val wishlistData = hashMapOf(
+                "name" to name,
+                "productIds" to emptyList<String>() // Initially empty list of product IDs
             )
-            wishlistDao.insertWishlistItem(wishlistItem)
-            Result.success(Unit)
+            userWishlistsCollection.add(wishlistData).await()
+            Log.d("WishlistRepository", "Wishlist created successfully with name: $name")
         } catch (e: Exception) {
-            Result.failure(e)
+            Log.e("WishlistRepository", "Error creating wishlist", e)
         }
     }
 
-    // This method's signature (productId: Int) differs from the interface (productId: String).
-    // Creating as per current subtask's text.
-    suspend fun removeProductFromWishlist(userId: String, productId: Int): Result<Unit> {
-        return try {
-            wishlistDao.deleteWishlistItem(userId, productId)
-            Result.success(Unit)
+    override fun getWishlists(): Flow<List<Wishlist>> = callbackFlow {
+        val listenerRegistration: ListenerRegistration? = try {
+            userWishlistsCollection.addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    Log.e("WishlistRepository", "Error fetching wishlists", error)
+                    close(error) // Close the flow with the error
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null) {
+                    val wishlists = snapshot.documents.mapNotNull { document ->
+                        val name = document.getString("name") ?: ""
+                        val productIds = document.get("productIds") as? List<String> ?: emptyList()
+                        Wishlist(document.id, name, productIds)
+                    }
+                    trySendBlocking(wishlists)
+                }
+            }
         } catch (e: Exception) {
-            Result.failure(e)
+            Log.e("WishlistRepository", "Error setting up snapshot listener", e)
+            close(e) // Close the flow with the error
+            null
+        }
+
+        awaitClose {
+            listenerRegistration?.remove()
         }
     }
 
-    // This method is not in the previously defined WishlistRepository interface.
-    // Creating as per current subtask's text.
-    suspend fun isProductInWishlist(userId: String, productId: Int): Boolean {
-        // wishlistDao.isProductInWishlist already returns Boolean
-        return try {
-            wishlistDao.isProductInWishlist(userId, productId)
+    override suspend fun updateWishlistName(wishlistId: String, newName: String): Unit =
+        withContext(Dispatchers.IO) {
+            try {
+                userWishlistsCollection.document(wishlistId).update("name", newName).await()
+                Log.d(
+                    "WishlistRepository",
+                    "Wishlist name updated successfully for ID: $wishlistId"
+                )
         } catch (e: Exception) {
-            // Log error, default to false or rethrow depending on desired behavior
-            false
+                Log.e("WishlistRepository", "Error updating wishlist name", e)
         }
     }
 
-    // The methods from the interface that are NOT implemented here by this exact text:
-    // override suspend fun getWishlist(userId: String): Wishlist? { TODO() }
-    // override suspend fun addProductIdToWishlist(userId: String, productId: String): Result<Unit> { TODO() }
-    // override suspend fun removeProductIdFromWishlist(userId: String, productId: String): Result<Unit> { TODO() }
+    override suspend fun addProductToWishlist(wishlistId: String, productId: String): Unit =
+        withContext(Dispatchers.IO) {
+            try {
+                userWishlistsCollection.document(wishlistId).update(
+                    "productIds",
+                    com.google.firebase.firestore.FieldValue.arrayUnion(productId)
+                ).await()
+                Log.d(
+                    "WishlistRepository",
+                    "Product added to wishlist successfully. Wishlist ID: $wishlistId, Product ID: $productId"
+                )
+        } catch (e: Exception) {
+                Log.e("WishlistRepository", "Error adding product to wishlist", e)
+        }
+    }
 
+    override suspend fun removeProductFromWishlist(wishlistId: String, productId: String): Unit =
+        withContext(Dispatchers.IO) {
+            try {
+                userWishlistsCollection.document(wishlistId).update(
+                    "productIds",
+                    com.google.firebase.firestore.FieldValue.arrayRemove(productId)
+                ).await()
+                Log.d(
+                    "WishlistRepository",
+                    "Product removed from wishlist successfully. Wishlist ID: $wishlistId, Product ID: $productId"
+                )
+            } catch (e: Exception) {
+                Log.e("WishlistRepository", "Error removing product from wishlist", e)
+            }
+        }
 
-    // Example of how getUserWishlistProducts could be implemented if needed:
-    // suspend fun getUserWishlistProducts(userId: String): List<Product> {
-    //     val productIds = getUserWishlistProductIds(userId)
-    //     return productIds.mapNotNull { productId ->
-    //         try {
-    //             productRepository.getProductById(productId) // Assuming productRepository takes Int
-    //         } catch (e: Exception) {
-    //             null // Or handle error
-    //         }
-    //     }
-    // }
+    override suspend fun deleteWishlist(wishlistId: String): Unit = withContext(Dispatchers.IO) {
+        try {
+            userWishlistsCollection.document(wishlistId).delete().await()
+            Log.d("WishlistRepository", "Wishlist deleted successfully. Wishlist ID: $wishlistId")
+        } catch (e: Exception) {
+            Log.e("WishlistRepository", "Error deleting wishlist", e)
+        }
+    }
+
 }
