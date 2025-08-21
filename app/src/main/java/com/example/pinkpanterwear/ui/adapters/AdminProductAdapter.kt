@@ -58,7 +58,7 @@ class AdminProductAdapter(
 
             Glide.with(itemView.context)
                 .load(product.imageUrl)
-                .placeholder(R.drawable.placeholder_image)
+                .placeholder(R.drawable.ic_placeholder_image) // Placeholder image while loadingZ
                 .error(R.drawable.error_image)
                 .into(imageView)
 

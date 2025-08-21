@@ -7,68 +7,68 @@
     tools:context=".UserProductsDetailsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/main_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/white"
-            app:titleTextColor="?attr/colorPrimary"
-            app:title="Product Details" />
+            app:title="Product Details"
+            app:titleTextColor="?attr/colorPrimary" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:id="@+id/product_details_content_layout"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/user_product_details_image"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:id="@+id/user_product_details_image"
             android:scaleType="centerCrop" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/user_product_details_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Product Name"
+            android:layout_margin="10dp"
             android:gravity="center"
             android:padding="5dp"
-            android:layout_margin="10dp" />
+            android:text="Product Name" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/user_product_details_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Product Price"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="10dp"
             android:gravity="center"
             android:padding="5dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp" />
+            android:text="Product Price" />
 
         <LinearLayout
             android:id="@+id/quantity_selector"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="10dp">
+            android:layout_marginVertical="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:text="Quantity:"
-                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:layout_marginEnd="8dp" />
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/decrease_quantity_button"
@@ -91,21 +91,21 @@
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="PRODUCT SIZE:"
-                android:textStyle="bold"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
                 android:gravity="center"
                 android:padding="5dp"
-                android:layout_marginVertical="10dp"
-                android:layout_marginHorizontal="20dp"
-                android:textColor="@color/black" />
+                android:text="PRODUCT SIZE:"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/user_product_details_size"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginHorizontal="20dp"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
 
             </LinearLayout>
@@ -115,28 +115,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="30dp">
+            android:layout_marginTop="30dp"
+            android:orientation="vertical">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="PRODUCT DETAILS"
-                android:textStyle="bold"
-                android:textColor="@color/black"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="10dp"
                 android:gravity="center"
                 android:padding="5dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="10dp" />
+                android:text="PRODUCT DETAILS"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/user_product_details_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:padding="5dp"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="10dp" />
+                android:layout_marginVertical="10dp"
+                android:padding="5dp"
+                android:text="" />
 
             <Button
                 android:id="@+id/increase_quantity_button"
@@ -150,31 +150,32 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/add_to_cart_button"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:text="Add To Cart"
-        android:layout_margin="5dp" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ProgressBar
         android:id="@+id/details_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/details_error_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Error loading details"
-        android:visibility="gone"
         android:layout_margin="16dp"
+        android:text="Error loading details"
         android:textAlignment="center"
-        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

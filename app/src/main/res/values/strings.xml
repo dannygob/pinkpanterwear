@@ -2,7 +2,7 @@
     <string name="app_name">PinkPanter Wear</string>
     <string name="hello_world">Hello World!</string>
     <string name="forgot_password">Forgot Password?</string>
-    <string name="login_register_link">Don't have an account? Register</string>
+    <string name="login_register_link">Login or Register</string>
     <string name="verify_resend_code">Resend Code</string>
     <string name="register_intent_login_link">Already have an account? Login</string>
     <string name="test_string">Test String</string>

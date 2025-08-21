@@ -5,14 +5,12 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.pinkpanterwear.databinding.ActivityMainBinding
-import com.example.pinkpanterwear.ui.account.UserAccountFragment // Adjust import based on your fragment's package
-import com.example.pinkpanterwear.ui.cart.UserCartFragment // Adjust import based on your fragment's package
-import com.example.pinkpanterwear.ui.category.UserCategoryFragment // Adjust import based on your fragment's package
-import com.example.pinkpanterwear.ui.help.UserHelpFragment // Adjust import based on your fragment's package
-import com.example.pinkpanterwear.AuthHelper
-import com.example.pinkpanterwear.ui.AuthFragment
-import com.example.pinkpanterwear.ui.home.HomeFragment // Adjust import based on your fragment's package
-import com.example.pinkpanterwear.ui.store.StorePlaceholderFragment // Create this fragment or replace with actual
+import com.example.pinkpanterwear.ui.Fragment.AuthFragment
+import com.example.pinkpanterwear.ui.Fragment.HomeFragment
+import com.example.pinkpanterwear.ui.Fragment.UserAccountFragment
+import com.example.pinkpanterwear.ui.Fragment.UserCartFragment
+import com.example.pinkpanterwear.ui.Fragment.UserCategoryFragment
+import com.example.pinkpanterwear.ui.Fragment.UserHelpFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,8 +43,8 @@ class MainActivity : AppCompatActivity() {
             // Allow Home selection to proceed to default auth check logic
             if (!authHelper.isAuthenticated() && item.itemId != R.id.bottom_nav_home) {
                 replaceFragment(AuthFragment())
-                binding.bottomNavigationView.visibility = View.GONE;
-                return@setOnItemSelectedListener false; // Or true if you want to mark it as handled but still go to auth
+                binding.bottomNavigationView.visibility = View.GONE
+                return@setOnItemSelectedListener false // Or true if you want to mark it as handled but still go to auth
             }
             when (item.itemId) {
                 R.id.bottom_nav_home -> {

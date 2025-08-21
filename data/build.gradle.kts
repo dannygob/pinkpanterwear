@@ -2,11 +2,12 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     alias(libs.plugins.kapt)
+    // alias(libs.plugins.ksp) // Si decides migrar Room a KSP
 }
 
 android {
     namespace = "com.example.pinkpanterwear.data"
-    compileSdk = 34
+    compileSdk = libs.versions.sdk.get().toInt()
 
     defaultConfig {
         minSdk = 24
@@ -14,28 +15,35 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
 dependencies {
+    // Módulo de dominio
     implementation(project(":domain"))
-    implementation(kotlin("stdlib"))
-    // Other dependencies will be added later
+
+    // Hilt (inyección de dependencias)
     implementation(libs.hiltAndroid)
     kapt(libs.hiltCompiler)
 
+    // Retrofit + Gson (API REST)
     implementation(libs.retrofit)
     implementation(libs.gsonConverter)
 
+    // Firebase Firestore
     implementation(platform(libs.firebaseBom))
-    implementation(libs.firebaseFirestoreKtx)
+    implementation(libs.firebaseFirestore)
 
+    // Room (persistencia local)
     implementation(libs.roomRuntime)
-    kapt(libs.roomCompiler)
     implementation(libs.roomKtx)
+    kapt(libs.roomCompiler)
+    // Si migras a KSP:
+    // ksp(libs.roomCompiler)
 }

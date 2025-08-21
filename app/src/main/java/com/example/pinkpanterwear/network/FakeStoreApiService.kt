@@ -1,6 +1,7 @@
 package com.example.pinkpanterwear.network
 
 
+import androidx.compose.ui.graphics.vector.Path
 import com.example.pinkpanterwear.entities.Product
 import retrofit2.http.GET
 import retrofit2.http.Path

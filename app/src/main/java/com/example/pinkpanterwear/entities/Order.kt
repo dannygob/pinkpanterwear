@@ -2,6 +2,7 @@ package com.example.pinkpanterwear.entities
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.ServerTimestamp
 
 data class Order(
     @DocumentId // Firestore will automatically populate this with the document ID

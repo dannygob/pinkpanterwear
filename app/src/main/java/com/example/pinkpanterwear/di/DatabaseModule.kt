@@ -2,6 +2,9 @@ package com.example.pinkpanterwear.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.pinkpanterwear.dao.CartDao
+import com.example.pinkpanterwear.dao.WishlistDao
+import com.example.pinkpanterwear.data.local.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

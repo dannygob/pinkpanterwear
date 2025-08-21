@@ -4,7 +4,7 @@ package com.example.pinkpanterwear.di
 import com.example.pinkpanterwear.repositories.CartRepository
 import com.example.pinkpanterwear.repositories.CategoryRepository
 import com.example.pinkpanterwear.repositories.OrderRepository
-import com.example.pinkpanterwear.repositories.ProductRepository
+
 import com.example.pinkpanterwear.repositories.WishlistRepository
 import com.example.pinkpanterwear.repository.CartRepositoryImpl
 import com.example.pinkpanterwear.repository.CategoryRepositoryImpl

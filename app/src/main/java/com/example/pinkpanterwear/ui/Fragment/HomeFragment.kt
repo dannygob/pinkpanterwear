@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pinkpanterwear.HomeViewModel
 import com.example.pinkpanterwear.entities.Product
+import com.example.pinkpanterwear.presentation.R
 import com.example.pinkpanterwear.ui.activities.UserProductDetailsActivity
 import com.example.pinkpanterwear.ui.adapters.ProductAdapter
 import kotlinx.coroutines.flow.collectLatest

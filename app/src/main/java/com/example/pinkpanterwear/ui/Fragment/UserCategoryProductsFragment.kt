@@ -12,6 +12,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pinkpanterwear.ui.ViewModel.UserCategoryProductsViewModel
+import com.example.pinkpanterwear.ui.adapters.ProductAdapter
+import com.google.android.gms.analytics.ecommerce.Product
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

@@ -1,12 +1,11 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    alias(libs.plugins.kapt)
 }
 
 android {
     namespace = "com.example.pinkpanterwear.domain"
-    compileSdk = 34
+    compileSdk = 33
 
     defaultConfig {
         minSdk = 24
@@ -17,17 +16,17 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = "11"
     }
 }
 
 dependencies {
+    // Solo dependencias necesarias para lógica de negocio
     implementation(kotlin("stdlib"))
-    // Other dependencies will be added later
-    implementation(libs.hiltAndroid)
-    kapt(libs.hiltCompiler)
+    implementation(libs.kotlinxCoroutinesCore)
 
-    implementation(platform(libs.firebaseBom))
-    implementation(libs.firebaseFirestoreKtx)
+    // Testing
+    testImplementation(libs.junit)
 }

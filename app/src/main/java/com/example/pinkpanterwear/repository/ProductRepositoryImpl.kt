@@ -1,9 +1,9 @@
 package com.example.pinkpanterwear.repository
 
 
+import com.example.pinkpanterwear.di.ProductRepository
 import com.example.pinkpanterwear.entities.Product
 import com.example.pinkpanterwear.network.FakeStoreApiService
-import com.example.pinkpanterwear.repositories.ProductRepository
 import javax.inject.Inject
 
 class ProductRepositoryImpl @Inject constructor(

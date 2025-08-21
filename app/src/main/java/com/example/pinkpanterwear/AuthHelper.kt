@@ -1,5 +1,7 @@
 package com.example.pinkpanterwear
 
+import com.google.firebase.auth.FirebaseUser
+
 
 class AuthHelper {
 

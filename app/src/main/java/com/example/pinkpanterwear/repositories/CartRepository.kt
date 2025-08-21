@@ -1,21 +1,24 @@
 package com.example.pinkpanterwear.repositories
 
 import android.util.Log
+import com.example.pinkpanterwear.di.ProductRepository
 import com.example.pinkpanterwear.entities.CartItem
 import com.example.pinkpanterwear.entities.Product
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 // Data class to represent the structure in Firestore
 data class FirestoreCartItem(
     val productId: Int = 0, // Default value for Firebase deserialization
     val quantity: Int = 0,
-    val addedAt: com.google.firebase.Timestamp? = null // Nullable for existing items without it
+    val addedAt: Timestamp? = null, // Nullable for existing items without it
 )
 
-class CartRepository {
+open class CartRepository {
 
     private val firestore = FirebaseFirestore.getInstance()
     private val auth = FirebaseAuth.getInstance() // For getting current user if needed, though userId is passed
@@ -40,7 +43,16 @@ class CartRepository {
                     // Fetch full product details using ProductRepository
                     val product = productRepository.getProductById(firestoreCartItem.productId)
                     if (product != null) {
-                        cartItemsList.add(CartItem(product, firestoreCartItem.quantity))
+                        cartItemsList.add(
+                            CartItem(
+                                product.toString(), firestoreCartItem.quantity,
+                                quantity = TODO(),
+                                size = TODO(),
+                                productName = TODO(),
+                                productPrice = TODO(),
+                                productImageUrl = TODO()
+                            )
+                        )
                     } else {
                         Log.w("CartRepository", "Product with ID ${firestoreCartItem.productId} not found, but was in cart. Skipping.")
                         // Optionally, could remove this orphaned cart item here.
@@ -78,7 +90,7 @@ class CartRepository {
                     val newItem = FirestoreCartItem(
                         productId = product.id,
                         quantity = quantity,
-                        addedAt = com.google.firebase.Timestamp.now()
+                        addedAt = Timestamp.now()
                     )
                     transaction.set(cartItemRef, newItem)
                 }
@@ -120,7 +132,7 @@ class CartRepository {
         }
     }
 
-    suspend fun clearCart(userId: String): Boolean = withContext(Dispatchers.IO) {
+    suspend fun clearCart(userId: String): Result<Unit> = withContext(Dispatchers.IO) {
         if (userId.isEmpty()) return@withContext false
         val cartItemsCollectionRef = usersCollection.document(userId).collection("cartItems")
         try {
