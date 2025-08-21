@@ -1,7 +1,8 @@
 package com.example.pinkpanterwear.usecase
 
-import com.example.pinkpanterwear.domain.entities.Category
-import com.example.pinkpanterwear.domain.repository.CategoryRepository
+
+import com.example.pinkpanterwear.entities.Category
+import com.example.pinkpanterwear.repositories.CategoryRepository
 import javax.inject.Inject
 
 class GetAllCategoriesUseCase @Inject constructor(

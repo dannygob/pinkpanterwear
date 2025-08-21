@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context="com.example.pinkpanterwear.ui.CheckoutShippingFragment">
+    tools:context="com.example.pinkpanterwear.ui.Fragment.CheckoutShippingFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

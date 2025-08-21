@@ -1,6 +1,6 @@
 package com.example.pinkpanterwear.ui.adapters
 
-import android.os.Build.VERSION_CODES.R
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.pink.R
 import com.example.pinkpanterwear.entities.CartItem
 import java.text.NumberFormat
 import java.util.Currency

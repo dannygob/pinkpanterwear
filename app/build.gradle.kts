@@ -72,6 +72,7 @@ dependencies {
     implementation(libs.androidxViewPager2)
     implementation(libs.androidxPagingRuntimeKtx)
     implementation(libs.androidxLifecycleViewModel)
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
 
     // Firebase (BOM)
     implementation(platform(libs.firebaseBomLib))

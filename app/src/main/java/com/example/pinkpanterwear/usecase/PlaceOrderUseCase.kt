@@ -1,7 +1,8 @@
 package com.example.pinkpanterwear.usecase
 
-import com.example.pinkpanterwear.domain.entities.Order
-import com.example.pinkpanterwear.domain.repository.OrderRepository
+
+import com.example.pinkpanterwear.entities.Order
+import com.example.pinkpanterwear.repositories.OrderRepository
 import javax.inject.Inject
 
 class PlaceOrderUseCase @Inject constructor(

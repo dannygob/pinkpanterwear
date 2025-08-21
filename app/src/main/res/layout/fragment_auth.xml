@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:gravity="center_vertical"
     android:padding="16dp"
-    tools:context=".ui.AuthFragment">
+    tools:context="com.example.pinkpanterwear.ui.Fragment.AuthFragment">
 
     <EditText
         android:id="@+id/email_edit_text"

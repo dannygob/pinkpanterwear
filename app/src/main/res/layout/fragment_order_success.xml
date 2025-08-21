@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context="com.example.pinkpanterwear.ui.OrderSuccessFragment">
+    tools:context="com.example.pinkpanterwear.ui.Fragment.OrderSuccessFragment">
 
     <ImageView
         android:id="@+id/order_success_icon"
