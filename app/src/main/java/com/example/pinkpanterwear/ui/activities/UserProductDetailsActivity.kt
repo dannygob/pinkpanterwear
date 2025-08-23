@@ -2,6 +2,7 @@ package com.example.pinkpanterwear.ui.activities
 
 import android.os.Bundle
 import android.text.InputFilter
+import android.text.InputFilter.RegexFilter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -12,20 +13,18 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.dynamicanimation.R
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
+import com.example.pink.R
 import com.example.pinkpanterwear.entities.Product
 import com.example.pinkpanterwear.ui.ViewModel.ProductDetailsViewModel
-import com.google.android.gms.analytics.ecommerce.Product
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Currency
 import java.util.Locale
-import kotlin.toString
 
 class UserProductDetailsActivity : AppCompatActivity() {
 
@@ -74,7 +73,7 @@ class UserProductDetailsActivity : AppCompatActivity() {
 
         viewModel.loadProductById(productId)
 
-        quantityEditText.filters = arrayOf<InputFilter>(InputFilter.Digits())
+        quantityEditText.filters = arrayOf<InputFilter>(RegexFilter("[0-9]*"))
         setupQuantityButtons()
         setupAddToCartButton()
         observeViewModel()
@@ -195,7 +194,7 @@ class UserProductDetailsActivity : AppCompatActivity() {
         if (sizes.isEmpty()) {
             // Optionally hide the sizes section or show a "Not available" message
             // For now, it will just be empty.
-            val noSizeTextView = TextView(this).apply {
+            TextView(this).apply {
                 text = "Sizes not specified for this product."
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,

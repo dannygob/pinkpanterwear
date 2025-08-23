@@ -70,4 +70,21 @@ class OrderRepositoryImpl @Inject constructor(
                 null
         }
     }
+
+    override suspend fun placeOrder(order: Order): Result<String> = withContext(Dispatchers.IO) {
+        try {
+            // Assuming placeOrder might not always have items directly, or they are handled elsewhere.
+            // For now, we'll call createOrder with an empty list of items.
+            // In a real scenario, this might involve fetching cart items or other logic.
+            val orderId = createOrder(order, emptyList())
+            if (orderId != null) {
+                Result.success(orderId)
+            } else {
+                Result.failure(Exception("Failed to place order: Order ID was null"))
+            }
+        } catch (e: Exception) {
+            Log.e("OrderRepositoryImpl", "Error placing order", e)
+            Result.failure(e)
+        }
+    }
 }

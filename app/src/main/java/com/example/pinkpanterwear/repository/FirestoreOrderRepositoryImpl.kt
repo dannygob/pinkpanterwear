@@ -1,11 +1,11 @@
 package com.example.pinkpanterwear.repository
 
-import android.app.DownloadManager.Query
 import android.util.Log
 import com.example.pinkpanterwear.entities.Order
 import com.example.pinkpanterwear.entities.OrderItem
 import com.example.pinkpanterwear.repositories.OrderRepository
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query // Correct import for Query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -111,4 +111,21 @@ class FirestoreOrderRepositoryImpl @Inject constructor(
                 return@withContext null
             }
         }
+
+    override suspend fun placeOrder(order: Order): Result<String> = withContext(Dispatchers.IO) {
+        try {
+            // Assuming placeOrder might not always have items directly, or they are handled elsewhere.
+            // For now, we'll call createOrder with an empty list of items.
+            // In a real scenario, this might involve fetching cart items or other logic.
+            val orderId = createOrder(order, emptyList())
+            if (orderId != null) {
+                Result.success(orderId)
+            } else {
+                Result.failure(Exception("Failed to place order: Order ID was null"))
+            }
+        } catch (e: Exception) {
+            Log.e("FirestoreOrderRepositoryImpl", "Error placing order", e)
+            Result.failure(e)
+        }
+    }
 }
