@@ -1,6 +1,7 @@
 package com.example.pinkpanterwear.network
 
-import com.example.pinkpanterwear.entities.Product
+import com.example.pinkpanterwear.domain.entities.Category
+import com.example.pinkpanterwear.domain.entities.Product
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -14,7 +15,7 @@ interface FakeStoreApiService {
     suspend fun getAllProducts(): List<Product>
 
     @GET("products/categories")
-    suspend fun getAllCategories(): List<String>
+    suspend fun getAllCategories(): List<Category>
 
     @GET("products/category/{category}")
     suspend fun getProductsByCategory(@Path("category") category: String): List<Product>

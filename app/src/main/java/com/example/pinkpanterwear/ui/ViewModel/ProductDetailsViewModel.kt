@@ -5,19 +5,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pinkpanterwear.AuthHelper
 import com.example.pinkpanterwear.entities.Product
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ProductDetailsViewModel : ViewModel() {
-
-    // TODO: Use dependency injection for repositories
-    private val productRepository =
-        _root_ide_package_.com.example.pinkpanterwear.repositories.ProductRepository()
-    private val cartRepository =
-        _root_ide_package_.com.example.pinkpanterwear.di.CartRepository() // Assuming CartRepository exists and is set up
-    private val authHelper = AuthHelper() // TODO: Use dependency injection
+@HiltViewModel
+class ProductDetailsViewModel @Inject constructor(
+    private val productRepository: com.example.pinkpanterwear.repositories.ProductRepository,
+    private val cartRepository: com.example.pinkpanterwear.di.CartRepository,
+    private val authHelper: AuthHelper,
+) : ViewModel() {
 
     private val _productDetails = MutableStateFlow<Product?>(null)
     val productDetails: StateFlow<Product?> = _productDetails.asStateFlow()
@@ -45,7 +45,7 @@ class ProductDetailsViewModel : ViewModel() {
                     return@launch
                 }
 
-                val product = productRepository.getProductByIdFromFirestore(productIdInt)
+                val product = productRepository.getProductById(productIdInt)
                 if (product != null) {
                     _productDetails.value = product as Product?
                     // Potentially fetch/set real sizes if product object had them

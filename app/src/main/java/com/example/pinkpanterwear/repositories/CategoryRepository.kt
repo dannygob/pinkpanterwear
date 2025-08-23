@@ -1,6 +1,6 @@
 package com.example.pinkpanterwear.repositories
 
-import com.example.pinkpanterwear.entities.Category
+import com.example.pinkpanterwear.domain.entities.Category
 
 interface CategoryRepository {
     suspend fun getAllCategories(): List<Category>
