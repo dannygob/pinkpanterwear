@@ -10,7 +10,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.pink"
+    namespace = "com.example.pinkpanterwear"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -62,6 +62,7 @@ dependencies {
     // Hilt
     implementation(libs.hiltAndroid)
     implementation(libs.hiltNavigationCompose)
+    implementation(libs.playServicesAnalyticsImpl)
     ksp(libs.hiltCompiler)
 
     // Room
@@ -103,6 +104,8 @@ dependencies {
     implementation(libs.lottieLib)
     implementation(libs.picassoLib)
     implementation(libs.paperdbLib)
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    ksp("com.github.bumptech.glide:compiler:4.16.0")
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
