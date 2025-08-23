@@ -40,6 +40,7 @@ paperdb = "2.7.2"
 junit = "4.13.2"
 junitExt = "1.2.1"
 espressoCore = "3.6.1"
+playServicesAnalyticsImpl = "18.2.0"
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -92,5 +93,6 @@ paperdbLib = { group = "io.github.pilgr", name = "paperdb", version.ref = "paper
 junitLib = { group = "junit", name = "junit", version.ref = "junit" }
 androidxJunitLib = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
 espressoCoreLib = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+playServicesAnalyticsImpl = { group = "com.google.android.gms", name = "play-services-analytics-impl", version.ref = "playServicesAnalyticsImpl" }
 
 

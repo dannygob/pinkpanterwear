@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.pink.R
+import com.example.pinkpanterwear.R
 import com.example.pinkpanterwear.entities.Product
 import java.text.NumberFormat
 import java.util.Currency

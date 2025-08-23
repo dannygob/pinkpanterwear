@@ -1,6 +1,7 @@
 package com.example.pinkpanterwear.ui.Fragment
 
-import android.R
+
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.pinkpanterwear.AuthHelper
+import com.example.pinkpanterwear.R
+import com.example.pinkpanterwear.ui.activities.AdminHomeActivity
 import com.google.android.material.textview.MaterialTextView
 
 class UserAccountFragment : Fragment() {

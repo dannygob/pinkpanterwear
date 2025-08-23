@@ -15,6 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pinkpanterwear.R
 import com.example.pinkpanterwear.ui.ViewModel.CartViewModel
 import com.example.pinkpanterwear.ui.adapters.CartAdapter
 import com.google.android.material.textview.MaterialTextView

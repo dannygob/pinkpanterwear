@@ -1,8 +1,6 @@
-package com.example.pinkpanterwear.ui.activities
-
 import android.os.Bundle
 import android.text.InputFilter
-import android.text.InputFilter.RegexFilter
+import android.text.Spanned
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -25,6 +23,7 @@ import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Currency
 import java.util.Locale
+import java.util.regex.Pattern
 
 class UserProductDetailsActivity : AppCompatActivity() {
 
@@ -73,7 +72,21 @@ class UserProductDetailsActivity : AppCompatActivity() {
 
         viewModel.loadProductById(productId)
 
-        quantityEditText.filters = arrayOf<InputFilter>(RegexFilter("[0-9]*"))
+        quantityEditText.filters = arrayOf<InputFilter>(object : InputFilter {
+            private val pattern = Pattern.compile("[0-9]*")
+            override fun filter(
+                source: CharSequence?,
+                start: Int,
+                end: Int,
+                dest: Spanned?,
+                dstart: Int,
+                dend: Int
+            ): CharSequence? {
+                return if (source != null && !pattern.matcher(source).matches()) {
+                    ""
+                } else null
+            }
+        })
         setupQuantityButtons()
         setupAddToCartButton()
         observeViewModel()

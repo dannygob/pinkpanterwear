@@ -17,8 +17,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
-import com.example.pink.R
+import androidx.lifecycle.repeatOnLifecycle
+
 import com.example.pinkpanterwear.entities.Product
 import com.example.pinkpanterwear.ui.ViewModel.AdminProductAddEditViewModel
 import com.google.android.material.textfield.TextInputLayout
@@ -57,48 +57,8 @@ class AdminProductAddEditActivity : AppCompatActivity() {
         priceEditText = findViewById<TextInputLayout>(R.id.admin_add_product_price).editText!!
         descriptionEditText =
             findViewById<TextInputLayout>(R.id.admin_add_product_description).editText!!
-        // Assuming imageUrlEditText is missing from original XML, will add it conceptually or use description for now.
-        // For now, let's assume there's an EditText for imageUrl, or add one to the XML.
-        // If admin_add_product_image is meant to be an input for URL, that's unusual.
-        // Let's add a new EditText for Image URL for clarity if it's not in the original XML.
-        // For this subtask, I'll assume an EditText with id admin_add_product_image_url exists or will be added to XML.
-        // If not, this will need XML modification. For now, I'll create a dummy one if not found by ID
-        // This is a simplification for the subtask.
-        try {
-            imageUrlEditText =
-                findViewById<TextInputLayout>(R.id.admin_add_product_image_url).editText!!
-        } catch (e: Exception) {
-            Log.w(
-                "AdminAddEditActivity",
-                "admin_add_product_image_url TextInputLayout not found. Using description field's EditText as a placeholder."
-            )
-            // This is a fallback, the XML should be updated.
-            // For safety, let's create a new EditText programmatically if not found, though not ideal.
-            // Better: ensure the XML has it. For this script, I will assume it exists.
-            // If it doesn't, the script would need to modify the XML.
-            // For now, will proceed as if it exists and let it potentially fail if not, to highlight missing XML element.
-            // A proper solution would be to check if the XML has it and add it if not.
-            // For the sake of this subtask, let's assume it's there:
-            // imageUrlEditText = findViewById<com.google.android.material.textfield.TextInputLayout>(R.id.admin_add_product_image_url).editText!!
-            // If the above fails, the user needs to add this to the XML.
-            // For now, I'll make it a simple EditText that might not exist in the layout.
-            // This will be caught by the user when testing.
-            // Let's use a known existing EditText (e.g. description) if it's truly missing.
-            // This is bad practice, but for the tool environment, it's a way to proceed.
-            // The XML *should* have a field admin_add_product_image_url (TextInputLayout > TextInputEditText)
-            // For now, I'll just try to find it and if it crashes, the user knows to add it.
-            try {
-                imageUrlEditText =
-                    findViewById<TextInputLayout>(R.id.admin_add_product_image_url).editText!!
-            } catch (e: Exception) {
-                Log.e(
-                    "AdminAddEditActivity",
-                    "CRITICAL: TextInputLayout R.id.admin_add_product_image_url not found in XML. Image URL cannot be input."
-                )
-                // Create a dummy EditText to prevent NPE, but this is not a fix.
-                imageUrlEditText = EditText(this)
-            }
-        }
+        imageUrlEditText =
+            findViewById<TextInputLayout>(R.id.admin_add_product_image_url).editText!!
 
 
         saveButton = findViewById(R.id.admin_add_product_btn)

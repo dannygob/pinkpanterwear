@@ -1,6 +1,6 @@
 package com.example.pinkpanterwear.ui.Fragment
 
-import android.R
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,13 +18,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.pinkpanterwear.R
 import com.example.pinkpanterwear.ui.ViewModel.CheckoutViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Currency
 import java.util.Locale
-import kotlin.collections.isNotEmpty
 
 class CheckoutConfirmFragment : Fragment() {
 

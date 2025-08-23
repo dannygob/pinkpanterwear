@@ -1,5 +1,6 @@
 package com.example.pinkpanterwear.ui.Fragment
 
+import UserProductDetailsActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pinkpanterwear.R
 import com.example.pinkpanterwear.ui.ViewModel.UserCategoryProductsViewModel
 import com.example.pinkpanterwear.ui.adapters.ProductAdapter
 import com.google.android.gms.analytics.ecommerce.Product

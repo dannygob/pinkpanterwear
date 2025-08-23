@@ -1,5 +1,6 @@
 package com.example.pinkpanterwear.ui.Fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.pinkpanterwear.AuthHelper
 import com.example.pinkpanterwear.MainActivity
+import com.example.pinkpanterwear.R
+import com.example.pinkpanterwear.ui.activities.ForgotPasswordActivity
 import kotlinx.coroutines.launch
-import kotlin.toString
 
 class AuthFragment : Fragment() {
 
@@ -83,7 +85,7 @@ class AuthFragment : Fragment() {
         lifecycleScope.launch {
             val result = authHelper.registerUser(email, password)
             if (result.isSuccess) {
-                val user = result.getOrNull()
+                result.getOrNull()
                 Toast.makeText(requireContext(), "Registration successful!", Toast.LENGTH_SHORT)
                     .show()
                 (activity as? MainActivity)?.navigateToHome()
@@ -103,7 +105,7 @@ class AuthFragment : Fragment() {
         lifecycleScope.launch {
             val result = authHelper.loginUser(email, password)
             if (result.isSuccess) {
-                val user = result.getOrNull()
+                result.getOrNull()
                 Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
                 (activity as? MainActivity)?.navigateToHome()
             } else {
