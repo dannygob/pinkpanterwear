@@ -11,7 +11,8 @@ import kotlinx.coroutines.launch
 
 class AdminProductAddEditViewModel : ViewModel() {
 
-    private val repository = ProductRepository() // TODO: DI
+    private val repository =
+        _root_ide_package_.com.example.pinkpanterwear.repositories.ProductRepository() // TODO: DI
 
     private val _productToEdit = MutableStateFlow<Product?>(null)
     val productToEdit: StateFlow<Product?> = _productToEdit.asStateFlow()

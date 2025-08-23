@@ -16,6 +16,7 @@ import com.google.android.material.textview.MaterialTextView
 
 class UserAccountFragment : Fragment() {
 
+    private lateinit var authHelper: AuthHelper
     private lateinit var userAccountNameTextView: MaterialTextView
     private lateinit var userRegisterLinkButton: Button
     private lateinit var myWishlistTextView: MaterialTextView

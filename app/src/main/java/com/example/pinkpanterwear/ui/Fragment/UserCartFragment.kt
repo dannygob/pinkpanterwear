@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pinkpanterwear.R
+import com.example.pinkpanterwear.entities.CartItem
 import com.example.pinkpanterwear.ui.ViewModel.CartViewModel
 import com.example.pinkpanterwear.ui.adapters.CartAdapter
 import com.google.android.material.textview.MaterialTextView
@@ -72,15 +73,15 @@ class UserCartFragment : Fragment() {
     private fun setupAdapter() {
         cartAdapter = CartAdapter(
             onIncreaseQuantity = { cartItem ->
-                viewModel.updateItemQuantity(cartItem.product.id, cartItem.quantity + 1)
+                viewModel.updateItemQuantity(cartItem.productId, cartItem.quantity + 1)
             },
             onDecreaseQuantity = { cartItem ->
                 if (cartItem.quantity > 0) { // Ensure quantity doesn't go below 0 from UI before repo handles it
-                    viewModel.updateItemQuantity(cartItem.product.id, cartItem.quantity - 1)
+                    viewModel.updateItemQuantity(cartItem.productId, cartItem.quantity - 1)
                 }
             },
             onRemoveItem = { cartItem ->
-                viewModel.removeItem(cartItem.product.id)
+                viewModel.removeItem(cartItem.productId)
             }
         )
     }
@@ -174,7 +175,7 @@ class UserCartFragment : Fragment() {
     }
 
     private fun updateTotalPrice(cartItems: List<CartItem>) {
-        val total = cartItems.sumOf { it.product.price * it.quantity }
+        val total = cartItems.sumOf { it.productPrice * it.quantity }
         val currencyFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
         totalPriceTextView.text = "Total: ${currencyFormat.format(total)}"
     }

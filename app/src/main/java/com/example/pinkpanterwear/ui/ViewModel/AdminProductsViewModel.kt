@@ -11,7 +11,8 @@ import kotlinx.coroutines.launch
 
 class AdminProductsViewModel : ViewModel() {
 
-    private val repository = ProductRepository() // TODO: Dependency Injection
+    private val repository =
+        _root_ide_package_.com.example.pinkpanterwear.repositories.ProductRepository() // TODO: Dependency Injection
 
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products: StateFlow<List<Product>> = _products.asStateFlow()

@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.pinkpanterwear.R
 
 class UserHelpFragment : Fragment() {
 
@@ -19,13 +21,13 @@ class UserHelpFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_user_help, container, false)
 
         // Get references to the help views
-        val helpTitle = view.findViewById<TextView>(R.id.help_title)
-        val helpContent = view.findViewById<TextView>(R.id.help_content)
+        view.findViewById<TextView>(R.id.help_title)
+        view.findViewById<TextView>(R.id.help_content)
 
         // Get references to the FAQ views
-        val faqTitle = view.findViewById<TextView>(R.id.faq_title)
-        val faqQ1 = view.findViewById<TextView>(R.id.faq_q1)
-        val faqA1 = view.findViewById<TextView>(R.id.faq_a1)
+        view.findViewById<TextView>(R.id.faq_title)
+        view.findViewById<TextView>(R.id.faq_q1)
+        view.findViewById<TextView>(R.id.faq_a1)
         registerButton.setOnClickListener {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()

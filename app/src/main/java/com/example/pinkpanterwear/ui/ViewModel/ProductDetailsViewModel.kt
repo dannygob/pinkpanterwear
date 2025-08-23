@@ -13,8 +13,10 @@ import kotlinx.coroutines.launch
 class ProductDetailsViewModel : ViewModel() {
 
     // TODO: Use dependency injection for repositories
-    private val productRepository = ProductRepository()
-    private val cartRepository = CartRepository() // Assuming CartRepository exists and is set up
+    private val productRepository =
+        _root_ide_package_.com.example.pinkpanterwear.repositories.ProductRepository()
+    private val cartRepository =
+        _root_ide_package_.com.example.pinkpanterwear.di.CartRepository() // Assuming CartRepository exists and is set up
     private val authHelper = AuthHelper() // TODO: Use dependency injection
 
     private val _productDetails = MutableStateFlow<Product?>(null)
@@ -45,7 +47,7 @@ class ProductDetailsViewModel : ViewModel() {
 
                 val product = productRepository.getProductByIdFromFirestore(productIdInt)
                 if (product != null) {
-                    _productDetails.value = product
+                    _productDetails.value = product as Product?
                     // Potentially fetch/set real sizes if product object had them
                     // For now, _availableSizes uses a default or pre-set list.
                 } else {

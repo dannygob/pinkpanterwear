@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.FtsOptions
 import com.example.pinkpanterwear.R
+import com.example.pinkpanterwear.entities.Order
 import com.example.pinkpanterwear.ui.ViewModel.AdminOrdersViewModel
 import com.example.pinkpanterwear.ui.adapters.AdminOrderAdapter
 import kotlinx.coroutines.flow.collectLatest
@@ -69,7 +70,7 @@ class AdminAllOrdersFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.orders.collectLatest { orders ->
-                    adminOrderAdapter.submitList(orders as List<*>?)
+                    adminOrderAdapter.submitList(orders as List<Order?>?)
                     updateUIStates(orders, viewModel.isLoading.value, viewModel.error.value)
                 }
             }

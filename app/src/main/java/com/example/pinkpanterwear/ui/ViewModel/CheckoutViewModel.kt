@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pinkpanterwear.AuthHelper
 import com.example.pinkpanterwear.entities.CartItem
+import com.example.pinkpanterwear.entities.OrderItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,8 +14,9 @@ import kotlinx.coroutines.launch
 class CheckoutViewModel : ViewModel() {
 
     // TODO: Use Dependency Injection
-    private val orderRepository = OrderRepository()
-    private val cartRepository = CartRepository()
+    private val orderRepository =
+        _root_ide_package_.com.example.pinkpanterwear.repositories.OrderRepository()
+    private val cartRepository = _root_ide_package_.com.example.pinkpanterwear.di.CartRepository()
     private val authHelper = AuthHelper()
 
     private val _shippingAddress = MutableStateFlow<Map<String, String>?>(null)
@@ -111,10 +113,10 @@ class CheckoutViewModel : ViewModel() {
 
             val orderItems = currentCart.map { cartItem ->
                 OrderItem(
-                    productId = cartItem.product.id,
-                    productName = cartItem.product.name,
+                    productId = cartItem.productId,
+                    productName = cartItem.productName,
                     quantity = cartItem.quantity,
-                    pricePerItem = cartItem.product.price
+                    pricePerItem = cartItem.productPrice
                 )
             }
 

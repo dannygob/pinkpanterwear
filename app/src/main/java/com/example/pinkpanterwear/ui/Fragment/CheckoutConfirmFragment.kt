@@ -19,6 +19,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.pinkpanterwear.R
+import com.example.pinkpanterwear.entities.CartItem
 import com.example.pinkpanterwear.ui.ViewModel.CheckoutViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -213,9 +214,9 @@ class CheckoutConfirmFragment : Fragment() {
         }
         items.forEach { cartItem ->
             val itemTextView = TextView(context).apply {
-                text = "${cartItem.quantity} x ${cartItem.product.name} @ ${
-                    currencyFormat.format(cartItem.product.price)
-                } = ${currencyFormat.format(cartItem.product.price * cartItem.quantity)}"
+                text = "${cartItem.quantity} x ${cartItem.productName} @ ${
+                    currencyFormat.format(cartItem.productPrice)
+                } = ${currencyFormat.format(cartItem.productPrice * cartItem.quantity)}"
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT

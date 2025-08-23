@@ -1,7 +1,7 @@
 package com.example.pinkpanterwear.ui.adapters
 
 
-import android.R
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.pinkpanterwear.R
 import com.example.pinkpanterwear.entities.CartItem
 import java.text.NumberFormat
 import java.util.Currency
@@ -53,16 +54,16 @@ class CartAdapter(
             onDecreaseQuantity: (CartItem) -> Unit,
             onRemoveItem: (CartItem) -> Unit
         ) {
-            itemNameTextView.text = cartItem.product.name
+            itemNameTextView.text = cartItem.productName
             itemQuantityTextView.text = cartItem.quantity.toString()
 
             val format: NumberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
             format.currency = Currency.getInstance("USD") // Or use device locale
             itemPriceTextView.text =
-                format.format(cartItem.product.price * cartItem.quantity) // Display total for this item line
+                format.format(cartItem.productPrice * cartItem.quantity) // Display total for this item line
 
             Glide.with(itemView.context)
-                .load(cartItem.product.imageUrl)
+                .load(cartItem.productImageUrl)
                 .placeholder(R.drawable.placeholder_image)
                 .error(R.drawable.error_image)
                 .into(itemImageView)
@@ -75,7 +76,7 @@ class CartAdapter(
 
     class CartItemDiffCallback : DiffUtil.ItemCallback<CartItem>() {
         override fun areItemsTheSame(oldItem: CartItem, newItem: CartItem): Boolean {
-            return oldItem.product.id == newItem.product.id
+            return oldItem.productId == newItem.productId
         }
 
         override fun areContentsTheSame(oldItem: CartItem, newItem: CartItem): Boolean {

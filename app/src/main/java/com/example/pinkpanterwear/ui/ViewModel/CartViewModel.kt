@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 class CartViewModel : ViewModel() {
 
     // TODO: Use dependency injection
-    private val cartRepository = CartRepository()
+    private val cartRepository = _root_ide_package_.com.example.pinkpanterwear.di.CartRepository()
     private val authHelper = AuthHelper()
 
     private val _cartItems = MutableStateFlow<List<CartItem>>(emptyList())

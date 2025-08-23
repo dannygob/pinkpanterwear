@@ -12,7 +12,8 @@ import kotlinx.coroutines.launch
 class AdminOrdersViewModel : ViewModel() {
 
     // TODO: Use dependency injection for OrderRepository
-    private val orderRepository = OrderRepository()
+    private val orderRepository =
+        _root_ide_package_.com.example.pinkpanterwear.repositories.OrderRepository()
 
     private val _orders = MutableStateFlow<List<Order>>(emptyList())
     val orders: StateFlow<List<Order>> = _orders.asStateFlow()

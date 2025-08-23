@@ -15,7 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
-import com.example.pink.R
+import com.example.pinkpanterwear.R
 import com.example.pinkpanterwear.entities.Product
 import com.example.pinkpanterwear.ui.ViewModel.ProductDetailsViewModel
 import kotlinx.coroutines.flow.collectLatest

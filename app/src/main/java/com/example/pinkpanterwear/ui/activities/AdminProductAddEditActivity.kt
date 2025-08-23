@@ -18,6 +18,8 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.bumptech.glide.Glide
+import com.example.pinkpanterwear.R
 
 import com.example.pinkpanterwear.entities.Product
 import com.example.pinkpanterwear.ui.ViewModel.AdminProductAddEditViewModel
@@ -91,8 +93,8 @@ class AdminProductAddEditActivity : AppCompatActivity() {
 
     private fun setupCategorySpinner() {
         categoriesAdapter =
-            ArrayAdapter(this, R.layout.simple_spinner_item, mutableListOf<String>())
-        categoriesAdapter?.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, mutableListOf<String>())
+        categoriesAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         categorySpinner.adapter = categoriesAdapter
     }
 
@@ -188,7 +190,7 @@ class AdminProductAddEditActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.home) {
+        if (item.itemId == android.R.id.home) {
             finish()
             return true
         }

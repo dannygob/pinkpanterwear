@@ -10,7 +10,8 @@ import kotlinx.coroutines.launch
 
 class UserCategoryProductsViewModel : ViewModel() {
 
-    private val repository = ProductRepository() // TODO: Use dependency injection
+    private val repository =
+        _root_ide_package_.com.example.pinkpanterwear.repositories.ProductRepository() // TODO: Use dependency injection
 
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products: StateFlow<List<Product>> = _products.asStateFlow()

@@ -1,6 +1,7 @@
 package com.example.pinkpanterwear.ui.Fragment
 
 import UserProductDetailsActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pinkpanterwear.R
 import com.example.pinkpanterwear.ui.ViewModel.UserCategoryProductsViewModel
 import com.example.pinkpanterwear.ui.adapters.ProductAdapter
-import com.google.android.gms.analytics.ecommerce.Product
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -96,7 +96,7 @@ class UserCategoryProductsFragment : Fragment() {
         }
     }
 
-    private fun navigateToProductDetails(product: Product) {
+    private fun navigateToProductDetails(product: com.example.pinkpanterwear.entities.Product) {
         val intent = Intent(activity, UserProductDetailsActivity::class.java).apply {
             putExtra(
                 "PRODUCT_ID",
