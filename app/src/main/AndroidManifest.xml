@@ -9,6 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Pinkpanterwear">
+
+        <!-- Habilitar Firebase Analytics -->
+        <meta-data
+            android:name="firebase_analytics_collection_enabled"
+            android:value="true" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -16,31 +22,37 @@
             android:theme="@style/Theme.Pinkpanterwear">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".UserProductDetailsActivity" />
+
         <activity
             android:name=".AdminHomeActivity"
             android:label="Admin Panel"
             android:theme="@style/Theme.Pinkpanterwear" />
+
         <activity
             android:name=".ForgotPasswordActivity"
             android:label="Forgot Password"
             android:theme="@style/Theme.Pinkpanterwear" />
+
         <activity
             android:name=".ResetCodeActivity"
             android:label="Enter Reset Code"
             android:theme="@style/Theme.Pinkpanterwear" />
+
         <activity
             android:name=".ResetPasswordActivity"
             android:label="Reset Password"
             android:theme="@style/Theme.Pinkpanterwear" />
+
         <activity
             android:name=".AdminProductAddEditActivity"
             android:label="Manage Product"
             android:theme="@style/Theme.Pinkpanterwear" />
+
     </application>
 
 </manifest>

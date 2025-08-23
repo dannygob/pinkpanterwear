@@ -1,10 +1,13 @@
 [versions]
 agp = "8.11.1"
-kotlin = "2.2.10"
+kotlin = "2.2.0"
+
 compileSdk = "36"
 minSdk = "28"
-playServicesAnalyticsVersion = "18.1.1"
 targetSdk = "34"
+composeCompiler = "1.5.15"
+ksp = "2.2.0-2.0.2"
+
 
 coreKtx = "1.10.1"
 appcompat = "1.7.1"
@@ -17,39 +20,34 @@ lifecycleViewModel = "2.7.0"
 room = "2.7.2"
 
 composeBom = "2024.05.00"
-composeCompiler = "1.5.15"
 navigationCompose = "2.7.7"
 hiltNavigationCompose = "1.2.0"
 
-firebaseBom = "33.16.0"
+firebaseBom = "34.1.0"
 firebaseUiFirestore = "9.0.0"
 firebaseAuthKtx = "23.2.1"
 firebaseFirestoreKtx = "25.1.4"
 firebaseStorageKtx = "21.0.2"
-firebaseAnalytics = "21.3.0"
+firebaseAnalytics = "23.0.0"
 
 hilt = "2.51.1"
-ksp = "1.0.18"
 
 lottie = "6.6.7"
 picasso = "2.71828"
-glide = "4.16.0"
+coil = "2.5.0"
 paperdb = "2.7.2"
 
 junit = "4.13.2"
 junitExt = "1.2.1"
 espressoCore = "3.6.1"
 
-playServicesAnalytics = "18.0.3"
-
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlinKapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 googleServices = { id = "com.google.gms.google-services", version = "4.4.3" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlinComposeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-kotlinComposeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" } # <-- Add this line
 
 [libraries]
 androidxCoreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -72,6 +70,7 @@ firebaseFirestoreKtxLib = { group = "com.google.firebase", name = "firebase-fire
 firebaseStorageKtxLib = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 firebaseAnalyticsLib = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 
+
 composeBomLib = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 composeUi = { group = "androidx.compose.ui", name = "ui" }
 composeUiTooling = { group = "androidx.compose.ui", name = "ui-tooling" }
@@ -87,14 +86,11 @@ hiltNavigationCompose = { group = "androidx.hilt", name = "hilt-navigation-compo
 
 lottieLib = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 picassoLib = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
-glideLib = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
-glideCompiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+coilLib = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 paperdbLib = { group = "io.github.pilgr", name = "paperdb", version.ref = "paperdb" }
 
 junitLib = { group = "junit", name = "junit", version.ref = "junit" }
 androidxJunitLib = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
 espressoCoreLib = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
-playServicesAnalyticsLib = { group = "com.google.android.gms", name = "play-services-analytics", version.ref = "playServicesAnalytics" }
-playServicesAnalyticsCore = { group = "com.google.android.gms", name = "analytics", version.ref = "playServicesAnalytics" }
-playServicesAnalyticsV1811 = { module = "com.google.android.gms:play-services-analytics", version.ref = "playServicesAnalyticsVersion" }
+

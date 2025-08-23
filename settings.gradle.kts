@@ -19,5 +19,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
 rootProject.name = "pinkpanterwear"
 include(":app")
