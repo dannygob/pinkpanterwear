@@ -4,20 +4,25 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pinkpanterwear.AuthHelper
+import com.example.pinkpanterwear.di.CartRepository
 import com.example.pinkpanterwear.entities.CartItem
+import com.example.pinkpanterwear.entities.Order
 import com.example.pinkpanterwear.entities.OrderItem
+import com.example.pinkpanterwear.repositories.OrderRepository
+import com.google.firebase.Timestamp
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CheckoutViewModel : ViewModel() {
-
-    // TODO: Use Dependency Injection
-    private val orderRepository =
-        _root_ide_package_.com.example.pinkpanterwear.repositories.OrderRepository()
-    private val cartRepository = _root_ide_package_.com.example.pinkpanterwear.di.CartRepository()
-    private val authHelper = AuthHelper()
+@HiltViewModel
+class CheckoutViewModel @Inject constructor(
+    private val orderRepository: OrderRepository,
+    private val cartRepository: CartRepository,
+    private val authHelper: AuthHelper,
+) : ViewModel() {
 
     private val _shippingAddress = MutableStateFlow<Map<String, String>?>(null)
     val shippingAddress: StateFlow<Map<String, String>?> = _shippingAddress.asStateFlow()
@@ -124,11 +129,11 @@ class CheckoutViewModel : ViewModel() {
                 // Assuming OrderRepository.createOrder will handle generating Order ID if not passed
                 val newOrderId = orderRepository.createOrder(order, orderItems)
                 if (newOrderId != null) {
-                    val cartCleared = cartRepository.clearCart(userId)
-                    if (!cartCleared) {
+                    val cartClearResult = cartRepository.clearCart(userId)
+                    if (cartClearResult.isFailure) {
                         Log.w(
                             "CheckoutVM",
-                            "Failed to clear cart for user $userId after order $newOrderId"
+                            "Failed to clear cart for user $userId after order $newOrderId: ${cartClearResult.exceptionOrNull()?.message}"
                         )
                         // Non-critical error, order is placed. Might want to inform user or log for admin.
                     }

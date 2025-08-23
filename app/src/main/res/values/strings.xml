@@ -6,4 +6,11 @@
     <string name="verify_resend_code">Resend Code</string>
     <string name="register_intent_login_link">Already have an account? Login</string>
     <string name="test_string">Test String</string>
+    <string name="shipping_address_format">%1$s\n%2$s\n%3$s, %4$s\n%5$s</string>
+    <string name="shipping_address_not_provided">Shipping address not provided.</string>
+    <string name="loading_cart_summary">Loading cart summary...</string>
+    <string name="cart_is_empty">Cart is empty.</string>
+    <string name="order_item_format">%1$d x %2$s @ %3$s = %4$s</string>
+    <string name="grand_total_format">Total: %1$s</string>
+    <string name="order_placed_success_message">Order Placed Successfully! Order ID: %1$s</string>
 </resources>

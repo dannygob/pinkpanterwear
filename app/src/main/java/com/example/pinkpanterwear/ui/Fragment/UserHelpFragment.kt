@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.pinkpanterwear.R
 
@@ -28,37 +27,6 @@ class UserHelpFragment : Fragment() {
         view.findViewById<TextView>(R.id.faq_title)
         view.findViewById<TextView>(R.id.faq_q1)
         view.findViewById<TextView>(R.id.faq_a1)
-        registerButton.setOnClickListener {
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
-
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                // Call the registration function
-                registerUser(email, password)
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Please enter email and password",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-
-        loginButton.setOnClickListener {
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
-
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                // Call the login function
-                loginUser(email, password)
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Please enter email and password",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
 
         // TODO: Load dynamic help content here if needed
 

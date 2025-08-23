@@ -4,17 +4,21 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pinkpanterwear.AuthHelper
+import com.example.pinkpanterwear.di.CartRepository
 import com.example.pinkpanterwear.entities.CartItem
+
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CartViewModel : ViewModel() {
-
-    // TODO: Use dependency injection
-    private val cartRepository = _root_ide_package_.com.example.pinkpanterwear.di.CartRepository()
-    private val authHelper = AuthHelper()
+@HiltViewModel
+class CartViewModel @Inject constructor(
+    private val cartRepository: CartRepository,
+    private val authHelper: AuthHelper,
+) : ViewModel() {
 
     private val _cartItems = MutableStateFlow<List<CartItem>>(emptyList())
     val cartItems: StateFlow<List<CartItem>> = _cartItems.asStateFlow()
@@ -106,12 +110,12 @@ class CartViewModel : ViewModel() {
             return
         }
         viewModelScope.launch {
-            val success = cartRepository.clearCart(userId)
-            if (success) {
+            val result = cartRepository.clearCart(userId)
+            if (result.isSuccess) {
                 _cartItems.value = emptyList() // Optimistically update UI
                 _actionFeedback.value = "Cart cleared."
             } else {
-                _actionFeedback.value = "Failed to clear cart."
+                _actionFeedback.value = "Failed to clear cart: ${result.exceptionOrNull()?.message}"
             }
         }
     }

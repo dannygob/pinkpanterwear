@@ -4,15 +4,18 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pinkpanterwear.entities.Product
+import com.example.pinkpanterwear.repositories.ProductRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AdminProductAddEditViewModel : ViewModel() {
-
-    private val repository =
-        _root_ide_package_.com.example.pinkpanterwear.repositories.ProductRepository() // TODO: DI
+@HiltViewModel
+class AdminProductAddEditViewModel @Inject constructor(
+    private val repository: ProductRepository,
+) : ViewModel() {
 
     private val _productToEdit = MutableStateFlow<Product?>(null)
     val productToEdit: StateFlow<Product?> = _productToEdit.asStateFlow()
@@ -38,12 +41,12 @@ class AdminProductAddEditViewModel : ViewModel() {
             _isLoading.value = true
             _error.value = null
             try {
-                _productToEdit.value = repository.getProductByIdFromFirestore(productId)
+                _productToEdit.value = repository.getProductById(productId)
                 if (_productToEdit.value == null) {
                     _error.value = "Product not found for editing."
                 }
             } catch (e: Exception) {
-                Log.e("AdminAddEditVM", "Error loading product ${productId}", e)
+                Log.e("AdminAddEditVM", "Error loading product $productId", e)
                 _error.value = "Failed to load product: ${e.message}"
             } finally {
                 _isLoading.value = false

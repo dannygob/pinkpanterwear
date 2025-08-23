@@ -3,17 +3,19 @@ package com.example.pinkpanterwear.ui.ViewModel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.FtsOptions.Order
+import com.example.pinkpanterwear.entities.Order
+import com.example.pinkpanterwear.repositories.OrderRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AdminOrdersViewModel : ViewModel() {
-
-    // TODO: Use dependency injection for OrderRepository
-    private val orderRepository =
-        _root_ide_package_.com.example.pinkpanterwear.repositories.OrderRepository()
+@HiltViewModel
+class AdminOrdersViewModel @Inject constructor(
+    private val orderRepository: OrderRepository,
+) : ViewModel() {
 
     private val _orders = MutableStateFlow<List<Order>>(emptyList())
     val orders: StateFlow<List<Order>> = _orders.asStateFlow()

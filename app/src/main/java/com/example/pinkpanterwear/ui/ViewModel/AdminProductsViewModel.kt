@@ -4,15 +4,18 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pinkpanterwear.entities.Product
+import com.example.pinkpanterwear.repositories.ProductRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AdminProductsViewModel : ViewModel() {
-
-    private val repository =
-        _root_ide_package_.com.example.pinkpanterwear.repositories.ProductRepository() // TODO: Dependency Injection
+@HiltViewModel
+class AdminProductsViewModel @Inject constructor(
+    private val repository: ProductRepository,
+) : ViewModel() {
 
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products: StateFlow<List<Product>> = _products.asStateFlow()
@@ -35,7 +38,7 @@ class AdminProductsViewModel : ViewModel() {
             _isLoading.value = true
             _error.value = null
             try {
-                _products.value = repository.getAllProductsFromFirestore()
+                _products.value = repository.getAllProducts()
             } catch (e: Exception) {
                 Log.e("AdminProductsVM", "Error fetching products", e)
                 _error.value = "Failed to fetch products: ${e.message}"

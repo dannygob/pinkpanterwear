@@ -6,7 +6,7 @@ compileSdk = "36"
 minSdk = "28"
 targetSdk = "34"
 composeCompiler = "1.5.15"
-ksp = "2.2.0-2.0.2"
+ksp = "2.2.0-2.1.0" # Attempting to fix KSP error by updating version
 
 
 coreKtx = "1.10.1"
@@ -17,6 +17,7 @@ constraintlayout = "2.1.4"
 viewpager2 = "1.1.0"
 paging = "3.2.1"
 lifecycleViewModel = "2.7.0"
+lifecycleRuntimeKtx = "2.7.0" # Added for repeatOnLifecycle
 room = "2.7.2"
 
 composeBom = "2024.05.00"
@@ -59,6 +60,7 @@ androidxConstraintLayout = { group = "androidx.constraintlayout", name = "constr
 androidxViewPager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 androidxPagingRuntimeKtx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging" }
 androidxLifecycleViewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewModel" }
+androidxLifecycleRuntimeKtx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" } # Added for repeatOnLifecycle
 
 androidxRoomRuntime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidxRoomKtx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
@@ -94,5 +96,3 @@ junitLib = { group = "junit", name = "junit", version.ref = "junit" }
 androidxJunitLib = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
 espressoCoreLib = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 playServicesAnalyticsImpl = { group = "com.google.android.gms", name = "play-services-analytics-impl", version.ref = "playServicesAnalyticsImpl" }
-
-

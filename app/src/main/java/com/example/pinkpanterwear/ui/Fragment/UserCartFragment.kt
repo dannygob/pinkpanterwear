@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pinkpanterwear.R
@@ -73,15 +74,21 @@ class UserCartFragment : Fragment() {
     private fun setupAdapter() {
         cartAdapter = CartAdapter(
             onIncreaseQuantity = { cartItem ->
-                viewModel.updateItemQuantity(cartItem.productId, cartItem.quantity + 1)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.updateItemQuantity(cartItem.productId, cartItem.quantity + 1)
+                }
             },
             onDecreaseQuantity = { cartItem ->
-                if (cartItem.quantity > 0) { // Ensure quantity doesn't go below 0 from UI before repo handles it
-                    viewModel.updateItemQuantity(cartItem.productId, cartItem.quantity - 1)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    if (cartItem.quantity > 0) { // Ensure quantity doesn't go below 0 from UI before repo handles it
+                        viewModel.updateItemQuantity(cartItem.productId, cartItem.quantity - 1)
+                    }
                 }
             },
             onRemoveItem = { cartItem ->
-                viewModel.removeItem(cartItem.productId)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.removeItem(cartItem.productId)
+                }
             }
         )
     }

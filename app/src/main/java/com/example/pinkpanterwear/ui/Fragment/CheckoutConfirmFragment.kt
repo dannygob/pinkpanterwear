@@ -109,7 +109,7 @@ class CheckoutConfirmFragment : Fragment() {
                     // For now, main progress bar might cover it, or rely on cart screen's loading
                     if (isLoading) {
                         orderItemsContainer.removeAllViews()
-                        TextView(context).apply { text = "Loading cart summary..." }
+                        TextView(context).apply { text = getString(R.string.loading_cart_summary) }
                             .also { orderItemsContainer.addView(it) }
                     }
                 }
@@ -167,7 +167,7 @@ class CheckoutConfirmFragment : Fragment() {
                     if (orderId != null) {
                         Toast.makeText(
                             context,
-                            "Order Placed Successfully! Order ID: $orderId",
+                            getString(R.string.order_placed_success_message, orderId),
                             Toast.LENGTH_LONG
                         ).show()
                         checkoutViewModel.consumeOrderPlacementStatus()
@@ -196,16 +196,17 @@ class CheckoutConfirmFragment : Fragment() {
             val city = it["city"] ?: ""
             val zip = it["zip"] ?: ""
             val country = it["country"] ?: ""
-            shippingAddressDisplayTextView.text = "$name\n$street\n$city, $zip\n$country"
+            shippingAddressDisplayTextView.text =
+                getString(R.string.shipping_address_format, name, street, city, zip, country)
         } ?: run {
-            shippingAddressDisplayTextView.text = "Shipping address not provided."
+            shippingAddressDisplayTextView.text = getString(R.string.shipping_address_not_provided)
         }
     }
 
     private fun populateOrderItemsUI(items: List<CartItem>) {
         orderItemsContainer.removeAllViews()
         if (items.isEmpty() && !checkoutViewModel.isLoadingCartSummary.value) { // Check loading state too
-            TextView(context).apply { text = "Cart is empty." }
+            TextView(context).apply { text = getString(R.string.cart_is_empty) }
                 .also { orderItemsContainer.addView(it) }
             return
         }
@@ -214,9 +215,13 @@ class CheckoutConfirmFragment : Fragment() {
         }
         items.forEach { cartItem ->
             val itemTextView = TextView(context).apply {
-                text = "${cartItem.quantity} x ${cartItem.productName} @ ${
-                    currencyFormat.format(cartItem.productPrice)
-                } = ${currencyFormat.format(cartItem.productPrice * cartItem.quantity)}"
+                text = getString(
+                    R.string.order_item_format,
+                    cartItem.quantity,
+                    cartItem.productName,
+                    currencyFormat.format(cartItem.productPrice),
+                    currencyFormat.format(cartItem.productPrice * cartItem.quantity)
+                )
                 layoutParams = LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
@@ -232,6 +237,7 @@ class CheckoutConfirmFragment : Fragment() {
         val currencyFormat = NumberFormat.getCurrencyInstance(Locale.getDefault()).apply {
             currency = Currency.getInstance("USD")
         }
-        grandTotalTextView.text = "Total: ${currencyFormat.format(total)}"
+        grandTotalTextView.text =
+            getString(R.string.grand_total_format, currencyFormat.format(total))
     }
 }

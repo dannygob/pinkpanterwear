@@ -98,6 +98,7 @@ dependencies {
     implementation(libs.androidxViewPager2)
     implementation(libs.androidxPagingRuntimeKtx)
     implementation(libs.androidxLifecycleViewModel)
+    implementation(libs.androidxLifecycleRuntimeKtx) // Added for repeatOnLifecycle
     implementation("androidx.fragment:fragment-ktx:1.6.2")
 
     implementation(libs.coilLib)
