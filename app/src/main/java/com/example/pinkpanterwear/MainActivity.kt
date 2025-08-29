@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-
 import com.example.pinkpanterwear.databinding.ActivityMainBinding
 import com.example.pinkpanterwear.ui.Fragment.AuthFragment
 import com.example.pinkpanterwear.ui.Fragment.HomeFragment

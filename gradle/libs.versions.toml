@@ -6,8 +6,7 @@ compileSdk = "36"
 minSdk = "28"
 targetSdk = "34"
 composeCompiler = "1.5.15"
-ksp = "2.2.0-2.1.0" # Attempting to fix KSP error by updating version
-
+ksp = "2.2.0-2.0.2"  # Attempting to fix KSP error by updating version
 
 coreKtx = "1.10.1"
 appcompat = "1.7.1"
@@ -31,7 +30,7 @@ firebaseFirestoreKtx = "25.1.4"
 firebaseStorageKtx = "21.0.2"
 firebaseAnalytics = "23.0.0"
 
-hilt = "2.51.1"
+hilt = "2.57.1"
 
 lottie = "6.6.7"
 picasso = "2.71828"
