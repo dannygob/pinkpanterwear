@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.util.Collections.emptyList
 import javax.inject.Inject
 
 class WishlistRepositoryImpl @Inject constructor(
@@ -56,7 +57,7 @@ class WishlistRepositoryImpl @Inject constructor(
                 if (snapshot != null) {
                     val wishlists = snapshot.documents.mapNotNull { document ->
                         val name = document.getString("name") ?: ""
-                        val productIds = document.get("productIds") as? List<String> ?: emptyList()
+                        val productIds = document.get("productIds") as? List<*> ?: emptyList()
                         Wishlist(document.id, name, productIds)
                     }
                     trySendBlocking(wishlists)

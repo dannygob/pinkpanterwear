@@ -52,7 +52,7 @@ class FirestoreOrderRepositoryImpl @Inject constructor(
             } catch (e: Exception) {
                 Log.e(
                     "FirestoreOrderRepositoryImpl",
-                    "Error fetching items for order ${orderId}",
+                    "Error fetching items for order $orderId",
                     e
                 )
                 return@withContext emptyList()
@@ -69,7 +69,7 @@ class FirestoreOrderRepositoryImpl @Inject constructor(
             val documentSnapshot = ordersCollection.document(orderId).get().await()
             return@withContext documentSnapshot.toObject(Order::class.java)
         } catch (e: Exception) {
-            Log.e("FirestoreOrderRepositoryImpl", "Error fetching order by ID ${orderId}", e)
+            Log.e("FirestoreOrderRepositoryImpl", "Error fetching order by ID $orderId", e)
             return@withContext null
         }
     }

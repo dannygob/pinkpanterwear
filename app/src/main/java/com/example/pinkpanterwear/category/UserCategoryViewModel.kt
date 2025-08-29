@@ -34,6 +34,7 @@ class UserCategoryViewModel @Inject constructor(
             _isLoading.value = true
             _error.value = null
             try {
+                getAllCategoriesUseCase()
                 // Assuming use case returns List<Category> directly or Result<List<Category>>
                 // For simplicity, let's assume it returns List<Category> and throws on error
                 _categories.value = getAllCategoriesUseCase()

@@ -69,7 +69,7 @@ class FirebaseCartRepositoryImpl @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                Log.e("CartRepository", "Error fetching cart items for user ${userId}", e)
+                Log.e("CartRepository", "Error fetching cart items for user $userId", e)
                 // Return empty list or throw custom exception
             }
             return@withContext cartItemsList
@@ -137,7 +137,7 @@ class FirebaseCartRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Log.e(
                 "CartRepository",
-                "Error updating quantity for user ${userId}, product ${productId}",
+                "Error updating quantity for user ${userId}, product $productId",
                 e
             )
             return@withContext false
@@ -155,7 +155,7 @@ class FirebaseCartRepositoryImpl @Inject constructor(
             } catch (e: Exception) {
                 Log.e(
                     "CartRepository",
-                    "Error removing item for user ${userId}, product ${productId}",
+                    "Error removing item for user ${userId}, product $productId",
                     e
                 )
                 return@withContext false
@@ -180,7 +180,7 @@ class FirebaseCartRepositoryImpl @Inject constructor(
             batch.commit().await()
             return@withContext Result.success(Unit)
         } catch (e: Exception) {
-            Log.e("CartRepository", "Error clearing cart for user ${userId}", e)
+            Log.e("CartRepository", "Error clearing cart for user $userId", e)
             return@withContext Result.failure(e)
         }
     }

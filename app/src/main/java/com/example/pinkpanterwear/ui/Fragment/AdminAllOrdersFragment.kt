@@ -16,7 +16,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.FtsOptions
 import com.example.pinkpanterwear.R
 import com.example.pinkpanterwear.entities.Order
 import com.example.pinkpanterwear.ui.ViewModel.AdminOrdersViewModel
@@ -93,7 +92,7 @@ class AdminAllOrdersFragment : Fragment() {
         }
     }
 
-    private fun updateUIStates(orders: List<FtsOptions.Order>, isLoading: Boolean, error: String?) {
+    private fun updateUIStates(orders: List<Order>, isLoading: Boolean, error: String?) {
         progressBar.isVisible = isLoading
 
         if (isLoading) {

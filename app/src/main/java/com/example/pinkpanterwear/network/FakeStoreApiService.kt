@@ -1,7 +1,7 @@
 package com.example.pinkpanterwear.network
 
 import com.example.pinkpanterwear.domain.entities.Category
-import com.example.pinkpanterwear.domain.entities.Product
+import com.example.pinkpanterwear.entities.Product
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
