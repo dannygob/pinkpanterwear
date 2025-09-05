@@ -13,5 +13,6 @@ data class Products(
     val productStatus: String = "",
     val dateCreated: String = "",
     val timeCreated: String = "",
-    val productPrice: Double = 0.0,  // ← Mejora: precio decimal para más flexibilidad
+    val productPrice: Double = 0.0,
+    val productDeleted: String,  // ← Mejora: precio decimal para más flexibilidad
 )

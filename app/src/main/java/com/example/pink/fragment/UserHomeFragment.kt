@@ -1,38 +1,35 @@
 package com.example.pink.fragment
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.example.pink.R
-import com.example.pink.adapter.SliderHomeAdapter
+import com.example.pink.adapter.ProductAdapter
+import com.example.pink.model.CartItem
+import com.example.pink.network.FakeStoreApi
+import com.example.pink.network.PlatziApi
+import com.example.pink.repositories.ProductRepository
+import com.example.pink.viewModel.CartViewModel
+import com.example.pink.viewModel.ProductViewModel
+import com.example.pink.viewModel.ProductViewModelFactory
 
 class UserHomeFragment : Fragment() {
 
-    private lateinit var imageSlider: ViewPager2
-    private lateinit var sliderAdapter: SliderHomeAdapter
-    private val sliderHandler = Handler(Looper.getMainLooper())
-
-    private lateinit var recyclerViewCategory: RecyclerView
-    private lateinit var recyclerViewTodayDeals: RecyclerView
-    private lateinit var recyclerViewTrending: RecyclerView
+    private lateinit var productAdapter: ProductAdapter
     private lateinit var recyclerViewSuggested: RecyclerView
+    private lateinit var progressBar: ProgressBar
 
-    private val sliderRunnable: Runnable = object : Runnable {
-        override fun run() {
-            imageSlider.currentItem = (imageSlider.currentItem + 1) % sliderAdapter.itemCount
-            sliderHandler.postDelayed(this, 4000)
-        }
-    }
+    private lateinit var productViewModel: ProductViewModel
+    private lateinit var cartViewModel: CartViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         return inflater.inflate(R.layout.fragment_user_home, container, false)
@@ -41,40 +38,44 @@ class UserHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 🔘 Slider de imágenes
-        imageSlider = view.findViewById(R.id.imageSlider)
-        val imageUrls = getImageUrls()
-        sliderAdapter = SliderHomeAdapter(imageUrls)
-        imageSlider.adapter = sliderAdapter
+        recyclerViewSuggested = view.findViewById(R.id.recycler_view_suggested)
+        progressBar = view.findViewById(R.id.progress_bar_home)
 
-        // 🔄 Inicia el auto-scroll
-        sliderHandler.postDelayed(sliderRunnable, 4000)
+        // Inicializar ViewModels
+        val repository = ProductRepository(PlatziApi.create(), FakeStoreApi.create())
+        productViewModel = ViewModelProvider(
+            this,
+            ProductViewModelFactory(repository)
+        )[ProductViewModel::class.java]
+        cartViewModel = ViewModelProvider(this)[CartViewModel::class.java]
 
-        // 🛍️ RecyclerViews principales
-        recyclerViewCategory = view.findViewById(R.id.recycler_view_category)
-        recyclerViewTodayDeals = view.findViewById(R.id.recycler_view_today_deals)
-        recyclerViewTrending = view.findViewById(R.id.recycler_view_home_trending)
-        recyclerViewSuggested = view.findViewById(R.id.recycler_view_home_products)
+        // Configurar adapter con productos y lógica de agregar al carrito
+        productAdapter = ProductAdapter(mutableListOf()) { product ->
+            val item = CartItem(
+                productUniqueID = product.productUniqueID,
+                productName = product.productName,
+                productImage = product.productImage,
+                productPrice = product.productPrice,
+                quantity = 1
+            )
+            cartViewModel.addItem(item)
+        }
 
-        // 👉 Aquí puedes configurar cada RecyclerView con su Adapter
-        // Por ejemplo: recyclerViewCategory.adapter = CategoryAdapter(categoryList)
-    }
+        recyclerViewSuggested.layoutManager = LinearLayoutManager(requireContext())
+        recyclerViewSuggested.adapter = productAdapter
+        productAdapter.getSwipeHelper().attachToRecyclerView(recyclerViewSuggested)
 
-    override fun onPause() {
-        super.onPause()
-        sliderHandler.removeCallbacks(sliderRunnable)
-    }
+        // Observar productos
+        productViewModel.products.observe(viewLifecycleOwner) { products ->
+            productAdapter.updateList(products)
+        }
 
-    override fun onResume() {
-        super.onResume()
-        sliderHandler.postDelayed(sliderRunnable, 4000)
-    }
+        // Mostrar progreso
+        productViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
 
-    private fun getImageUrls(): List<String> {
-        return listOf(
-            "https://example.com/image1.jpg",
-            "https://example.com/image2.jpg",
-            "https://example.com/image3.jpg"
-        )
+        // Cargar productos
+        productViewModel.loadProducts()
     }
 }

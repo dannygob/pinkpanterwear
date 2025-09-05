@@ -1,67 +1,85 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="12dp">
-
-    <TextView
-        android:id="@+id/itemName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="Producto"
-        android:textColor="#000000"
-        android:textSize="16sp" />
+    android:layout_margin="8dp"
+    android:background="@color/pink_50"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingEnd="8dp">
+        android:padding="12dp">
 
-        <ImageView
-            android:id="@+id/minusBtn"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:contentDescription="Disminuir cantidad"
-            android:src="@android:drawable/ic_input_delete"
-            app:tint="#666666" />
-
+        <!-- Nombre del producto -->
         <TextView
-            android:id="@+id/itemQuantity"
+            android:id="@+id/itemName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:fontFamily="@font/jacques_francois"
+            android:text="Producto"
+            android:textColor="@color/pink_900"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Controles de cantidad -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:text="x1"
-            android:textColor="#666666" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="8dp">
 
+            <ImageView
+                android:id="@+id/minusBtn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Disminuir cantidad"
+                android:src="@android:drawable/ic_input_delete"
+                app:tint="@color/faded_black" />
+
+            <TextView
+                android:id="@+id/itemQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:text="x1"
+                android:textColor="@color/faded_black"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/plusBtn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="Aumentar cantidad"
+                android:src="@android:drawable/ic_input_add"
+                app:tint="@color/faded_black" />
+        </LinearLayout>
+
+        <!-- Precio total -->
+        <TextView
+            android:id="@+id/itemPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="12dp"
+            android:text="€0.00"
+            android:textColor="@color/purple_500"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <!-- Botón eliminar -->
         <ImageView
-            android:id="@+id/plusBtn"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:contentDescription="Aumentar cantidad"
-            android:src="@android:drawable/ic_input_add"
-            app:tint="#666666" />
+            android:id="@+id/deleteBtn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="Eliminar"
+            android:src="@android:drawable/ic_menu_delete"
+            app:tint="@color/error_red" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/itemPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingEnd="12dp"
-        android:text="€0.00"
-        android:textColor="#FF5722"
-        android:textStyle="bold" />
-
-    <ImageView
-        android:id="@+id/deleteBtn"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:contentDescription="Eliminar"
-        android:src="@android:drawable/ic_menu_delete"
-        app:tint="#FF0000" />
-</LinearLayout>
+</androidx.cardview.widget.CardView>

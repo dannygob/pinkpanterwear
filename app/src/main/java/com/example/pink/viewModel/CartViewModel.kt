@@ -10,30 +10,46 @@ import kotlinx.coroutines.launch
 
 class CartViewModel(private val repository: CartRepository) : ViewModel() {
 
+    // 🛒 Lista de ítems en el carrito
     val cartItems: LiveData<List<CartItem>> = repository.getAllItems()
+
+    // 💰 Precio total calculado en tiempo real
     val totalPrice: LiveData<Double> = repository.getTotalPrice()
 
+    // ➕ Agregar producto al carrito
     fun addItem(item: CartItem) {
-        viewModelScope.launch { repository.insertItem(item) }
+        viewModelScope.launch {
+            repository.insertItem(item)
+        }
     }
 
+    // ❌ Eliminar producto del carrito
     fun deleteItem(item: CartItem) {
-        viewModelScope.launch { repository.deleteItem(item) }
+        viewModelScope.launch {
+            repository.deleteItem(item)
+        }
     }
 
+    // 🔄 Actualizar cantidad u otros datos
     fun updateItem(item: CartItem) {
-        viewModelScope.launch { repository.updateItem(item) }
+        viewModelScope.launch {
+            repository.updateItem(item)
+        }
     }
 
+    // 🧹 Vaciar el carrito
     fun clearCart() {
-        viewModelScope.launch { repository.clearCart() }
+        viewModelScope.launch {
+            repository.clearCart()
+        }
     }
 
-    // Puedes agregar función helper para calcular total manualmente si prefieres
+    // 🧮 Calcular total manualmente (opcional)
     fun getTotal(items: List<CartItem>): Double {
         return items.sumOf { it.productPrice * it.quantity }
     }
 
+    // 🧠 Factory para inyección de dependencias
     class Factory(private val repository: CartRepository) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(CartViewModel::class.java)) {

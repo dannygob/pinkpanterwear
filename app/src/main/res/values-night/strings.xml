@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="home_product_image">home_product_image</string>
+    <string name="clear_filter">limpiar filtro</string>
+    <string name="no_products_found">Producto_no_encontrado</string>
 </resources>

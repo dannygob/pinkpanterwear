@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.example.pink.model.CartItem
+
 @Dao
 interface CartDao {
 
@@ -15,10 +16,10 @@ interface CartDao {
     suspend fun insertItem(item: CartItem): Long
 
     @Update
-    suspend fun updateItem(item: CartItem)  // sin retorno
+    suspend fun updateItem(item: CartItem)
 
     @Delete
-    suspend fun deleteItem(item: CartItem)  // sin retorno
+    suspend fun deleteItem(item: CartItem)
 
     @Query("DELETE FROM cart_items")
     suspend fun clearCart(): Int
@@ -28,4 +29,7 @@ interface CartDao {
 
     @Query("SELECT SUM(productPrice * quantity) FROM cart_items")
     fun getTotalPrice(): LiveData<Double>
+
+    @Query("SELECT * FROM cart_items WHERE productUniqueID = :productID LIMIT 1")
+    suspend fun findItemByProductID(productID: String): CartItem?
 }
