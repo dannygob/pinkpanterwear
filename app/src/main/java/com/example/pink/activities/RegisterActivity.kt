@@ -21,7 +21,7 @@ import java.util.*
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var registerName: TextInputLayout
-    private lateinit var registerPhone: TextInputLayout
+    private lateinit var registerIdentifier: TextInputLayout
     private lateinit var registerPassword: TextInputLayout
     private lateinit var registerConfirmPassword: TextInputLayout
     private lateinit var registerButton: Button
