@@ -1,6 +1,8 @@
 package com.example.pinkpanterwear
 
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.tasks.await
 
@@ -26,16 +28,20 @@ class AuthHelper {
 
     /**
      * Logs in an existing user with email and password.
-     * @return Result of the operation containing FirebaseUser on success.
+     * @return A LoginResult indicating success, failure, or network error.
      */
-    suspend fun loginUser(email: String, password: String): Result<FirebaseUser> {
+    suspend fun loginUser(email: String, password: String): LoginResult {
         return try {
             val userCredential = auth.signInWithEmailAndPassword(email, password).await()
             userCredential.user?.let {
-                Result.success(it)
-            } ?: Result.failure(Exception("Firebase user is null after login"))
+                LoginResult.Success(it)
+            } ?: LoginResult.Failure(Exception("Firebase user is null after login"))
+        } catch (e: FirebaseNetworkException) {
+            LoginResult.NetworkError
+        } catch (e: FirebaseAuthException) {
+            LoginResult.Failure(e)
         } catch (e: Exception) {
-            Result.failure(e)
+            LoginResult.Failure(e)
         }
     }
 
@@ -95,4 +101,10 @@ class AuthHelper {
         }
         return false
     }
+}
+
+sealed class LoginResult {
+    data class Success(val user: FirebaseUser) : LoginResult()
+    data class Failure(val exception: Exception) : LoginResult()
+    object NetworkError : LoginResult()
 }
