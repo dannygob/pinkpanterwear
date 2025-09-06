@@ -1,10 +1,11 @@
 package com.example.pink.activities
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -16,17 +17,16 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Date
-import java.util.Locale
 
 class AdminCategoriesAddEditActivity : AppCompatActivity() {
 
     private lateinit var addCategoryName: TextInputLayout
     private lateinit var addCategoryButton: MaterialButton
     private lateinit var addCategoryImage: ShapeableImageView
-    private lateinit var loadingBar: ProgressDialog
+    private lateinit var loadingBar: ProgressBar
     private lateinit var toolbar: Toolbar
 
     private var imageUri: Uri? = null
@@ -63,7 +63,7 @@ class AdminCategoriesAddEditActivity : AppCompatActivity() {
         addCategoryImage = findViewById(R.id.admin_add_category_image)
         addCategoryName = findViewById(R.id.admin_add_category_name)
         addCategoryButton = findViewById(R.id.admin_add_category_btn)
-        loadingBar = ProgressDialog(this)
+        loadingBar = findViewById(R.id.progress_bar)
 
         addCategoryImage.setOnClickListener { openGallery() }
         addCategoryButton.setOnClickListener { validateCategoryData() }
@@ -91,14 +91,11 @@ class AdminCategoriesAddEditActivity : AppCompatActivity() {
     }
 
     private fun uploadCategoryImage() {
-        loadingBar.setTitle("Adding Category")
-        loadingBar.setMessage("Please wait...")
-        loadingBar.setCanceledOnTouchOutside(false)
-        loadingBar.show()
+        loadingBar.visibility = View.VISIBLE
 
         val calendar = Calendar.getInstance()
-        val date = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(calendar.time)
-        val time = SimpleDateFormat("HHmmss", Locale.getDefault()).format(calendar.time)
+        val date = DateTimeFormatter.ofPattern("yyyyMMdd").format(calendar.time.toInstant())
+        val time = DateTimeFormatter.ofPattern("HHmmss").format(calendar.time.toInstant())
         categoryUniqueID = "$date$time"
 
         val fileName = "${imageUri?.lastPathSegment}_${categoryUniqueID}.jpg"
@@ -112,17 +109,24 @@ class AdminCategoriesAddEditActivity : AppCompatActivity() {
             downloadImageUrl = uri.toString()
             saveCategoryToDatabase()
         }.addOnFailureListener {
-            loadingBar.dismiss()
+            loadingBar.visibility = View.GONE
             showToast("Image upload failed: ${it.message}")
         }
     }
 
     private fun saveCategoryToDatabase() {
         val now = Date()
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+        val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        val dateCreated = now.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDateTime()
+            .format(dateFormatter)
+        val timeCreated = now.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDateTime()
+            .format(timeFormatter)
+
         val categoryData = mapOf(
             "CategoryUniqueID" to categoryUniqueID,
-            "DateCreated" to SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(now),
-            "TimeCreated" to SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(now),
+            "DateCreated" to dateCreated,
+            "TimeCreated" to timeCreated,
             "CategoryName" to categoryName,
             "CategoryImage" to downloadImageUrl,
             "CategoryStatus" to "active",
@@ -133,12 +137,12 @@ class AdminCategoriesAddEditActivity : AppCompatActivity() {
             .document(categoryUniqueID!!)
             .set(categoryData)
             .addOnSuccessListener {
-                loadingBar.dismiss()
+                loadingBar.visibility = View.GONE
                 showToast("Category added successfully.")
                 startActivity(Intent(this, AdminCategoriesActivity::class.java))
             }
             .addOnFailureListener {
-                loadingBar.dismiss()
+                loadingBar.visibility = View.GONE
                 showToast("Error adding category: ${it.message}")
             }
     }
@@ -151,3 +155,5 @@ class AdminCategoriesAddEditActivity : AppCompatActivity() {
         private const val GALLERY_PICK = 1 // 🎯 no longer used, just kept for reference
     }
 }
+
+

@@ -38,7 +38,7 @@ class UserHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerViewSuggested = view.findViewById(R.id.recycler_view_suggested)
+        recyclerViewSuggested = view.findViewById(R.id.recycler_view_home_products)
         progressBar = view.findViewById(R.id.progress_bar_home)
 
         // Inicializar ViewModels

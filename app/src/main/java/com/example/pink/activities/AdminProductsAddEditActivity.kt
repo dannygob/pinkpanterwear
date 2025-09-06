@@ -1,11 +1,12 @@
 package com.example.pink.activities
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,7 +25,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
@@ -36,7 +38,7 @@ class AdminProductsAddEditActivity : AppCompatActivity() {
     private lateinit var addProductButton: MaterialButton
     private lateinit var addProductImage: ShapeableImageView
     private lateinit var addProductCategory: Spinner
-    private lateinit var loadingBar: ProgressDialog
+    private lateinit var loadingBar: ProgressBar
     private lateinit var toolbar: Toolbar
 
     private var imageUri: Uri? = null
@@ -68,7 +70,7 @@ class AdminProductsAddEditActivity : AppCompatActivity() {
         addProductDescription = findViewById(R.id.admin_add_product_description)
         addProductCategory = findViewById(R.id.admin_add_product_category)
         addProductButton = findViewById(R.id.admin_add_product_btn)
-        loadingBar = ProgressDialog(this)
+        loadingBar = findViewById(R.id.progress_bar)
 
         addProductImage.setOnClickListener { openGallery() }
         addProductButton.setOnClickListener { validateProductData() }
@@ -146,18 +148,15 @@ class AdminProductsAddEditActivity : AppCompatActivity() {
         productDescription: String,
         productCategoryID: String?,
     ) {
-        loadingBar.setTitle(getString(R.string.adding_product_title))
-        loadingBar.setMessage(getString(R.string.please_wait))
-        loadingBar.setCanceledOnTouchOutside(false)
-        loadingBar.show()
+        loadingBar.visibility = View.VISIBLE
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val calendar = Calendar.getInstance()
-                val saveCurrentDate =
-                    SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(calendar.time)
-                val saveCurrentTime =
-                    SimpleDateFormat("HHmmss", Locale.getDefault()).format(calendar.time)
+                Calendar.getInstance()
+                val saveCurrentDate = DateTimeFormatter.ofPattern("yyyyMMdd", Locale.getDefault())
+                    .format(LocalDateTime.now())
+                val saveCurrentTime = DateTimeFormatter.ofPattern("HHmmss", Locale.getDefault())
+                    .format(LocalDateTime.now())
                 val productUniqueID = saveCurrentDate + saveCurrentTime
 
                 val imageRef =
@@ -180,7 +179,7 @@ class AdminProductsAddEditActivity : AppCompatActivity() {
                 productRef.collection("Products").document(productUniqueID).set(productMap).await()
 
                 withContext(Dispatchers.Main) {
-                    loadingBar.dismiss()
+                    loadingBar.visibility = View.GONE
                     Toast.makeText(
                         this@AdminProductsAddEditActivity,
                         getString(R.string.product_added_successfully),
@@ -196,7 +195,7 @@ class AdminProductsAddEditActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    loadingBar.dismiss()
+                    loadingBar.visibility = View.GONE
                     Toast.makeText(
                         this@AdminProductsAddEditActivity,
                         "Error: ${e.message}",

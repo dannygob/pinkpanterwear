@@ -1,4 +1,4 @@
-package com.example.pink.util
+package com.example.pink.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

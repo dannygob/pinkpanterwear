@@ -30,7 +30,7 @@
     <string name="logout_message">Logged Out Successfully</string>
     <string name="empty_category_name">Category name cannot be empty!</string>
     <string name="select_image">Select an image!</string>
-    <string name="please_wait">Please wait...</string>
+    <string name="please_wait">Please wait…</string>
     <string name="category_added_successfully">Category Added Successfully</string>
     <string name="new_orders">New</string>
     <string name="dispatch_orders">Dispatch</string>
@@ -45,7 +45,7 @@
     <string name="product_does_not_exist">Product does not exist!</string>
     <string name="could_not_load_product">Could not load product.</string>
     <string name="empty_number">Number cannot be empty!</string>
-    <string name="number_format">Number format: 705...</string>
+    <string name="number_format">Number format: 705…</string>
     <string name="empty_phone_number">Phone Number cannot be empty!</string>
     <string name="user_does_not_exist">User +%1$s does not exist!</string>
     <string name="error_accessing_user_data">Error accessing user data.</string>
@@ -55,7 +55,7 @@
     <string name="incorrect_password">Incorrect password</string>
     <string name="login_error">Error logging in. Try again.</string>
     <string name="otp_resent">OTP has been resent!</string>
-    <string name="waiting_for_sms">Waiting for SMS...</string>
+    <string name="waiting_for_sms">Waiting for SMS…</string>
     <string name="failed_to_start_sms_consent">Failed to start SMS consent.</string>
     <string name="sms_capture_failed">SMS capture failed.</string>
     <string name="error_verifying">Error verifying</string>
@@ -87,4 +87,18 @@
     <string name="home_product_image">home_product_image</string>
     <string name="clear_filter">limpiar filtro</string>
     <string name="no_products_found">Producto_no_encontrado</string>
+    <string name="add_to_cart">Agregar al carrito</string>
+    <string name="product_image">Imagen del producto</string>
+    <string name="collection">Collection</string>
+    <string name="trending">Trending</string>
+    <string name="you_might_like">You might like</string>
+    <string name="peter_parker">Peter Parker</string>
+    <string name="peterparker_gmail_com">PeterParker@gmail.com</string>
+    <string name="_0_00">€0.00</string>
+    <string name="invalid_email">Email_invalido</string>
+    <string name="empty_email_or_phone">empty_email_or_phone</string>
+    <string name="user_created_successfully">user_created_successfully</string>
+    <string name="empty_email">empty_email</string>
+    <string name="empty_identifier">empty_identifier</string>
+
 </resources>

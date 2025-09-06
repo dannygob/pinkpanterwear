@@ -3,4 +3,6 @@
     <string name="home_product_image">home_product_image</string>
     <string name="clear_filter">limpiar filtro</string>
     <string name="no_products_found">Producto_no_encontrado</string>
+    <string name="empty_email_or_phone">empty_email_or_phone</string>
+    <string name="user_created_successfully">user_created_successfully</string>
 </resources>

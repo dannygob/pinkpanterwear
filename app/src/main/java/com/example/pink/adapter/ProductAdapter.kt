@@ -68,7 +68,7 @@ class ProductAdapter(
             ): Boolean = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
+                val position = viewHolder.bindingAdapterPosition
                 val product = products[position]
                 onAddToCart(product)
                 notifyItemChanged(position) // Restaurar visualmente el ítem

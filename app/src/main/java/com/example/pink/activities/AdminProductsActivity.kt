@@ -94,10 +94,10 @@ class AdminProductsActivity : AppCompatActivity(), NavigationView.OnNavigationIt
                 position: Int,
                 model: Products,
             ) {
-                holder.txtProductName?.text = model.productName
-                holder.txtProductPrice?.text =
+                holder.txtProductName.text = model.productName
+                holder.txtProductPrice.text =
                     "${getString(R.string.currency)} ${model.productPrice}"
-                holder.txtProductDescription?.text = model.productDescription
+                holder.txtProductDescription.text = model.productDescription
 
                 Picasso.get()
                     .load(model.productImage)

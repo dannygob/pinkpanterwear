@@ -8,9 +8,3 @@ data class PlatziProduct(
     val images: List<String>?,
     val category: PlatziCategory?, // ✅ Renombrado para evitar conflicto
 )
-
-data class PlatziCategory(
-    val id: Int,
-    val name: String,
-    val image: String?,
-)
