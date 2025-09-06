@@ -1,11 +1,12 @@
 package com.example.pink.activities
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pink.R
@@ -20,7 +21,7 @@ class ResetPasswordActivity : AppCompatActivity() {
     private lateinit var resetPasswordLayout: TextInputLayout
     private lateinit var resetConfirmPasswordLayout: TextInputLayout
     private lateinit var resetButton: Button
-    private lateinit var loadingBar: ProgressDialog
+    private lateinit var loadingBar: ProgressBar
     private lateinit var userRef: FirebaseFirestore
     private lateinit var userID: String
     private var generatedPassword: String? = null
@@ -33,7 +34,7 @@ class ResetPasswordActivity : AppCompatActivity() {
         resetPasswordLayout = findViewById(R.id.reset_password)
         resetConfirmPasswordLayout = findViewById(R.id.reset_confirm_password)
         resetButton = findViewById(R.id.reset_password_btn)
-        loadingBar = ProgressDialog(this)
+        loadingBar = findViewById(R.id.progress_bar)
 
         // Firebase
         userRef = FirebaseFirestore.getInstance()
@@ -107,12 +108,7 @@ class ResetPasswordActivity : AppCompatActivity() {
                 getString(R.string.passwords_do_not_match)
 
             else -> {
-                loadingBar.apply {
-                    setTitle(getString(R.string.resetting_password_title))
-                    setMessage(getString(R.string.please_wait))
-                    setCanceledOnTouchOutside(false)
-                    show()
-                }
+                loadingBar.visibility = View.VISIBLE
 
                 saveNewPassword(password)
             }
@@ -125,8 +121,8 @@ class ResetPasswordActivity : AppCompatActivity() {
         userRef.collection("Users")
             .document(userID)
             .update("UserPassword", generatedPassword)
-            .addOnSuccessListener(OnSuccessListener<Void?> {
-                loadingBar.dismiss()
+            .addOnSuccessListener(OnSuccessListener {
+                loadingBar.visibility = View.GONE
                 Toast.makeText(
                     this,
                     getString(R.string.password_reset_successful),

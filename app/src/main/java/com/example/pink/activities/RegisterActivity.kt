@@ -1,26 +1,22 @@
 package com.example.pink.activities
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pink.R
-import com.example.pink.fragment.SmsGateway
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.security.MessageDigest
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
-import java.util.Random
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -30,7 +26,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var registerConfirmPassword: TextInputLayout
     private lateinit var registerButton: Button
     private lateinit var loginLink: TextView
-    private lateinit var loadingBar: ProgressDialog
+    private lateinit var loadingBar: ProgressBar
 
     private val userRef = FirebaseFirestore.getInstance()
     private var hashedPassword: String? = null
@@ -48,7 +44,7 @@ class RegisterActivity : AppCompatActivity() {
         registerConfirmPassword = findViewById(R.id.register_confirm_password)
         registerButton = findViewById(R.id.register_button)
         loginLink = findViewById(R.id.register_login_link)
-        loadingBar = ProgressDialog(this)
+        loadingBar = findViewById(R.id.progress_bar)
 
         setupFieldValidation()
 
@@ -129,13 +125,8 @@ class RegisterActivity : AppCompatActivity() {
             confirmPassword != password -> registerConfirmPassword.error =
                 getString(R.string.passwords_do_not_match)
             else -> {
-                loadingBar.apply {
-                    setTitle(getString(R.string.creating_account_title))
-                    setMessage(getString(R.string.please_wait))
-                    setCanceledOnTouchOutside(false)
-                    show()
-                }
-                registerUser(name, phone, password)
+                loadingBar.visibility = View.VISIBLE
+                registerUser(name, identifier, password)
             }
         }
     }

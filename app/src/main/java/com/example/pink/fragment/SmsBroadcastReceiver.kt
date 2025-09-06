@@ -19,12 +19,12 @@ class SmsBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (SmsRetriever.SMS_RETRIEVED_ACTION == intent.action) {
             val extras = intent.extras
-            val status = extras?.get(SmsRetriever.EXTRA_STATUS) as? Status
+            val status = extras?.getParcelable(SmsRetriever.EXTRA_STATUS, Status::class.java)
 
             when (status?.statusCode) {
                 CommonStatusCodes.SUCCESS -> {
                     val consentIntent =
-                        extras.getParcelable<Intent>(SmsRetriever.EXTRA_CONSENT_INTENT)
+                        extras.getParcelable(SmsRetriever.EXTRA_CONSENT_INTENT, Intent::class.java)
                     if (consentIntent != null) {
                         smsBroadcastReceiverListener?.onSuccess(consentIntent)
                     } else {

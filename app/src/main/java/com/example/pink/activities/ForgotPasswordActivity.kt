@@ -1,11 +1,12 @@
 package com.example.pink.activities
 
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pink.R
@@ -17,7 +18,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
     private lateinit var forgotPasswordPhone: TextInputLayout
     private lateinit var forgotPasswordButton: Button
-    private lateinit var loadingBar: ProgressDialog
+    private lateinit var loadingBar: ProgressBar
     private val userRef: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     private var userID: String = ""
@@ -28,7 +29,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         forgotPasswordPhone = findViewById(R.id.forgot_password_phone)
         forgotPasswordButton = findViewById(R.id.forgot_password_btn)
-        loadingBar = ProgressDialog(this)
+        loadingBar = findViewById(R.id.progress_bar)
 
         addPhoneNumberValidation()
 
@@ -71,17 +72,14 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         userID = "254$phone"
 
-        loadingBar.setTitle(getString(R.string.sending_reset_code_title))
-        loadingBar.setMessage(getString(R.string.please_wait))
-        loadingBar.setCanceledOnTouchOutside(false)
-        loadingBar.show()
+        loadingBar.visibility = View.VISIBLE
 
         userRef.collection("Users").document(userID).get()
             .addOnSuccessListener { snapshot ->
                 if (snapshot.exists()) {
                     generateAndSaveOTP(userID)
                 } else {
-                    loadingBar.dismiss()
+                    loadingBar.visibility = View.GONE
                     Toast.makeText(
                         this,
                         getString(R.string.user_does_not_exist, userID),
@@ -90,7 +88,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener {
-                loadingBar.dismiss()
+                loadingBar.visibility = View.GONE
                 Toast.makeText(
                     this,
                     getString(R.string.error_accessing_user_data),
@@ -107,7 +105,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 proceedToResetScreen(userID, otp)
             }
             .addOnFailureListener {
-                loadingBar.dismiss()
+                loadingBar.visibility = View.GONE
                 Toast.makeText(
                     this,
                     getString(R.string.could_not_save_reset_code),
@@ -118,7 +116,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
     private fun proceedToResetScreen(userID: String, otp: String) {
         // Simular envío SMS si integras gateway aquí
-        loadingBar.dismiss()
+        loadingBar.visibility = View.GONE
         val intent = Intent(this, ResetCodeActivity::class.java)
         intent.putExtra("userID", userID)
         startActivity(intent)
