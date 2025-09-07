@@ -58,8 +58,8 @@ class AdminCategoriesActivity : AppCompatActivity(),
             this,
             drawerLayout,
             toolbar,
-            R.string.openNavDrawer,
-            R.string.closeNavDrawer
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
         )
 
         drawerLayout.addDrawerListener(toggle)

@@ -28,8 +28,8 @@ class AdminAssistantActivity : AppCompatActivity(),
             this,
             binding.drawerLayout,
             binding.mainToolbar,
-            R.string.openNavDrawer,
-            R.string.closeNavDrawer
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
         )
 
         binding.drawerLayout.addDrawerListener(drawerToggle)

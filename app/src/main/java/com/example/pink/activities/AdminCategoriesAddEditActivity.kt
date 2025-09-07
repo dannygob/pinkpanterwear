@@ -58,7 +58,7 @@ class AdminCategoriesAddEditActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.main_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.setNavigationIcon(R.drawable.back_icon)
+        toolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
 
         addCategoryImage = findViewById(R.id.admin_add_category_image)
         addCategoryName = findViewById(R.id.admin_add_category_name)
