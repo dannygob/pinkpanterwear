@@ -11,9 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pink.AppDatabase
 import com.example.pink.R
 import com.example.pink.activities.CheckoutActivity
 import com.example.pink.adapter.CartAdapter
+import com.example.pink.repositories.CartRepository
 import com.example.pink.viewModel.CartViewModel
 
 class UserCartFragment : Fragment() {
@@ -36,7 +38,12 @@ class UserCartFragment : Fragment() {
         totalLabel = view.findViewById(R.id.cartTotalLabel)
         checkoutButton = view.findViewById(R.id.checkoutBtn)
 
-        viewModel = ViewModelProvider(this)[CartViewModel::class.java]
+        val cartDao = AppDatabase.getDatabase(requireContext()).cartDao()
+        val cartRepository = CartRepository(cartDao)
+        viewModel = ViewModelProvider(
+            this,
+            CartViewModel.Factory(cartRepository)
+        )[CartViewModel::class.java]
         adapter = CartAdapter(
             emptyList(),
             onDelete = { itemToDelete ->

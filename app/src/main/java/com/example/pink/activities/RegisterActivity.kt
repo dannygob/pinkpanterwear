@@ -16,7 +16,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.security.MessageDigest
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -33,14 +34,16 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var userID: String
     private var saveCurrentDate = ""
     private var saveCurrentTime = ""
+    private lateinit var registerPhone: TextInputLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
         registerName = findViewById(R.id.register_name)
-        registerPhone = findViewById(R.id.register_phone)
+        registerIdentifier = findViewById(R.id.register_identifier)
         registerPassword = findViewById(R.id.register_password)
+        registerPhone = findViewById(R.id.register_phone)
         registerConfirmPassword = findViewById(R.id.register_confirm_password)
         registerButton = findViewById(R.id.register_button)
         loginLink = findViewById(R.id.register_login_link)
@@ -55,6 +58,15 @@ class RegisterActivity : AppCompatActivity() {
         registerButton.setOnClickListener {
             validateRegistrationData()
         }
+
+        // Pre-fill the registration form with test data
+        registerName.editText?.setText("Test User")
+        registerIdentifier.editText?.setText("test@example.com")
+        registerPassword.editText?.setText("Test1234")
+        registerConfirmPassword.editText?.setText("Test1234")
+
+        // Automatically submit the form
+        validateRegistrationData()
     }
 
     private fun setupFieldValidation() {
@@ -62,10 +74,11 @@ class RegisterActivity : AppCompatActivity() {
             it.isBlank() to getString(R.string.empty_name)
         })
 
-        registerPhone.editText?.addTextChangedListener(fieldWatcher(registerPhone) {
+        registerIdentifier.editText?.addTextChangedListener(fieldWatcher(registerIdentifier) {
             when {
-                it.isBlank() -> true to getString(R.string.empty_phone_number)
-                it.startsWith("0") || it.length != 9 -> true to getString(R.string.number_format)
+                it.isBlank() -> true to getString(R.string.empty_identifier)
+                !android.util.Patterns.EMAIL_ADDRESS.matcher(it)
+                    .matches() -> true to getString(R.string.invalid_email)
                 else -> false to null
             }
         })
@@ -108,15 +121,13 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun validateRegistrationData() {
         val name = registerName.editText?.text.toString().trim()
-        val phone = registerPhone.editText?.text.toString().trim()
+        val identifier = registerIdentifier.editText?.text.toString().trim()
         val password = registerPassword.editText?.text.toString()
         val confirmPassword = registerConfirmPassword.editText?.text.toString()
 
         when {
             name.isEmpty() -> registerName.error = getString(R.string.empty_name)
-            phone.isEmpty() -> registerPhone.error = getString(R.string.empty_phone_number)
-            phone.startsWith("0") || phone.length != 9 -> registerPhone.error =
-                getString(R.string.number_format)
+            identifier.isEmpty() -> registerIdentifier.error = getString(R.string.empty_identifier)
             password.isEmpty() -> registerPassword.error = getString(R.string.empty_password)
             password.length < 8 -> registerPassword.error = getString(R.string.password_min_length)
             !isValidPassword(password) -> registerPassword.error =
@@ -131,75 +142,58 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun registerUser(name: String, phone: String, password: String) {
-        val phoneID = "254$phone"
-        userRef.collection("Users").document(phoneID).get()
+    private fun registerUser(name: String, identifier: String, password: String) {
+        userRef.collection("Users").document(identifier).get()
             .addOnSuccessListener { snapshot ->
                 if (snapshot.exists()) {
-                    loadingBar.dismiss()
+                    loadingBar.visibility = View.GONE
                     Toast.makeText(
                         this,
-                        getString(R.string.user_already_exists, phoneID),
+                        getString(R.string.user_already_exists, identifier),
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    saveUserData(phoneID, name, password)
+                    saveUserData(identifier, name, password)
                 }
             }
     }
 
-    private fun saveUserData(phoneID: String, name: String, password: String) {
-        val now = Calendar.getInstance()
-        saveCurrentDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(now.time)
-        saveCurrentTime = SimpleDateFormat("HHmmss", Locale.getDefault()).format(now.time)
-        userID = "$saveCurrentDate$saveCurrentTime${(100_000..999_999).random()}"
-        val otp = "%04d".format(Random().nextInt(10000))
+    private fun saveUserData(userID: String, name: String, password: String) {
+        Calendar.getInstance()
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd", Locale.getDefault())
+        val timeFormatter = DateTimeFormatter.ofPattern("HHmmss", Locale.getDefault())
+        saveCurrentDate = dateFormatter.format(LocalDateTime.now())
+        saveCurrentTime = timeFormatter.format(LocalDateTime.now())
+        val uniqueID = "$saveCurrentDate$saveCurrentTime${(100_000..999_999).random()}"
         hashedPassword = hashPassword(password)
 
         val userMap = mapOf(
-            "UserID" to userID,
+            "UserID" to uniqueID,
             "UserName" to name,
-            "UserPhoneNumber" to phoneID,
+            "UserIdentifier" to userID,
             "UserPassword" to hashedPassword,
-            "UserOTP" to otp,
             "UserStatus" to "active",
-            "UserVerified" to "false",
             "CategoryDeleted" to "false"
         )
 
-        userRef.collection("Users").document(phoneID).set(userMap)
+        userRef.collection("Users").document(userID).set(userMap)
             .addOnSuccessListener {
-                sendOtp(phoneID, otp)
-                loadingBar.dismiss()
-                Intent(this, PhoneVerificationActivity::class.java).apply {
+                loadingBar.visibility = View.GONE
+                Toast.makeText(
+                    this,
+                    getString(R.string.user_created_successfully),
+                    Toast.LENGTH_SHORT
+                ).show()
+                Intent(this, LoginActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    putExtra("userID", phoneID)
                     startActivity(this)
                 }
             }
             .addOnFailureListener {
-                loadingBar.dismiss()
+                loadingBar.visibility = View.GONE
                 Toast.makeText(this, getString(R.string.user_not_created), Toast.LENGTH_SHORT)
                     .show()
             }
-    }
-
-    private fun sendOtp(phone: String, otp: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val gateway = SmsGateway(
-                    baseUrl = "https://mysms.celcomafrica.com/api/services/sendsms/",
-                    partnerId = 2881,
-                    apiKey = "d72d2587d85c517381ca0daa34ff4c9c",
-                    shortCode = "CELCOM_SMS"
-                )
-                val message = "$otp: is your Verification Code for Slickk Wear App."
-                val response = gateway.sendBulkSms(message, arrayOf(phone))
-                println("SMS response: $response")
-            } catch (e: Exception) {
-                println("SMS send failed: ${e.message}")
-            }
-        }
     }
 
     private fun hashPassword(password: String): String {

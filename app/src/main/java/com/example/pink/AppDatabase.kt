@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.pink.dao.CartDao
 import com.example.pink.model.CartItem
 
-@Database(entities = [CartItem::class], version = 1)
+@Database(entities = [CartItem::class], version = 1, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun cartDao(): CartDao
 

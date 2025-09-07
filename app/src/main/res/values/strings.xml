@@ -84,21 +84,24 @@
 
     <!-- Resources -->
     <string name="banner_image">Banner Image</string>
-    <string name="home_product_image">home_product_image</string>
-    <string name="clear_filter">limpiar filtro</string>
-    <string name="no_products_found">Producto_no_encontrado</string>
-    <string name="add_to_cart">Agregar al carrito</string>
-    <string name="product_image">Imagen del producto</string>
+    <string name="home_product_image">Home product image</string>
+    <string name="clear_filter">Clear filter</string>
+    <string name="no_products_found">Product no found</string>
+    <string name="add_to_cart">Add to cart</string>
+    <string name="product_image">Product image</string>
     <string name="collection">Collection</string>
     <string name="trending">Trending</string>
     <string name="you_might_like">You might like</string>
     <string name="peter_parker">Peter Parker</string>
     <string name="peterparker_gmail_com">PeterParker@gmail.com</string>
     <string name="_0_00">€0.00</string>
-    <string name="invalid_email">Email_invalido</string>
-    <string name="empty_email_or_phone">empty_email_or_phone</string>
-    <string name="user_created_successfully">user_created_successfully</string>
-    <string name="empty_email">empty_email</string>
-    <string name="empty_identifier">empty_identifier</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="empty_email_or_phone">Empty email or phone</string>
+    <string name="user_created_successfully">User created successfully</string>
+    <string name="empty_email">Empty email</string>
+    <string name="empty_identifier">Empty identifier</string>
+    <string name="don_t_have_an_account">Don\'t have an account ?</string>
+    <string name="or">OR</string>
+    <string name="invalid_identifier_format">Invalid format. Use phone, email, or username</string>
 
 </resources>

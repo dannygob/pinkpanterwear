@@ -9,11 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pink.AppDatabase
 import com.example.pink.R
 import com.example.pink.adapter.ProductAdapter
 import com.example.pink.model.CartItem
 import com.example.pink.network.FakeStoreApi
 import com.example.pink.network.PlatziApi
+import com.example.pink.repositories.CartRepository
 import com.example.pink.repositories.ProductRepository
 import com.example.pink.viewModel.CartViewModel
 import com.example.pink.viewModel.ProductViewModel
@@ -43,11 +45,17 @@ class UserHomeFragment : Fragment() {
 
         // Inicializar ViewModels
         val repository = ProductRepository(PlatziApi.create(), FakeStoreApi.create())
+        val cartDao = AppDatabase.getDatabase(requireContext()).cartDao()
+        val cartRepository = CartRepository(cartDao)
+
         productViewModel = ViewModelProvider(
             this,
             ProductViewModelFactory(repository)
         )[ProductViewModel::class.java]
-        cartViewModel = ViewModelProvider(this)[CartViewModel::class.java]
+        cartViewModel = ViewModelProvider(
+            this,
+            CartViewModel.Factory(cartRepository)
+        )[CartViewModel::class.java]
 
         // Configurar adapter con productos y lógica de agregar al carrito
         productAdapter = ProductAdapter(mutableListOf()) { product ->

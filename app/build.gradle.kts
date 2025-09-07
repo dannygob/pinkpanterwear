@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-    alias(libs.plugins.kotlinKapt)
+    alias(libs.plugins.ksp) // ✅ reemplaza kapt
     alias(libs.plugins.googleServices)
 }
 
@@ -43,6 +43,11 @@ android {
     }
 }
 
+// ✅ Room schema export configuration for KSP
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
     implementation(libs.androidxCoreKtx)
     implementation(libs.androidxAppCompat)
@@ -52,6 +57,7 @@ dependencies {
     implementation(libs.androidxViewPager2)
     implementation(libs.androidxPagingRuntimeKtx)
     implementation(libs.androidxLifecycleViewModel)
+    implementation(libs.lifecycleViewmodel)
 
     implementation(platform(libs.firebaseBomLib))
     implementation(libs.firebaseAnalyticsLib)
@@ -61,21 +67,18 @@ dependencies {
     implementation(libs.firebaseUiFirestoreLib)
 
     implementation(libs.glideLib)
-    kapt(libs.glideCompiler)
+    ksp(libs.glideCompiler) // ✅ reemplaza kapt
 
     implementation(libs.androidxRoomRuntime)
     implementation(libs.androidxRoomKtx)
-    kapt(libs.androidxRoomCompiler)
-    implementation(libs.lifecycleViewmodel)
+    ksp(libs.androidxRoomCompiler) // ✅ reemplaza kapt
 
-    implementation("androidx.fragment:fragment-ktx:1.3.0")
+    implementation("androidx.fragment:fragment-ktx:1.8.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
-
-
-
 
     implementation(libs.picassoLib)
     implementation(libs.lottieLib)

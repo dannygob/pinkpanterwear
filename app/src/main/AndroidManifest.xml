@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.pink">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 📡 SMS + Internet Permissions -->
     <uses-feature
@@ -63,7 +62,6 @@
         <activity android:name="com.example.pink.activities.RegisterActivity" />
         <activity
             android:name="com.example.pink.MainActivity"
-            android:windowSoftInputMode="adjustNothing"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
