@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.random.Random
 
 @HiltViewModel
 class AdminProductAddEditViewModel @Inject constructor(
@@ -56,19 +57,17 @@ class AdminProductAddEditViewModel @Inject constructor(
 
     private fun loadCategories() {
         viewModelScope.launch {
-            // Could add loading/error states for categories if complex, for now direct
             try {
                 _categories.value = repository.getAllCategoriesFromFirestore()
             } catch (e: Exception) {
                 Log.e("AdminAddEditVM", "Error loading categories", e)
-                _error.value =
-                    "Failed to load categories: ${e.message}" // Or a separate error flow for categories
+                _error.value = "Failed to load categories: ${e.message}"
             }
         }
     }
 
     fun saveProduct(
-        currentProductId: Int?, // Null if new product
+        currentProductId: Int?,
         name: String,
         description: String,
         priceStr: String,
@@ -90,34 +89,17 @@ class AdminProductAddEditViewModel @Inject constructor(
             _error.value = null
             _saveSuccess.value = false
 
-            val productIdToSave: Int
-            val isNewProduct: Boolean
+            val productIdToSave = currentProductId ?: Random.nextInt(1, Int.MAX_VALUE)
+            val isNewProduct = currentProductId == null
 
-            if (currentProductId == null || currentProductId == 0) {
-                isNewProduct = true
-                // CRUDE ID generation. NOT FOR PRODUCTION.
-                // A robust system needs a unique ID strategy (e.g., Firestore counter, backend generated, admin input with validation).
-                // For now, using timestamp. Risk of collision is low for testing but exists.
-                // Max Int is 2,147,483,647. System.currentTimeMillis() is larger.
-                // Taking last 9 digits of millis and hoping for the best for this dev step.
-                // Or simply use a random positive Int.
-                productIdToSave = (System.currentTimeMillis() % 1_000_000_000L).toInt()
-                Log.d("AdminAddEditVM", "Generated new product ID: $productIdToSave")
-
-            } else {
-                isNewProduct = false
-                productIdToSave = currentProductId
-            }
-
-            // Rating will be null for new/edited products by admin initially
             val product = Product(
-                productIdToSave,
-                name,
-                description,
-                price,
-                imageUrl,
-                category,
-                rating = null
+                id = productIdToSave,
+                name = name,
+                price = price,
+                description = description,
+                category = category,
+                imageUrl = imageUrl,
+                rating = null // Admin cannot set rating
             )
 
             val success = if (isNewProduct) {
@@ -142,6 +124,6 @@ class AdminProductAddEditViewModel @Inject constructor(
 
     fun consumeSaveSuccess() {
         _saveSuccess.value = false
-        _productToEdit.value = null // Clear product after successful save if it was an edit
+        _productToEdit.value = null
     }
 }

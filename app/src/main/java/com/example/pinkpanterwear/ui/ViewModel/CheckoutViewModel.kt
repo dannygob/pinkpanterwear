@@ -4,10 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pinkpanterwear.AuthHelper
-import com.example.pinkpanterwear.di.CartRepository
 import com.example.pinkpanterwear.entities.CartItem
 import com.example.pinkpanterwear.entities.Order
 import com.example.pinkpanterwear.entities.OrderItem
+import com.example.pinkpanterwear.repositories.CartRepository
 import com.example.pinkpanterwear.repositories.OrderRepository
 import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -66,7 +66,7 @@ class CheckoutViewModel @Inject constructor(
             try {
                 val items = cartRepository.getCartItems(userId)
                 _cartItemsForSummary.value = items
-                _grandTotal.value = items.sumOf { it.product.price * it.quantity }
+                _grandTotal.value = items.sumOf { it.productPrice * it.quantity }
             } catch (e: Exception) {
                 Log.e("CheckoutVM", "Error loading cart for summary", e)
                 _cartSummaryError.value = "Failed to load cart: ${e.message}"

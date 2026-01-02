@@ -1,7 +1,6 @@
 package com.example.pinkpanterwear.repository
 
-
-import com.example.pinkpanterwear.domain.entities.Category
+import com.example.pinkpanterwear.category.Category
 import com.example.pinkpanterwear.network.FakeStoreApiService
 import com.example.pinkpanterwear.repositories.CategoryRepository
 import javax.inject.Inject
@@ -12,8 +11,10 @@ class CategoryRepositoryImpl @Inject constructor(
 
     override suspend fun getAllCategories(): List<Category> {
         return try {
-            val categories = apiService.getAllCategories()
-            categories
+            val categoryNames = apiService.getAllCategories()
+            categoryNames.map { name ->
+                Category(id = name, name = name, image = "") // No image from this API endpoint
+            }
         } catch (e: Exception) {
             // Log error or handle specific exceptions
             emptyList() // Return empty list on error
@@ -22,11 +23,14 @@ class CategoryRepositoryImpl @Inject constructor(
 
     override suspend fun getCategoryById(categoryId: String): Category? {
         return try {
-            val categories = apiService.getAllCategories()
-            return categories.find { it.id == categoryId }
+            // The API doesn't have a direct "get by ID" for categories,
+            // so we fetch all and find the one we need.
+            val categoryNames = apiService.getAllCategories()
+            val foundName = categoryNames.find { it.equals(categoryId, ignoreCase = true) }
+            foundName?.let { Category(id = it, name = it, image = "") }
         } catch (e: Exception) {
             // Log error or handle specific exceptions
-            return null // Return null on error
+            null // Return null on error
         }
     }
 }

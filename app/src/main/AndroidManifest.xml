@@ -26,30 +26,30 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".UserProductDetailsActivity" />
+        <activity android:name=".ui.activities.UserProductDetailsActivity" />
 
         <activity
-            android:name=".AdminHomeActivity"
+            android:name=".ui.activities.AdminHomeActivity"
             android:label="Admin Panel"
             android:theme="@style/Theme.Pinkpanterwear" />
 
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".ui.activities.ForgotPasswordActivity"
             android:label="Forgot Password"
             android:theme="@style/Theme.Pinkpanterwear" />
 
         <activity
-            android:name=".ResetCodeActivity"
+            android:name=".ui.activities.ResetCodeActivity"
             android:label="Enter Reset Code"
             android:theme="@style/Theme.Pinkpanterwear" />
 
         <activity
-            android:name=".ResetPasswordActivity"
+            android:name=".ui.activities.ResetPasswordActivity"
             android:label="Reset Password"
             android:theme="@style/Theme.Pinkpanterwear" />
 
         <activity
-            android:name=".AdminProductAddEditActivity"
+            android:name=".ui.activities.AdminProductAddEditActivity"
             android:label="Manage Product"
             android:theme="@style/Theme.Pinkpanterwear" />
 

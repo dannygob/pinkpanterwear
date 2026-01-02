@@ -1,12 +1,13 @@
 package com.example.pinkpanterwear.repository
 
 import android.util.Log
-import com.example.pinkpanterwear.di.CartRepository
-import com.example.pinkpanterwear.di.ProductRepository
 import com.example.pinkpanterwear.entities.CartItem
 import com.example.pinkpanterwear.entities.Product
+import com.example.pinkpanterwear.repositories.CartRepository
+import com.example.pinkpanterwear.repositories.ProductRepository
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -20,6 +21,24 @@ data class FirestoreCartItem(
     val quantity: Int = 0,
     val addedAt: Timestamp? = null, // Nullable for existing items without it
 )
+
+// Mapper function to handle validation and prevent invalid data from propagating
+private fun DocumentSnapshot.toCartItem(userId: String, product: Product): CartItem? {
+    val firestoreCartItem = toObject(FirestoreCartItem::class.java)
+    if (firestoreCartItem == null) {
+        Log.e("CartMapper", "Failed to parse Firestore document to CartItem: ${this.id}")
+        return null
+    }
+    return CartItem(
+        userId = userId,
+        productId = firestoreCartItem.productId,
+        quantity = firestoreCartItem.quantity,
+        size = null, // Or handle size if available
+        productName = product.name,
+        productPrice = product.price,
+        productImageUrl = product.imageUrl
+    )
+}
 
 @Singleton
 class FirebaseCartRepositoryImpl @Inject constructor(
@@ -48,17 +67,8 @@ class FirebaseCartRepositoryImpl @Inject constructor(
                         // Fetch full product details using ProductRepository
                         val product = productRepository.getProductById(firestoreCartItem.productId)
                         if (product != null) {
-                            cartItemsList.add(
-                                CartItem(
-                                    userId = userId,
-                                    productId = firestoreCartItem.productId,
-                                    quantity = firestoreCartItem.quantity,
-                                    size = null, // Assuming size is not stored in FirestoreCartItem for now
-                                    productName = product.name,
-                                    productPrice = product.price,
-                                    productImageUrl = product.imageUrl
-                                )
-                            )
+                            document.toCartItem(userId, product as Product)
+                                ?.let { cartItemsList.add(it) }
                         } else {
                             Log.w(
                                 "CartRepository",
@@ -164,24 +174,22 @@ class FirebaseCartRepositoryImpl @Inject constructor(
 
     override suspend fun clearCart(userId: String): Result<Unit> = withContext(Dispatchers.IO) {
         if (userId.isEmpty()) {
-            Log.w("CartRepository", "User ID is empty, cannot clear cart.")
             return@withContext Result.failure(IllegalArgumentException("User ID cannot be empty"))
         }
-        val cartItemsCollectionRef = usersCollection.document(userId).collection("cartItems")
         try {
-            val snapshot = cartItemsCollectionRef.get().await()
+            val snapshot = usersCollection.document(userId).collection("cartItems").get().await()
             if (snapshot.isEmpty) {
-                return@withContext Result.success(Unit) // Nothing to clear
+                return@withContext Result.success(Unit)
             }
             val batch = firestore.batch()
             for (document in snapshot.documents) {
                 batch.delete(document.reference)
             }
             batch.commit().await()
-            return@withContext Result.success(Unit)
+            Result.success(Unit)
         } catch (e: Exception) {
-            Log.e("CartRepository", "Error clearing cart for user $userId", e)
-            return@withContext Result.failure(e)
+            Log.e("CartRepository", "Error clearing cart for user: $userId", e)
+            Result.failure(e)
         }
     }
 }

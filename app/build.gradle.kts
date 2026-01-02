@@ -47,6 +47,7 @@ android {
 
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 
     composeOptions {
@@ -69,9 +70,6 @@ dependencies {
     implementation(libs.androidxRoomRuntime)
     implementation(libs.androidxRoomKtx)
     ksp(libs.androidxRoomCompiler)
-
-    // KSP API (necesaria para Kotlin DSL)
-    ksp("com.google.devtools.ksp:symbol-processing-api:${libs.versions.ksp.get()}")
 
     // Otros (Firebase, Compose, Coil, Retrofit, etc.)
     implementation(platform(libs.firebaseBomLib))
@@ -99,19 +97,21 @@ dependencies {
     implementation(libs.androidxPagingRuntimeKtx)
     implementation(libs.androidxLifecycleViewModel)
     implementation(libs.androidxLifecycleRuntimeKtx) // Added for repeatOnLifecycle
-    implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation(libs.fragmentKtx)
 
     implementation(libs.coilLib)
     implementation(libs.lottieLib)
     implementation(libs.picassoLib)
     implementation(libs.paperdbLib)
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    ksp("com.github.bumptech.glide:compiler:4.16.0")
+    implementation(libs.glide)
+    ksp(libs.compiler)
 
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation(libs.retrofit)
+    implementation(libs.converterGson)
 
     testImplementation(libs.junitLib)
     androidTestImplementation(libs.androidxJunitLib)
     androidTestImplementation(libs.espressoCoreLib)
+
+    testImplementation(libs.mockkLib)
 }

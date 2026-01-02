@@ -4,8 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pinkpanterwear.AuthHelper
-import com.example.pinkpanterwear.di.CartRepository
+
 import com.example.pinkpanterwear.entities.CartItem
+import com.example.pinkpanterwear.repositories.CartRepository
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

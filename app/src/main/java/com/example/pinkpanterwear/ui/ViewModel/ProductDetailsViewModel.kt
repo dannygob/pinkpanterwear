@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductDetailsViewModel @Inject constructor(
     private val productRepository: com.example.pinkpanterwear.repositories.ProductRepository,
-    private val cartRepository: com.example.pinkpanterwear.di.CartRepository,
+    private val cartRepository: com.example.pinkpanterwear.repositories.CartRepository,
     private val authHelper: AuthHelper,
 ) : ViewModel() {
 

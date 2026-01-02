@@ -57,7 +57,7 @@ class UserCategoryFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             categoryViewModel.categories.collectLatest { categories ->
-                categoryAdapter.submitList(categories as List<*>?)
+                categoryAdapter.submitList(categories)
             }
         }
         viewLifecycleOwner.lifecycleScope.launch {

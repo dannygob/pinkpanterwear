@@ -1,3 +1,5 @@
+package com.example.pinkpanterwear.ui.activities
+
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.Spanned

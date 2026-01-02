@@ -17,6 +17,39 @@ class OrderRepositoryImpl @Inject constructor(
     private val ordersCollection = firestore.collection("orders")
     private val orderItemsCollection = firestore.collection("order_items")
 
+    override suspend fun createOrder(order: Order, items: List<OrderItem>): String? =
+        withContext(Dispatchers.IO) {
+            try {
+                val orderDocument = ordersCollection.document()
+                order.orderId = orderDocument.id // Set the orderId in the Order object
+
+                val batch = firestore.batch()
+                batch.set(orderDocument, order)
+
+                for (item in items) {
+                    val itemDocument = orderItemsCollection.document()
+                    val itemWithOrderId = item.copy(orderId = order.orderId)
+                    batch.set(itemDocument, itemWithOrderId)
+                }
+
+                batch.commit().await()
+                order.orderId
+            } catch (e: Exception) {
+                Log.e("OrderRepositoryImpl", "Error creating order", e)
+                null
+            }
+        }
+
+    override suspend fun getOrderById(orderId: String): Order? = withContext(Dispatchers.IO) {
+        try {
+            val documentSnapshot = ordersCollection.document(orderId).get().await()
+            documentSnapshot.toObject(Order::class.java)
+        } catch (e: Exception) {
+            Log.e("OrderRepositoryImpl", "Error fetching order by id: $orderId", e)
+            null
+        }
+    }
+
     override suspend fun getAllOrders(): List<Order> = withContext(Dispatchers.IO) {
         try {
             val querySnapshot = ordersCollection.get().await()
@@ -34,57 +67,9 @@ class OrderRepositoryImpl @Inject constructor(
                     .whereEqualTo("orderId", orderId)
                     .get().await()
                 querySnapshot.documents.mapNotNull { it.toObject(OrderItem::class.java) }
-        } catch (e: Exception) {
+            } catch (e: Exception) {
                 Log.e("OrderRepositoryImpl", "Error fetching order items for orderId: $orderId", e)
                 emptyList()
             }
         }
-
-    override suspend fun getOrderById(orderId: String): Order? = withContext(Dispatchers.IO) {
-        try {
-            val documentSnapshot = ordersCollection.document(orderId).get().await()
-            documentSnapshot.toObject(Order::class.java)
-        } catch (e: Exception) {
-            Log.e("OrderRepositoryImpl", "Error fetching order by id: $orderId", e)
-            null
-        }
-    }
-
-    override suspend fun createOrder(order: Order, items: List<OrderItem>): String? =
-        withContext(Dispatchers.IO) {
-            try {
-                val orderDocument = ordersCollection.document()
-                val batch = firestore.batch()
-
-                batch.set(orderDocument, order)
-
-                items.forEach { item ->
-                    val itemDocument = orderItemsCollection.document()
-                    batch.set(itemDocument, item)
-                }
-
-                batch.commit().await()
-                orderDocument.id
-            } catch (e: Exception) {
-                Log.e("OrderRepositoryImpl", "Error creating order", e)
-                null
-        }
-    }
-
-    override suspend fun placeOrder(order: Order): Result<String> = withContext(Dispatchers.IO) {
-        try {
-            // Assuming placeOrder might not always have items directly, or they are handled elsewhere.
-            // For now, we'll call createOrder with an empty list of items.
-            // In a real scenario, this might involve fetching cart items or other logic.
-            val orderId = createOrder(order, emptyList())
-            if (orderId != null) {
-                Result.success(orderId)
-            } else {
-                Result.failure(Exception("Failed to place order: Order ID was null"))
-            }
-        } catch (e: Exception) {
-            Log.e("OrderRepositoryImpl", "Error placing order", e)
-            Result.failure(e)
-        }
-    }
 }

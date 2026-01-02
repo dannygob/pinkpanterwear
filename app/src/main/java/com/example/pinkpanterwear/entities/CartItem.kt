@@ -1,18 +1,26 @@
 package com.example.pinkpanterwear.entities
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
 
-// No ForeignKey to ProductDbo yet, as ProductDbo isn't defined.
-// We'll assume product details are either denormalized or fetched separately.
-
-@Entity(tableName = "cart_items", primaryKeys = ["userId", "productId"])
+@Entity(
+    tableName = "cart_items",
+    primaryKeys = ["userId", "productId"],
+    foreignKeys = [
+        ForeignKey(
+            entity = Product::class,
+            parentColumns = ["id"],
+            childColumns = ["productId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
 data class CartItem(
     val userId: String,
     val productId: Int,
     val quantity: Int,
     val size: String?, // Nullable if size is optional
-    // Optional: Denormalized product fields for easier cart display
-    val productName: String,
+    val productName: String, // Denormalized for easier cart display
     val productPrice: Double,
     val productImageUrl: String
 )

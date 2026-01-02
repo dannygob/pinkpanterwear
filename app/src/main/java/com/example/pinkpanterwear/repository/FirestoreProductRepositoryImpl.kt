@@ -1,8 +1,8 @@
 package com.example.pinkpanterwear.repository
 
 import android.util.Log
-import com.example.pinkpanterwear.di.ProductRepository
 import com.example.pinkpanterwear.entities.Product
+import com.example.pinkpanterwear.repositories.ProductRepository
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.Dispatchers
@@ -52,6 +52,23 @@ class FirestoreProductRepositoryImpl @Inject constructor(
                 Log.e(
                     "FirestoreProductRepositoryImpl",
                     "Error fetching products for category '${categoryName}' from Firestore",
+                    e
+                )
+                return@withContext emptyList()
+            }
+        }
+
+    override suspend fun getAllCategoriesFromFirestore(): List<String> =
+        withContext(Dispatchers.IO) {
+            try {
+                val snapshot = productsCollection.get().await()
+                val categories =
+                    snapshot.documents.mapNotNull { it.getString("category") }.distinct()
+                return@withContext categories
+            } catch (e: Exception) {
+                Log.e(
+                    "FirestoreProductRepositoryImpl",
+                    "Error fetching categories from Firestore",
                     e
                 )
                 return@withContext emptyList()

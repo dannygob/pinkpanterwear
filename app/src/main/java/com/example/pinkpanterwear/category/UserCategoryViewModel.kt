@@ -2,7 +2,6 @@ package com.example.pinkpanterwear.category
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pinkpanterwear.entities.Category
 import com.example.pinkpanterwear.usecase.GetAllCategoriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel // Import for Hilt
 import kotlinx.coroutines.flow.MutableStateFlow

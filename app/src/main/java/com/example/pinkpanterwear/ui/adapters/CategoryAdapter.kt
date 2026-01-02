@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pinkpanterwear.R
-import com.example.pinkpanterwear.domain.entities.Category
+import com.example.pinkpanterwear.category.Category
+
 
 class CategoryAdapter(
     private val onCategoryClicked: (String) -> Unit,

@@ -57,7 +57,7 @@ class WishlistRepositoryImpl @Inject constructor(
                 if (snapshot != null) {
                     val wishlists = snapshot.documents.mapNotNull { document ->
                         val name = document.getString("name") ?: ""
-                        val productIds = document.get("productIds") as? List<*> ?: emptyList()
+                        val productIds = document.get("productIds") as? List<String> ?: emptyList()
                         Wishlist(document.id, name, productIds)
                     }
                     trySendBlocking(wishlists)

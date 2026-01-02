@@ -1,8 +1,7 @@
-package com.example.pinkpanterwear.di
+package com.example.pinkpanterwear.repositories
 
 import com.example.pinkpanterwear.entities.CartItem
 import com.example.pinkpanterwear.entities.Product
-
 
 interface CartRepository {
     suspend fun getCartItems(userId: String): List<CartItem>

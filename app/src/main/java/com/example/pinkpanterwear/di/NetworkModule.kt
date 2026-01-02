@@ -1,28 +1,32 @@
 package com.example.pinkpanterwear.di
 
-
 import com.example.pinkpanterwear.network.FakeStoreApiService
-import com.example.pinkpanterwear.network.RetrofitInstance
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class) // Or appropriate component like ViewModelComponent if scoped differently
+@InstallIn(SingletonComponent::class)
 object NetworkModule {
 
+    private const val BASE_URL = "https://fakestoreapi.com/"
+
     @Provides
-    @Singleton // Assuming FakeStoreApiService should be a singleton
-    fun provideFakeStoreApiService(): FakeStoreApiService {
-        return RetrofitInstance.api
+    @Singleton
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
     @Provides
     @Singleton
-    fun provideFirebaseFirestore(): FirebaseFirestore {
-        return FirebaseFirestore.getInstance()
+    fun provideFakeStoreApiService(retrofit: Retrofit): FakeStoreApiService {
+        return retrofit.create(FakeStoreApiService::class.java)
     }
 }
