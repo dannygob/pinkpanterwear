@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.pinkpanterwear.AuthHelper
+import com.example.pinkpanterwear.LoginResult
 import com.example.pinkpanterwear.MainActivity
 import com.example.pinkpanterwear.R
 import com.example.pinkpanterwear.ui.activities.ForgotPasswordActivity
@@ -103,20 +104,32 @@ class AuthFragment : Fragment() {
 
     private fun loginUser(email: String, password: String) {
         lifecycleScope.launch {
-            val result = authHelper.loginUser(email, password)
-            if (result.isSuccess) {
-                result.getOrNull()
-                Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                (activity as? MainActivity)?.navigateToHome()
-            } else {
-                val exception = result.exceptionOrNull()
-                Toast.makeText(
-                    requireContext(),
-                    "Login failed: ${exception?.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                // TODO: Show more specific error messages based on exception type
+            when (val result = authHelper.loginUser(email, password)) {
+                is LoginResult.Success -> {
+                    Toast.makeText(requireContext(), "Firebase login successful!", Toast.LENGTH_SHORT).show()
+                    (activity as? MainActivity)?.navigateToHome()
+                }
+                is LoginResult.Failure -> {
+                    val exception = result.exception
+                    Toast.makeText(
+                        requireContext(),
+                        "Firebase connection failed. Please try again later.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                is LoginResult.NetworkError -> {
+                    localLogin(email, password)
+                }
             }
+        }
+    }
+
+    private fun localLogin(email: String, password: String) {
+        lifecycleScope.launch {
+            // Here you can add your local login logic
+            // For now, we'll just simulate a successful login
+            Toast.makeText(requireContext(), "No internet connection, logged in locally.", Toast.LENGTH_SHORT).show()
+            (activity as? MainActivity)?.navigateToHome()
         }
     }
 
