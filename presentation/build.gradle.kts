@@ -64,4 +64,6 @@ dependencies {
     androidTestImplementation(libs.androidxEspressoCore)
     androidTestImplementation(platform(libs.androidxComposeBom))
     androidTestImplementation(libs.androidxUiTestJunit4)
+
+    testImplementation(libs.mockkLib)
 }

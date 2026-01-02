@@ -1,6 +1,5 @@
 package com.example.pinkpanterwear.ui.Fragment
 
-
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,18 +13,19 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pinkpanterwear.HomeViewModel
 import com.example.pinkpanterwear.R
 import com.example.pinkpanterwear.entities.Product
+import com.example.pinkpanterwear.ui.ViewModel.HomeViewModel
 import com.example.pinkpanterwear.ui.activities.UserProductDetailsActivity
 import com.example.pinkpanterwear.ui.adapters.ProductAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.jvm.java
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-    private val homeViewModel: HomeViewModel by viewModels() // Type will now resolve to new import
+    private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var productAdapter: ProductAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
@@ -78,11 +78,7 @@ class HomeFragment : Fragment() {
 
     private fun navigateToProductDetails(product: Product) {
         val intent = Intent(activity, UserProductDetailsActivity::class.java).apply {
-            // Assuming UserProductDetailsActivity expects PRODUCT_ID as Int after Product.id change
-            putExtra(
-                "PRODUCT_ID",
-                product.id.toString()
-            ) // API getProductDetails expects Int, but Activity might still expect String from intent
+            putExtra("PRODUCT_ID", product.id)
         }
         startActivity(intent)
     }

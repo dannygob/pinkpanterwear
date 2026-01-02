@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +31,7 @@ class AdminOrderAdapter(
     }
 
     class OrderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         private val orderIdTextView: TextView = itemView.findViewById(R.id.admin_order_id_text_view)
         private val userNameTextView: TextView =
             itemView.findViewById(R.id.admin_order_user_name_text_view)
@@ -40,32 +42,76 @@ class AdminOrderAdapter(
         private val dateTextView: TextView = itemView.findViewById(R.id.admin_order_date_text_view)
 
         fun bind(order: Order, onItemClicked: (Order) -> Unit) {
-            orderIdTextView.text = "#${order.orderId}" // Assuming orderId doesn't already have #
-            userNameTextView.text = order.userName // Or order.userId if name is not available
 
-            val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
-            // TODO: Consider storing currency code with order or using a global app setting
+            // ORDER ID
+            orderIdTextView.text = "#${order.orderId}"
+
+            // USER NAME
+            userNameTextView.text = order.userName
+
+            // TOTAL AMOUNT
+            val currencyFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
             try {
                 currencyFormat.currency = Currency.getInstance("USD")
-            } catch (e: Exception) { /* Handle cases where USD might not be available, though unlikely */
+            } catch (_: Exception) {
             }
             totalTextView.text = currencyFormat.format(order.totalAmount)
 
-            statusTextView.text = order.orderStatus
-            // TODO: Implement dynamic background tint for statusTextView based on order.orderStatus
+            // STATUS LABEL (DYNAMIC)
+            val context = itemView.context
+            val status = order.orderStatus.lowercase()
 
+            when (status) {
+
+                "pending" -> {
+                    statusTextView.text = context.getString(R.string.status_pending)
+                    statusTextView.background =
+                        ContextCompat.getDrawable(context, R.drawable.bg_status_pending)
+                    statusTextView.setTextColor(ContextCompat.getColor(context, R.color.black))
+                }
+
+                "delivered" -> {
+                    statusTextView.text = context.getString(R.string.status_delivered)
+                    statusTextView.background =
+                        ContextCompat.getDrawable(context, R.drawable.bg_status_delivered)
+                    statusTextView.setTextColor(ContextCompat.getColor(context, R.color.white))
+                }
+
+                "cancelled" -> {
+                    statusTextView.text = context.getString(R.string.status_cancelled)
+                    statusTextView.background =
+                        ContextCompat.getDrawable(context, R.drawable.bg_status_cancelled)
+                    statusTextView.setTextColor(ContextCompat.getColor(context, R.color.white))
+                }
+
+                "returned" -> {
+                    statusTextView.text = context.getString(R.string.status_returned)
+                    statusTextView.background =
+                        ContextCompat.getDrawable(context, R.drawable.bg_status_returned)
+                    statusTextView.setTextColor(ContextCompat.getColor(context, R.color.white))
+                }
+
+                else -> {
+                    statusTextView.text = order.orderStatus
+                    statusTextView.background =
+                        ContextCompat.getDrawable(context, R.drawable.bg_status_pending)
+                    statusTextView.setTextColor(ContextCompat.getColor(context, R.color.black))
+                }
+            }
+
+            // DATE
             if (order.orderDate != null) {
                 try {
                     val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-                    // sdf.timeZone = TimeZone.getTimeZone("UTC") // If dates are stored in UTC
                     dateTextView.text = sdf.format(order.orderDate.toDate())
-                } catch (e: Exception) {
-                    dateTextView.text = "Date N/A"
+                } catch (_: Exception) {
+                    dateTextView.text = context.getString(R.string.date_not_available)
                 }
             } else {
-                dateTextView.text = "Date N/A"
+                dateTextView.text = context.getString(R.string.date_not_available)
             }
 
+            // CLICK LISTENER
             itemView.setOnClickListener {
                 onItemClicked(order)
             }
@@ -78,7 +124,7 @@ class AdminOrderAdapter(
         }
 
         override fun areContentsTheSame(oldItem: Order, newItem: Order): Boolean {
-            return oldItem == newItem // Order is a data class
+            return oldItem == newItem
         }
     }
 }

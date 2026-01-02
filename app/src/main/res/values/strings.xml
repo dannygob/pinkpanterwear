@@ -1,16 +1,63 @@
 <resources>
-    <string name="app_name">PinkPanter Wear</string>
-    <string name="hello_world">Hello World!</string>
-    <string name="forgot_password">Forgot Password?</string>
-    <string name="login_register_link">Login or Register</string>
-    <string name="verify_resend_code">Resend Code</string>
+
+    <!-- App -->
+    <string name="app_name" translatable="false">PinkPanter Wear</string>
+    <string name="hello_world" translatable="false">Hello World!</string>
+    <string name="test_string" translatable="false">Test String</string>
+
+    <!-- Auth -->
+    <string name="forgot_password" translatable="false">Forgot Password?</string>
+    <string name="login_register_link" translatable="false">Login or Register</string>
+    <string name="verify_resend_code" translatable="false">Resend Code</string>
     <string name="register_intent_login_link">Already have an account? Login</string>
-    <string name="test_string">Test String</string>
-    <string name="shipping_address_format">%1$s\n%2$s\n%3$s, %4$s\n%5$s</string>
+
+    <!-- Shipping -->
+    <string name="shipping_address_format" translatable="false">%1$s\n%2$s\n%3$s, %4$s\n%5$s</string>
     <string name="shipping_address_not_provided">Shipping address not provided.</string>
-    <string name="loading_cart_summary">Loading cart summary...</string>
+
+    <!-- Cart -->
+    <string name="loading_cart_summary" translatable="false">Loading cart summary...</string>
     <string name="cart_is_empty">Cart is empty.</string>
     <string name="order_item_format">%1$d x %2$s @ %3$s = %4$s</string>
-    <string name="grand_total_format">Total: %1$s</string>
+    <string name="grand_total_format" translatable="false">Total: %1$s</string>
     <string name="order_placed_success_message">Order Placed Successfully! Order ID: %1$s</string>
+
+    <!-- Admin - General -->
+    <string name="admin_no_orders_found">No orders found.</string>
+    <string name="admin_no_products_found">No products found. Add one!</string>
+    <string name="admin_add_product" translatable="false">Add new product</string>
+
+    <!-- Admin - Order States -->
+    <string name="admin_no_new_orders">No new orders found.</string>
+    <string name="admin_no_dispatched_orders">No dispatched orders found.</string>
+    <string name="admin_no_cancelled_orders">No cancelled orders found.</string>
+    <string name="admin_no_delivered_orders">No delivered orders found.</string>
+    <string name="admin_no_returned_orders">No returned orders found.</string>
+
+    <!-- Admin - Order Details -->
+    <string name="admin_order_id">Order ID:</string>
+    <string name="admin_user" translatable="false">User:</string>
+    <string name="admin_date">Date:</string>
+    <string name="admin_total">Total:</string>
+    <string name="date_not_available">Date N/A</string>
+
+    <!-- Order Status -->
+    <string name="status_pending">Pending</string>
+    <string name="status_delivered">Delivered</string>
+    <string name="status_cancelled" translatable="false">Cancelled</string>
+    <string name="status_returned" translatable="false">Returned</string>
+
+    <!-- Admin Header -->
+    <string name="admin_profile_image">Admin profile image</string>
+    <string name="admin_name_placeholder">ADMIN NAME</string>
+    <string name="admin_email_placeholder">admin@example.com</string>
+
+    <!-- Admin Menu -->
+    <string name="admin_all_orders" translatable="false">All Orders</string>
+    <string name="admin_manage_products" translatable="false">Manage Products</string>
+    <string name="admin_cancelled_orders" translatable="false">Cancelled Orders</string>
+    <string name="admin_delivered_orders" translatable="false">Delivered Orders</string>
+    <string name="admin_returned_orders" translatable="false">Returned Orders</string>
+    <string name="admin_logout">Logout</string>
+
 </resources>

@@ -1,3 +1,63 @@
 <resources>
 
+    <!-- App -->
+    <string name="app_name">PinkPanter Wear</string>
+    <string name="hello_world">سلام الدنيا!</string>
+    <string name="test_string">جملة تجريبية</string>
+
+    <!-- Auth -->
+    <string name="forgot_password">نسيت الباسورد؟</string>
+    <string name="login_register_link">دخول ولا تسجيل</string>
+    <string name="verify_resend_code">عاود صيفط الكود</string>
+    <string name="register_intent_login_link">عندك حساب؟ دخل</string>
+
+    <!-- Shipping -->
+    <string name="shipping_address_format">%1$s\n%2$s\n%3$s، %4$s\n%5$s</string>
+    <string name="shipping_address_not_provided">العنوان ما كاينش.</string>
+
+    <!-- Cart -->
+    <string name="loading_cart_summary">كنحمّلو السلة...</string>
+    <string name="cart_is_empty">السلة خاوية.</string>
+    <string name="order_item_format">%1$d × %2$s @ %3$s = %4$s</string>
+    <string name="grand_total_format">المجموع: %1$s</string>
+    <string name="order_placed_success_message">الطلب دار بنجاح! رقم الطلب: %1$s</string>
+
+    <!-- Admin - General -->
+    <string name="admin_no_orders_found">ما كاين حتى طلب.</string>
+    <string name="admin_no_products_found">ما كاين حتى برودوي. زيد واحد!</string>
+    <string name="admin_add_product">زيد برودوي جديد</string>
+
+    <!-- Admin - Order States -->
+    <string name="admin_no_new_orders">ما كاين حتى طلب جديد.</string>
+    <string name="admin_no_dispatched_orders">ما كاين حتى طلب تصيفط.</string>
+    <string name="admin_no_cancelled_orders">ما كاين حتى طلب تلغى.</string>
+    <string name="admin_no_delivered_orders">ما كاين حتى طلب توصل.</string>
+    <string name="admin_no_returned_orders">ما كاين حتى طلب ترجع.</string>
+
+    <!-- Admin - Order Details -->
+    <string name="admin_order_id">رقم الطلب:</string>
+    <string name="admin_user">المستخدم:</string>
+    <string name="admin_date">التاريخ:</string>
+    <string name="admin_total">المجموع:</string>
+    <string name="date_not_available">التاريخ ما كاينش</string>
+
+    <!-- Order Status -->
+    <string name="status_pending">معلّق</string>
+    <string name="status_delivered">توصل</string>
+    <string name="status_cancelled">تلغى</string>
+    <string name="status_returned">ترجع</string>
+
+    <!-- Admin Header -->
+    <string name="admin_profile_image">تصويرة ديال الأدمن</string>
+    <string name="admin_name_placeholder">سميّة الأدمن</string>
+    <string name="admin_email_placeholder">admin@example.com</string>
+
+    <!-- Admin Menu -->
+    <string name="admin_all_orders">جميع الطلبات</string>
+    <string name="admin_manage_products">تسيير البرودويات</string>
+    <string name="admin_cancelled_orders">الطلبات لي تلغاو</string>
+    <string name="admin_delivered_orders">الطلبات لي توصلو</string>
+    <string name="admin_returned_orders">الطلبات لي ترجعو</string>
+    <string name="admin_logout">خروج</string>
+
 </resources>

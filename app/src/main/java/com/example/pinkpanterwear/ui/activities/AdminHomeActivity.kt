@@ -1,16 +1,21 @@
 package com.example.pinkpanterwear.ui.activities
 
-
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.example.pinkpanterwear.MainActivity
 import com.example.pinkpanterwear.R
 import com.example.pinkpanterwear.ui.Fragment.AdminAllOrdersFragment
+import com.example.pinkpanterwear.ui.Fragment.AdminCancelledOrdersFragment
+import com.example.pinkpanterwear.ui.Fragment.AdminDeliveredOrdersFragment
 import com.example.pinkpanterwear.ui.Fragment.AdminProductsFragment
+import com.example.pinkpanterwear.ui.Fragment.AdminReturnedOrdersFragment
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 
 class AdminHomeActivity : AppCompatActivity() {
 
@@ -26,40 +31,64 @@ class AdminHomeActivity : AppCompatActivity() {
 
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
-            setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24) // Ensure this drawable exists
+            setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24)
         }
 
         drawerLayout = findViewById(R.id.drawer_layout)
         navView = findViewById(R.id.nav_view)
 
+        // Load initial fragment only once
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.admin_fragment_container, AdminAllOrdersFragment())
-                .commitNow() // Use commitNow for initial fragment if possible, or ensure navView exists
+            loadFragment(AdminAllOrdersFragment())
+            navView.setCheckedItem(R.id.nav_admin_all_orders)
         }
 
         navView.setNavigationItemSelectedListener { menuItem ->
-            menuItem.isChecked = true
             drawerLayout.closeDrawers()
 
             when (menuItem.itemId) {
+
                 R.id.nav_admin_all_orders -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.admin_fragment_container, AdminAllOrdersFragment())
-                        .commit()
+                    loadFragment(AdminAllOrdersFragment())
                 }
 
                 R.id.nav_admin_products -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.admin_fragment_container, AdminProductsFragment())
-                        .commit()
+                    loadFragment(AdminProductsFragment())
                 }
-                // Add other cases here
+
+                R.id.nav_admin_cancelled_orders -> {
+                    loadFragment(AdminCancelledOrdersFragment())
+                }
+
+                R.id.nav_admin_delivered_orders -> {
+                    loadFragment(AdminDeliveredOrdersFragment())
+                }
+
+                R.id.nav_admin_returned_orders -> {
+                    loadFragment(AdminReturnedOrdersFragment())
+                }
+
+                // ⭐ LOGOUT CORRECTO PARA TU ARQUITECTURA
+                R.id.nav_admin_logout -> {
+                    FirebaseAuth.getInstance().signOut()
+
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+
+                    finish()
+                }
             }
-            // Set checked item after listener is set and fragment loaded, if first launch
-            navView.setCheckedItem(menuItem.itemId)
-            return@setNavigationItemSelectedListener true
+
+            menuItem.isChecked = true
+            true
         }
+    }
+
+    private fun loadFragment(fragment: androidx.fragment.app.Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.admin_fragment_container, fragment)
+            .commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

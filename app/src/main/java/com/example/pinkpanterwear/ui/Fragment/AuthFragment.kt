@@ -5,138 +5,93 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.view.animation.AlphaAnimation
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.pinkpanterwear.AuthHelper
-import com.example.pinkpanterwear.LoginResult
 import com.example.pinkpanterwear.MainActivity
 import com.example.pinkpanterwear.R
 import com.example.pinkpanterwear.ui.activities.ForgotPasswordActivity
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 
 class AuthFragment : Fragment() {
 
-    private lateinit var emailEditText: EditText
-    private lateinit var passwordEditText: EditText
-    private lateinit var registerButton: Button
-    private lateinit var loginButton: Button
+    private lateinit var emailEditText: TextInputEditText
+    private lateinit var passwordEditText: TextInputEditText
+    private lateinit var loginButton: MaterialButton
+    private lateinit var registerText: View
+    private lateinit var forgotText: View
 
-    private val authHelper = AuthHelper() // Instantiate AuthHelper
+    private val authHelper = AuthHelper()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
         val view = inflater.inflate(R.layout.fragment_auth, container, false)
 
-        // Get references to UI elements
-        emailEditText = view.findViewById(R.id.email_edit_text)
-        passwordEditText = view.findViewById(R.id.password_edit_text)
-        registerButton = view.findViewById(R.id.register_button)
-        loginButton = view.findViewById(R.id.login_button)
-
-        // Add click listeners for buttons
-        registerButton.setOnClickListener {
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
-
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                // Call the registration function
-                registerUser(email, password)
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Please enter email and password",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
+        emailEditText = view.findViewById(R.id.email)
+        passwordEditText = view.findViewById(R.id.password)
+        loginButton = view.findViewById(R.id.btnLogin)
+        registerText = view.findViewById(R.id.txtRegister)
+        forgotText = view.findViewById(R.id.txtForgot)
 
         loginButton.setOnClickListener {
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
+            val email = emailEditText.text.toString().trim()
+            val password = passwordEditText.text.toString().trim()
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                // Call the login function
-                loginUser(email, password)
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "Please enter email and password",
-                    Toast.LENGTH_SHORT
-                ).show()
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(requireContext(), "Introduce email y contraseña", Toast.LENGTH_SHORT)
+                    .show()
+                return@setOnClickListener
             }
+
+            animateButton(loginButton)
+            loginUser(email, password)
         }
 
-        val forgotPasswordLink: TextView = view.findViewById(R.id.forgot_password_link)
-        forgotPasswordLink.setOnClickListener {
-            val intent = Intent(activity, ForgotPasswordActivity::class.java)
-            startActivity(intent)
+        registerText.setOnClickListener {
+            Toast.makeText(
+                requireContext(),
+                "Función de registro aún no implementada",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        forgotText.setOnClickListener {
+            startActivity(Intent(requireContext(), ForgotPasswordActivity::class.java))
         }
 
         return view
     }
 
-    private fun registerUser(email: String, password: String) {
-        lifecycleScope.launch {
-            val result = authHelper.registerUser(email, password)
-            if (result.isSuccess) {
-                result.getOrNull()
-                Toast.makeText(requireContext(), "Registration successful!", Toast.LENGTH_SHORT)
-                    .show()
-                (activity as? MainActivity)?.navigateToHome()
-            } else {
-                val exception = result.exceptionOrNull()
-                Toast.makeText(
-                    requireContext(),
-                    "Registration failed: ${exception?.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                // TODO: Show more specific error messages based on exception type
-            }
-        }
-    }
-
     private fun loginUser(email: String, password: String) {
         lifecycleScope.launch {
-            when (val result = authHelper.loginUser(email, password)) {
-                is LoginResult.Success -> {
-                    Toast.makeText(requireContext(), "Firebase login successful!", Toast.LENGTH_SHORT).show()
-                    (activity as? MainActivity)?.navigateToHome()
-                }
-                is LoginResult.Failure -> {
-                    val exception = result.exception
-                    Toast.makeText(
-                        requireContext(),
-                        "Firebase connection failed. Please try again later.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                is LoginResult.NetworkError -> {
-                    localLogin(email, password)
-                }
+            val result = authHelper.loginUser(email, password)
+
+            result.onSuccess {
+                Toast.makeText(requireContext(), "Inicio de sesión exitoso", Toast.LENGTH_SHORT)
+                    .show()
+                (activity as? MainActivity)?.navigateToHome()
+            }
+
+            result.onFailure {
+                Toast.makeText(
+                    requireContext(),
+                    "Error de autenticación: ${it.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
-    private fun localLogin(email: String, password: String) {
-        lifecycleScope.launch {
-            // Here you can add your local login logic
-            // For now, we'll just simulate a successful login
-            Toast.makeText(requireContext(), "No internet connection, logged in locally.", Toast.LENGTH_SHORT).show()
-            (activity as? MainActivity)?.navigateToHome()
-        }
+    private fun animateButton(button: View) {
+        val anim = AlphaAnimation(0.6f, 1f)
+        anim.duration = 200
+        button.startAnimation(anim)
     }
-
-    // You might want to add a logout function here as well, similar to the AuthHelper
-    // private fun logoutUser() {
-    //     authHelper.logoutUser()
-    //     Toast.makeText(requireContext(), "Logged out", Toast.LENGTH_SHORT).show()
-    //     // TODO: Navigate back to login/registration screen or update UI
-    // }
 }

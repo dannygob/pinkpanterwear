@@ -1,3 +1,63 @@
 <resources>
 
+    <!-- App -->
+    <string name="app_name">PinkPanter Wear</string>
+    <string name="hello_world">Hola Mundo!</string>
+    <string name="test_string">Cadena de prueba</string>
+
+    <!-- Auth -->
+    <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="login_register_link">Iniciar sesión o registrarse</string>
+    <string name="verify_resend_code">Reenviar código</string>
+    <string name="register_intent_login_link">¿Ya tienes una cuenta? Inicia sesión</string>
+
+    <!-- Shipping -->
+    <string name="shipping_address_format">%1$s\n%2$s\n%3$s, %4$s\n%5$s</string>
+    <string name="shipping_address_not_provided">Dirección de envío no proporcionada.</string>
+
+    <!-- Cart -->
+    <string name="loading_cart_summary">Cargando resumen del carrito...</string>
+    <string name="cart_is_empty">El carrito está vacío.</string>
+    <string name="order_item_format">%1$d x %2$s @ %3$s = %4$s</string>
+    <string name="grand_total_format">Total: %1$s</string>
+    <string name="order_placed_success_message">Pedido realizado con éxito. ID del pedido: %1$s</string>
+
+    <!-- Admin - General -->
+    <string name="admin_no_orders_found">No se encontraron pedidos.</string>
+    <string name="admin_no_products_found">No se encontraron productos. ¡Agrega uno!</string>
+    <string name="admin_add_product">Agregar nuevo producto</string>
+
+    <!-- Admin - Order States -->
+    <string name="admin_no_new_orders">No se encontraron pedidos nuevos.</string>
+    <string name="admin_no_dispatched_orders">No se encontraron pedidos enviados.</string>
+    <string name="admin_no_cancelled_orders">No se encontraron pedidos cancelados.</string>
+    <string name="admin_no_delivered_orders">No se encontraron pedidos entregados.</string>
+    <string name="admin_no_returned_orders">No se encontraron pedidos devueltos.</string>
+
+    <!-- Admin - Order Details -->
+    <string name="admin_order_id">ID del pedido:</string>
+    <string name="admin_user">Usuario:</string>
+    <string name="admin_date">Fecha:</string>
+    <string name="admin_total">Total:</string>
+    <string name="date_not_available">Fecha no disponible</string>
+
+    <!-- Order Status -->
+    <string name="status_pending">Pendiente</string>
+    <string name="status_delivered">Entregado</string>
+    <string name="status_cancelled">Cancelado</string>
+    <string name="status_returned">Devuelto</string>
+
+    <!-- Admin Header -->
+    <string name="admin_profile_image">Imagen de perfil del administrador</string>
+    <string name="admin_name_placeholder">NOMBRE DEL ADMIN</string>
+    <string name="admin_email_placeholder">admin@ejemplo.com</string>
+
+    <!-- Admin Menu -->
+    <string name="admin_all_orders">Todos los pedidos</string>
+    <string name="admin_manage_products">Gestionar productos</string>
+    <string name="admin_cancelled_orders">Pedidos cancelados</string>
+    <string name="admin_delivered_orders">Pedidos entregados</string>
+    <string name="admin_returned_orders">Pedidos devueltos</string>
+    <string name="admin_logout">Cerrar sesión</string>
+
 </resources>

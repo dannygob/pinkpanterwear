@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     android:background="@color/white"
 
-    tools:context="com.example.pinkpanterwear.ui.Fragment.AdminDispatchedOrdersFragment">
+    tools:context="com.example.pinkpanterwear.ui.Fragment.AdminDeliveredOrdersFragment">
 
     <!-- Orders list -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/admin_dispatched_orders_recycler_view"
+        android:id="@+id/admin_delivered_orders_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
@@ -23,7 +23,7 @@
 
     <!-- Loading indicator -->
     <ProgressBar
-        android:id="@+id/admin_dispatched_orders_progress_bar"
+        android:id="@+id/admin_delivered_orders_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -35,11 +35,11 @@
 
     <!-- Empty message -->
     <TextView
-        android:id="@+id/admin_dispatched_orders_message_text_view"
+        android:id="@+id/admin_delivered_orders_message_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_medium"
-        android:text="@string/admin_no_dispatched_orders"
+        android:text="@string/admin_no_delivered_orders"
         android:textColor="@color/faded_black"
         android:textSize="16sp"
         android:visibility="gone"

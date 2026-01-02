@@ -1,4 +1,4 @@
-package com.example.pinkpanterwear
+package com.example.pinkpanterwear.ui.ViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,7 +24,8 @@ class HomeViewModel @Inject constructor(
     // private val _categories = MutableStateFlow<List<com.example.pinkpanterwear.domain.entities.Category>>(emptyList())
     // val categories: StateFlow<List<com.example.pinkpanterwear.domain.entities.Category>> = _categories.asStateFlow()
 
-    private val _isLoading = MutableStateFlow(false) // Consider separate loading states for products/categories
+    private val _isLoading =
+        MutableStateFlow(false) // Consider separate loading states for products/categories
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     private val _error = MutableStateFlow<String?>(null) // Consider separate error states

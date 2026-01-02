@@ -71,6 +71,10 @@ dependencies {
     implementation(libs.androidxRoomKtx)
     ksp(libs.androidxRoomCompiler)
 
+    // MockK for simulated login
+    implementation(libs.mockkLib)
+    implementation("io.mockk:mockk-android:1.13.10")
+
     // Otros (Firebase, Compose, Coil, Retrofit, etc.)
     implementation(platform(libs.firebaseBomLib))
     implementation(libs.firebaseAnalyticsLib)
@@ -112,6 +116,4 @@ dependencies {
     testImplementation(libs.junitLib)
     androidTestImplementation(libs.androidxJunitLib)
     androidTestImplementation(libs.espressoCoreLib)
-
-    testImplementation(libs.mockkLib)
 }

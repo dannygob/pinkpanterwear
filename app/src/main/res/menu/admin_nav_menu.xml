@@ -1,15 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <group android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_admin_all_orders"
             android:icon="@drawable/ic_baseline_view_list_24"
-            android:title="All Orders" />
+            android:title="@string/admin_all_orders" />
+
         <item
             android:id="@+id/nav_admin_products"
             android:icon="@drawable/ic_baseline_category_24"
-            android:title="Manage Products" />
-            <!-- ic_baseline_category_24 was created previously.
-                 A more specific icon like ic_inventory or ic_products could be added. -->
+            android:title="@string/admin_manage_products" />
+
+        <item
+            android:id="@+id/nav_admin_cancelled_orders"
+            android:icon="@drawable/ic_baseline_cancel_24"
+            android:title="@string/admin_cancelled_orders" />
+
+        <item
+            android:id="@+id/nav_admin_delivered_orders"
+            android:icon="@drawable/ic_baseline_check_circle_24"
+            android:title="@string/admin_delivered_orders" />
+
+        <item
+            android:id="@+id/nav_admin_returned_orders"
+            android:icon="@drawable/ic_baseline_undo_24"
+            android:title="@string/admin_returned_orders" />
+
+        <item
+            android:id="@+id/nav_admin_logout"
+            android:icon="@drawable/ic_baseline_exit_to_app_24"
+            android:title="@string/admin_logout" />
+
     </group>
+
 </menu>

@@ -13,11 +13,12 @@
         android:layout_height="wrap_content"
         android:padding="12dp">
 
+        <!-- ORDER ID -->
         <TextView
             android:id="@+id/admin_order_id_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Order ID:"
+            android:text="@string/admin_order_id"
             android:textAppearance="?attr/textAppearanceCaption"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -34,29 +35,29 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="#ORDER123XYZ" />
 
+        <!-- STATUS LABEL (DYNAMIC) -->
         <TextView
             android:id="@+id/admin_order_status_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:paddingStart="6dp"
-            android:paddingEnd="6dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:background="@drawable/status_background_placeholder"
+            android:background="@drawable/bg_status_pending"
+            android:fontFamily="@font/poppins_medium"
             android:textAppearance="?attr/textAppearanceBody2"
-            android:textColor="?attr/colorOnPrimary"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="4dp"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/admin_order_id_text_view"
-            tools:text="Pending"
-            tools:backgroundTint="?attr/colorPrimary"/>
+            tools:text="Pending" />
 
+        <!-- USER -->
         <TextView
             android:id="@+id/admin_order_user_name_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="User:"
+            android:text="@string/admin_user"
             android:textAppearance="?attr/textAppearanceCaption"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/admin_order_status_text_view" />
@@ -72,12 +73,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="Jane Doe (user@example.com)" />
 
+        <!-- DATE -->
         <TextView
             android:id="@+id/admin_order_date_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Date:"
+            android:text="@string/admin_date"
             android:textAppearance="?attr/textAppearanceCaption"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/admin_order_user_name_text_view" />
@@ -93,12 +95,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="2024-03-15 10:30 AM" />
 
+        <!-- TOTAL -->
         <TextView
             android:id="@+id/admin_order_total_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Total:"
+            android:text="@string/admin_total"
             android:textAppearance="?attr/textAppearanceCaption"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/admin_order_date_text_view" />
@@ -113,7 +116,7 @@
             app:layout_constraintStart_toEndOf="@id/admin_order_total_label"
             app:layout_constraintTop_toTopOf="@id/admin_order_total_label"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="\$129.97" />
+            tools:text="$129.97" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

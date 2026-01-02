@@ -1,3 +1,63 @@
 <resources>
 
+    <!-- App -->
+    <string name="app_name">PinkPanter Wear</string>
+    <string name="hello_world">你好，世界！</string>
+    <string name="test_string">测试字符串</string>
+
+    <!-- Auth -->
+    <string name="forgot_password">忘记密码？</string>
+    <string name="login_register_link">登录或注册</string>
+    <string name="verify_resend_code">重新发送验证码</string>
+    <string name="register_intent_login_link">已有账号？登录</string>
+
+    <!-- Shipping -->
+    <string name="shipping_address_format">%1$s\n%2$s\n%3$s，%4$s\n%5$s</string>
+    <string name="shipping_address_not_provided">未提供收货地址。</string>
+
+    <!-- Cart -->
+    <string name="loading_cart_summary">正在加载购物车摘要...</string>
+    <string name="cart_is_empty">购物车为空。</string>
+    <string name="order_item_format">%1$d x %2$s @ %3$s = %4$s</string>
+    <string name="grand_total_format">总计：%1$s</string>
+    <string name="order_placed_success_message">订单提交成功！订单编号：%1$s</string>
+
+    <!-- Admin - General -->
+    <string name="admin_no_orders_found">未找到订单。</string>
+    <string name="admin_no_products_found">未找到产品。请添加！</string>
+    <string name="admin_add_product">添加新产品</string>
+
+    <!-- Admin - Order States -->
+    <string name="admin_no_new_orders">未找到新订单。</string>
+    <string name="admin_no_dispatched_orders">未找到已发货订单。</string>
+    <string name="admin_no_cancelled_orders">未找到已取消订单。</string>
+    <string name="admin_no_delivered_orders">未找到已送达订单。</string>
+    <string name="admin_no_returned_orders">未找到已退货订单。</string>
+
+    <!-- Admin - Order Details -->
+    <string name="admin_order_id">订单编号：</string>
+    <string name="admin_user">用户：</string>
+    <string name="admin_date">日期：</string>
+    <string name="admin_total">总计：</string>
+    <string name="date_not_available">日期不可用</string>
+
+    <!-- Order Status -->
+    <string name="status_pending">待处理</string>
+    <string name="status_delivered">已送达</string>
+    <string name="status_cancelled">已取消</string>
+    <string name="status_returned">已退货</string>
+
+    <!-- Admin Header -->
+    <string name="admin_profile_image">管理员头像</string>
+    <string name="admin_name_placeholder">管理员姓名</string>
+    <string name="admin_email_placeholder">admin@example.com</string>
+
+    <!-- Admin Menu -->
+    <string name="admin_all_orders">所有订单</string>
+    <string name="admin_manage_products">管理产品</string>
+    <string name="admin_cancelled_orders">已取消订单</string>
+    <string name="admin_delivered_orders">已送达订单</string>
+    <string name="admin_returned_orders">已退货订单</string>
+    <string name="admin_logout">退出登录</string>
+
 </resources>
