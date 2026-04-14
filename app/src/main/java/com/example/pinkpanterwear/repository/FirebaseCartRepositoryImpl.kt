@@ -1,195 +1,109 @@
-package com.example.pinkpanterwear.repository
-
-import android.util.Log
-import com.example.pinkpanterwear.entities.CartItem
-import com.example.pinkpanterwear.entities.Product
-import com.example.pinkpanterwear.repositories.CartRepository
-import com.example.pinkpanterwear.repositories.ProductRepository
-import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
-import javax.inject.Inject
-import javax.inject.Singleton
-
-// Data class to represent the structure in Firestore
-data class FirestoreCartItem(
-    val productId: Int = 0, // Default value for Firebase deserialization
-    val quantity: Int = 0,
-    val addedAt: Timestamp? = null, // Nullable for existing items without it
-)
-
-// Mapper function to handle validation and prevent invalid data from propagating
-private fun DocumentSnapshot.toCartItem(userId: String, product: Product): CartItem? {
-    val firestoreCartItem = toObject(FirestoreCartItem::class.java)
-    if (firestoreCartItem == null) {
-        Log.e("CartMapper", "Failed to parse Firestore document to CartItem: ${this.id}")
-        return null
-    }
-    return CartItem(
-        userId = userId,
-        productId = firestoreCartItem.productId,
-        quantity = firestoreCartItem.quantity,
-        size = null, // Or handle size if available
-        productName = product.name,
-        productPrice = product.price,
-        productImageUrl = product.imageUrl
-    )
-}
-
 @Singleton
 class FirebaseCartRepositoryImpl @Inject constructor(
-    private val productRepository: ProductRepository, // Inject ProductRepository
+    private val productRepository: ProductRepository
 ) : CartRepository {
 
     private val firestore = FirebaseFirestore.getInstance()
-    private val auth =
-        FirebaseAuth.getInstance() // For getting current user if needed, though userId is passed
     private val usersCollection = firestore.collection("users")
 
-    // Fetches cart items and their product details.
     override suspend fun getCartItems(userId: String): List<CartItem> =
         withContext(Dispatchers.IO) {
-            if (userId.isEmpty()) {
-                Log.w("CartRepository", "User ID is empty, cannot fetch cart items.")
-                return@withContext emptyList()
+            require(userId.isNotBlank()) { "User ID cannot be empty" }
+
+            val snapshot =
+                usersCollection.document(userId).collection("cartItems").get().await()
+
+            snapshot.documents.mapNotNull { document ->
+                val firestoreItem = document.toObject(FirestoreCartItem::class.java)
+                    ?: return@mapNotNull null
+
+                val product =
+                    productRepository.getProductById(firestoreItem.productId)
+                        ?: return@mapNotNull null
+
+                document.toCartItem(userId, product)
             }
-            val cartItemsList = mutableListOf<CartItem>()
-            try {
-                val snapshot =
-                    usersCollection.document(userId).collection("cartItems").get().await()
-                for (document in snapshot.documents) {
-                    val firestoreCartItem = document.toObject(FirestoreCartItem::class.java)
-                    if (firestoreCartItem != null) {
-                        // Fetch full product details using ProductRepository
-                        val product = productRepository.getProductById(firestoreCartItem.productId)
-                        if (product != null) {
-                            document.toCartItem(userId, product as Product)
-                                ?.let { cartItemsList.add(it) }
-                        } else {
-                            Log.w(
-                                "CartRepository",
-                                "Product with ID ${firestoreCartItem.productId} not found, but was in cart. Skipping."
-                            )
-                            // Optionally, could remove this orphaned cart item here.
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e("CartRepository", "Error fetching cart items for user $userId", e)
-                // Return empty list or throw custom exception
-            }
-            return@withContext cartItemsList
         }
 
-    override suspend fun addCartItem(userId: String, product: Product, quantity: Int): Boolean =
-        withContext(Dispatchers.IO) {
-            if (userId.isEmpty()) {
-                Log.w("CartRepository", "User ID is empty, cannot add item to cart.")
-                return@withContext false
-            }
-            if (quantity <= 0) {
-                Log.w("CartRepository", "Quantity must be positive to add item.")
-                return@withContext false
-            }
+    override suspend fun addCartItem(
+        userId: String,
+        product: Product,
+        quantity: Int
+    ) = withContext(Dispatchers.IO) {
 
-            val cartItemRef = usersCollection.document(userId).collection("cartItems")
-                .document(product.id.toString())
+        require(userId.isNotBlank()) { "User ID cannot be empty" }
+        require(quantity > 0) { "Quantity must be greater than zero" }
 
-            try {
-                firestore.runTransaction { transaction ->
-                    val snapshot = transaction.get(cartItemRef)
-                    if (snapshot.exists()) {
-                        val existingCartItem = snapshot.toObject(FirestoreCartItem::class.java)
-                        val currentQuantity = existingCartItem?.quantity ?: 0
-                        val newQuantity = currentQuantity + quantity
-                        transaction.update(cartItemRef, "quantity", newQuantity)
-                    } else {
-                        val newItem = FirestoreCartItem(
-                            productId = product.id,
-                            quantity = quantity,
-                            addedAt = Timestamp.now()
-                        )
-                        transaction.set(cartItemRef, newItem)
-                    }
-                    null // Transaction must return null or a value
-                }.await()
-                return@withContext true
-            } catch (e: Exception) {
-                Log.e(
-                    "CartRepository",
-                    "Error adding/updating cart item for user ${userId}, product ${product.id}",
-                    e
+        val cartItemRef = usersCollection
+            .document(userId)
+            .collection("cartItems")
+            .document(product.id.toString())
+
+        firestore.runTransaction { transaction ->
+            val snapshot = transaction.get(cartItemRef)
+            if (snapshot.exists()) {
+                val currentQty =
+                    snapshot.toObject(FirestoreCartItem::class.java)?.quantity ?: 0
+                transaction.update(cartItemRef, "quantity", currentQty + quantity)
+            } else {
+                transaction.set(
+                    cartItemRef,
+                    FirestoreCartItem(
+                        productId = product.id,
+                        quantity = quantity,
+                        addedAt = Timestamp.now()
+                    )
                 )
-                return@withContext false
             }
-        }
+        }.await()
+    }
 
     override suspend fun updateItemQuantity(
         userId: String,
         productId: Int,
-        newQuantity: Int,
-    ): Boolean = withContext(Dispatchers.IO) {
-        if (userId.isEmpty()) return@withContext false
-        val cartItemRef =
-            usersCollection.document(userId).collection("cartItems").document(productId.toString())
+        newQuantity: Int
+    ) = withContext(Dispatchers.IO) {
 
-        try {
-            if (newQuantity <= 0) {
-                cartItemRef.delete().await()
-            } else {
-                cartItemRef.update("quantity", newQuantity).await()
-            }
-            return@withContext true
-        } catch (e: Exception) {
-            Log.e(
-                "CartRepository",
-                "Error updating quantity for user ${userId}, product $productId",
-                e
-            )
-            return@withContext false
+        require(userId.isNotBlank()) { "User ID cannot be empty" }
+
+        val ref = usersCollection.document(userId)
+            .collection("cartItems")
+            .document(productId.toString())
+
+        if (newQuantity <= 0) {
+            ref.delete().await()
+        } else {
+            ref.update("quantity", newQuantity).await()
         }
     }
 
-    override suspend fun removeItem(userId: String, productId: Int): Boolean =
+    override suspend fun removeItem(
+        userId: String,
+        productId: Int
+    ) = withContext(Dispatchers.IO) {
+
+        require(userId.isNotBlank()) { "User ID cannot be empty" }
+
+        usersCollection.document(userId)
+            .collection("cartItems")
+            .document(productId.toString())
+            .delete()
+            .await()
+    }
+
+    override suspend fun clearCart(userId: String) =
         withContext(Dispatchers.IO) {
-            if (userId.isEmpty()) return@withContext false
-            val cartItemRef = usersCollection.document(userId).collection("cartItems")
-                .document(productId.toString())
-            try {
-                cartItemRef.delete().await()
-                return@withContext true
-            } catch (e: Exception) {
-                Log.e(
-                    "CartRepository",
-                    "Error removing item for user ${userId}, product $productId",
-                    e
-                )
-                return@withContext false
-            }
-        }
 
-    override suspend fun clearCart(userId: String): Result<Unit> = withContext(Dispatchers.IO) {
-        if (userId.isEmpty()) {
-            return@withContext Result.failure(IllegalArgumentException("User ID cannot be empty"))
+            require(userId.isNotBlank()) { "User ID cannot be empty" }
+
+            val snapshot =
+                usersCollection.document(userId).collection("cartItems").get().await()
+
+            if (snapshot.isEmpty) return@withContext
+
+            firestore.batch().apply {
+                snapshot.documents.forEach { delete(it.reference) }
+            }.commit().await()
         }
-        try {
-            val snapshot = usersCollection.document(userId).collection("cartItems").get().await()
-            if (snapshot.isEmpty) {
-                return@withContext Result.success(Unit)
-            }
-            val batch = firestore.batch()
-            for (document in snapshot.documents) {
-                batch.delete(document.reference)
-            }
-            batch.commit().await()
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Log.e("CartRepository", "Error clearing cart for user: $userId", e)
-            Result.failure(e)
-        }
-    }
 }
+``
