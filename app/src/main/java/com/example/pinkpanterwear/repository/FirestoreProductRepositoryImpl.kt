@@ -1,6 +1,5 @@
 package com.example.pinkpanterwear.repository
 
-import android.util.Log
 import com.example.pinkpanterwear.entities.Product
 import com.example.pinkpanterwear.repositories.ProductRepository
 import com.google.firebase.firestore.FirebaseFirestore
@@ -11,123 +10,93 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class FirestoreProductRepositoryImpl @Inject constructor(
-    private val firestore: FirebaseFirestore,
+    private val firestore: FirebaseFirestore
 ) : ProductRepository {
 
     private val productsCollection = firestore.collection("products")
 
-    override suspend fun getAllProducts(): List<Product> = withContext(Dispatchers.IO) {
-        try {
+    override suspend fun getAllProducts(): List<Product> =
+        withContext(Dispatchers.IO) {
+
             val snapshot = productsCollection.get().await()
-            return@withContext snapshot.documents.mapNotNull { it.toObject(Product::class.java) }
-        } catch (e: Exception) {
-            Log.e("FirestoreProductRepositoryImpl", "Error fetching all products from Firestore", e)
-            return@withContext emptyList()
+            snapshot.documents.mapNotNull {
+                it.toObject(Product::class.java)
+            }
         }
-    }
 
     override suspend fun getProductById(productId: Int): Product? =
         withContext(Dispatchers.IO) {
-            try {
-                val documentSnapshot =
-                    productsCollection.document(productId.toString()).get().await()
-                return@withContext documentSnapshot.toObject(Product::class.java)
-            } catch (e: Exception) {
-                Log.e(
-                    "FirestoreProductRepositoryImpl",
-                    "Error fetching product $productId from Firestore",
-                    e
-                )
-                return@withContext null
-            }
+
+            require(productId > 0) { "Product ID must be greater than 0" }
+
+            productsCollection
+                .document(productId.toString())
+                .get()
+                .await()
+                .toObject(Product::class.java)
         }
 
     override suspend fun getProductsByCategory(categoryName: String): List<Product> =
         withContext(Dispatchers.IO) {
-            try {
-                val snapshot =
-                    productsCollection.whereEqualTo("category", categoryName).get().await()
-                return@withContext snapshot.documents.mapNotNull { it.toObject(Product::class.java) }
-            } catch (e: Exception) {
-                Log.e(
-                    "FirestoreProductRepositoryImpl",
-                    "Error fetching products for category '${categoryName}' from Firestore",
-                    e
-                )
-                return@withContext emptyList()
+
+            require(categoryName.isNotBlank()) { "Category cannot be empty" }
+
+            val snapshot =
+                productsCollection
+                    .whereEqualTo("category", categoryName)
+                    .get()
+                    .await()
+
+            snapshot.documents.mapNotNull {
+                it.toObject(Product::class.java)
             }
         }
 
     override suspend fun getAllCategoriesFromFirestore(): List<String> =
         withContext(Dispatchers.IO) {
-            try {
-                val snapshot = productsCollection.get().await()
-                val categories =
-                    snapshot.documents.mapNotNull { it.getString("category") }.distinct()
-                return@withContext categories
-            } catch (e: Exception) {
-                Log.e(
-                    "FirestoreProductRepositoryImpl",
-                    "Error fetching categories from Firestore",
-                    e
-                )
-                return@withContext emptyList()
-            }
+
+            val snapshot = productsCollection.get().await()
+
+            snapshot.documents
+                .mapNotNull { it.getString("category") }
+                .distinct()
         }
 
-    // Admin-Facing CRUD Operations
-    override suspend fun addProduct(product: Product): Boolean = withContext(Dispatchers.IO) {
-        if (product.id == 0) {
-            Log.e("FirestoreProductRepositoryImpl", "Product ID must be set before adding.")
-            return@withContext false
-        }
-        try {
-            productsCollection.document(product.id.toString()).set(product).await()
-            return@withContext true
-        } catch (e: Exception) {
-            Log.e(
-                "FirestoreProductRepositoryImpl",
-                "Error adding product ${product.id} to Firestore",
-                e
-            )
-            return@withContext false
-        }
-    }
+    // =========================
+    // Admin CRUD
+    // =========================
 
-    override suspend fun updateProduct(product: Product): Boolean = withContext(Dispatchers.IO) {
-        if (product.id == 0) {
-            Log.e("FirestoreProductRepositoryImpl", "Product ID must be valid for updating.")
-            return@withContext false
-        }
-        try {
-            productsCollection.document(product.id.toString()).set(product, SetOptions.merge())
+    override suspend fun addProduct(product: Product) =
+        withContext(Dispatchers.IO) {
+
+            require(product.id > 0) { "Product ID must be set before adding" }
+
+            productsCollection
+                .document(product.id.toString())
+                .set(product)
                 .await()
-            return@withContext true
-        } catch (e: Exception) {
-            Log.e(
-                "FirestoreProductRepositoryImpl",
-                "Error updating product ${product.id} in Firestore",
-                e
-            )
-            return@withContext false
         }
-    }
 
-    override suspend fun deleteProduct(productId: Int): Boolean = withContext(Dispatchers.IO) {
-        if (productId == 0) {
-            Log.e("FirestoreProductRepositoryImpl", "Invalid Product ID for deletion.")
-            return@withContext false
+    override suspend fun updateProduct(product: Product) =
+        withContext(Dispatchers.IO) {
+
+            require(product.id > 0) { "Product ID must be valid for update" }
+
+            productsCollection
+                .document(product.id.toString())
+                .set(product, SetOptions.merge())
+                .await()
         }
-        try {
-            productsCollection.document(productId.toString()).delete().await()
-            return@withContext true
-        } catch (e: Exception) {
-            Log.e(
-                "FirestoreProductRepositoryImpl",
-                "Error deleting product $productId from Firestore",
-                e
-            )
-            return@withContext false
+
+    override suspend fun deleteProduct(productId: Int) =
+        withContext(Dispatchers.IO) {
+
+            require(productId > 0) { "Invalid product ID" }
+
+            productsCollection
+                .document(productId.toString())
+                .delete()
+                .await()
         }
-    }
 }
+``
