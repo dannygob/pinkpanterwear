@@ -2,8 +2,8 @@ package com.example.pinkpanterwear.ui.ViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pinkpanterwear.category.Category
 import com.example.pinkpanterwear.usecase.GetAllCategoriesUseCase
+import com.example.pinkpanterwear.ui.state.UserCategoryUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,17 +13,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserCategoryViewModel @Inject constructor(
-    private val getAllCategoriesUseCase: GetAllCategoriesUseCase,
+    private val getAllCategoriesUseCase: GetAllCategoriesUseCase
 ) : ViewModel() {
 
-    private val _categories = MutableStateFlow<List<Category>>(emptyList())
-    val categories: StateFlow<List<Category>> = _categories.asStateFlow()
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    private val _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> = _error.asStateFlow()
+    private val _uiState =
+        MutableStateFlow<UserCategoryUiState>(UserCategoryUiState.Loading)
+    val uiState: StateFlow<UserCategoryUiState> = _uiState.asStateFlow()
 
     init {
         fetchCategories()
@@ -31,15 +26,20 @@ class UserCategoryViewModel @Inject constructor(
 
     fun fetchCategories() {
         viewModelScope.launch {
-            _isLoading.value = true
-            _error.value = null
-            try {
-                _categories.value = getAllCategoriesUseCase()
-            } catch (e: Exception) {
-                _error.value = "Failed to fetch categories: ${e.message}"
-            } finally {
-                _isLoading.value = false
+            _uiState.value = UserCategoryUiState.Loading
+
+            runCatching {
+                getAllCategoriesUseCase()
+            }.onSuccess { categories ->
+                _uiState.value =
+                    UserCategoryUiState.Success(categories)
+            }.onFailure {
+                _uiState.value =
+                    UserCategoryUiState.Error(
+                        it.message ?: "Error al cargar categorías"
+                    )
             }
         }
     }
 }
+``
