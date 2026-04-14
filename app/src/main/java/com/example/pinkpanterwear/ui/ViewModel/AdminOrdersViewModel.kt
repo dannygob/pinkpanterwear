@@ -14,17 +14,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AdminOrdersViewModel @Inject constructor(
-    private val orderRepository: OrderRepository,
+    private val orderRepository: OrderRepository
 ) : ViewModel() {
 
-    private val _orders = MutableStateFlow<List<Order>>(emptyList())
-    val orders: StateFlow<List<Order>> = _orders.asStateFlow()
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    private val _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> = _error.asStateFlow()
+    private val _uiState =
+        MutableStateFlow<AdminOrdersUiState>(AdminOrdersUiState.Loading)
+    val uiState: StateFlow<AdminOrdersUiState> = _uiState.asStateFlow()
 
     init {
         fetchAllOrders()
@@ -32,26 +27,30 @@ class AdminOrdersViewModel @Inject constructor(
 
     fun fetchAllOrders() {
         viewModelScope.launch {
-            _isLoading.value = true
-            _error.value = null
-            try {
-                val fetchedOrders = orderRepository.getAllOrders()
-                if (fetchedOrders.isEmpty()) {
-                    // Could be a valid empty state, or an indication that no orders exist yet.
-                    // For admin view, this is fine. Error state is for exceptions.
+            _uiState.value = AdminOrdersUiState.Loading
+
+            runCatching {
+                orderRepository.getAllOrders()
+            }.onSuccess { orders ->
+                _uiState.value = AdminOrdersUiState.Success(orders)
+
+                if (orders.isEmpty()) {
                     Log.i(
                         "AdminOrdersViewModel",
-                        "No orders found or repository returned empty list."
+                        "No orders found."
                     )
                 }
-                _orders.value = fetchedOrders
-            } catch (e: Exception) {
-                Log.e("AdminOrdersViewModel", "Error fetching all orders", e)
-                _error.value = "Failed to fetch orders: ${e.message}"
-                _orders.value = emptyList() // Ensure list is empty on error
-            } finally {
-                _isLoading.value = false
+            }.onFailure { throwable ->
+                Log.e(
+                    "AdminOrdersViewModel",
+                    "Error fetching all orders",
+                    throwable
+                )
+                _uiState.value = AdminOrdersUiState.Error(
+                    throwable.message ?: "Unknown error"
+                )
             }
         }
     }
 }
+``
