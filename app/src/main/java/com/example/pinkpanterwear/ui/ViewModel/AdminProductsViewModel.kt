@@ -3,8 +3,8 @@ package com.example.pinkpanterwear.ui.ViewModel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pinkpanterwear.entities.Product
 import com.example.pinkpanterwear.repositories.ProductRepository
+import com.example.pinkpanterwear.ui.state.AdminProductsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,20 +14,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AdminProductsViewModel @Inject constructor(
-    private val repository: ProductRepository,
+    private val repository: ProductRepository
 ) : ViewModel() {
 
-    private val _products = MutableStateFlow<List<Product>>(emptyList())
-    val products: StateFlow<List<Product>> = _products.asStateFlow()
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    private val _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> = _error.asStateFlow()
-
-    private val _actionFeedback = MutableStateFlow<String?>(null) // For delete status
-    val actionFeedback: StateFlow<String?> = _actionFeedback.asStateFlow()
+    private val _uiState =
+        MutableStateFlow<AdminProductsUiState>(AdminProductsUiState.Loading)
+    val uiState: StateFlow<AdminProductsUiState> = _uiState.asStateFlow()
 
     init {
         fetchAdminProducts()
@@ -35,33 +27,48 @@ class AdminProductsViewModel @Inject constructor(
 
     fun fetchAdminProducts() {
         viewModelScope.launch {
-            _isLoading.value = true
-            _error.value = null
-            try {
-                _products.value = repository.getAllProducts()
-            } catch (e: Exception) {
-                Log.e("AdminProductsVM", "Error fetching products", e)
-                _error.value = "Failed to fetch products: ${e.message}"
-            } finally {
-                _isLoading.value = false
+            _uiState.value = AdminProductsUiState.Loading
+
+            runCatching {
+                repository.getAllProducts()
+            }.onSuccess { products ->
+                _uiState.value =
+                    AdminProductsUiState.Success(products)
+            }.onFailure {
+                Log.e("AdminProductsVM", "Error fetching products", it)
+                _uiState.value =
+                    AdminProductsUiState.Error(
+                        it.message ?: "Failed to fetch products"
+                    )
             }
         }
     }
 
     fun deleteProduct(productId: Int) {
         viewModelScope.launch {
-            // Consider adding a specific loading state for delete action if it's slow
-            val success = repository.deleteProduct(productId)
-            if (success) {
-                _actionFeedback.value = "Product deleted successfully."
-                fetchAdminProducts() // Refresh the list
-            } else {
-                _actionFeedback.value = "Failed to delete product."
+            runCatching {
+                repository.deleteProduct(productId)
+            }.onSuccess { success ->
+                if (success) {
+                    _uiState.value =
+                        AdminProductsUiState.ActionMessage(
+                            "Product deleted successfully."
+                        )
+                    fetchAdminProducts()
+                } else {
+                    _uiState.value =
+                        AdminProductsUiState.Error(
+                            "Failed to delete product."
+                        )
+                }
+            }.onFailure {
+                Log.e("AdminProductsVM", "Error deleting product", it)
+                _uiState.value =
+                    AdminProductsUiState.Error(
+                        it.message ?: "Delete error"
+                    )
             }
         }
     }
-
-    fun consumeActionFeedback() {
-        _actionFeedback.value = null
-    }
 }
+``
