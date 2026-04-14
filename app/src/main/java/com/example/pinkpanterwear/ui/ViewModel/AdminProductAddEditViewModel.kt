@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pinkpanterwear.entities.Product
 import com.example.pinkpanterwear.repositories.ProductRepository
+import com.example.pinkpanterwear.ui.state.AdminProductAddEditUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,23 +16,12 @@ import kotlin.random.Random
 
 @HiltViewModel
 class AdminProductAddEditViewModel @Inject constructor(
-    private val repository: ProductRepository,
+    private val repository: ProductRepository
 ) : ViewModel() {
 
-    private val _productToEdit = MutableStateFlow<Product?>(null)
-    val productToEdit: StateFlow<Product?> = _productToEdit.asStateFlow()
-
-    private val _categories = MutableStateFlow<List<String>>(emptyList())
-    val categories: StateFlow<List<String>> = _categories.asStateFlow()
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    private val _error = MutableStateFlow<String?>(null)
-    val error: StateFlow<String?> = _error.asStateFlow()
-
-    private val _saveSuccess = MutableStateFlow(false)
-    val saveSuccess: StateFlow<Boolean> = _saveSuccess.asStateFlow()
+    private val _uiState =
+        MutableStateFlow<AdminProductAddEditUiState>(AdminProductAddEditUiState.Loading)
+    val uiState: StateFlow<AdminProductAddEditUiState> = _uiState.asStateFlow()
 
     init {
         loadCategories()
@@ -39,29 +29,48 @@ class AdminProductAddEditViewModel @Inject constructor(
 
     fun loadProductForEdit(productId: Int) {
         viewModelScope.launch {
-            _isLoading.value = true
-            _error.value = null
-            try {
-                _productToEdit.value = repository.getProductById(productId)
-                if (_productToEdit.value == null) {
-                    _error.value = "Product not found for editing."
+            _uiState.value = AdminProductAddEditUiState.Loading
+
+            runCatching {
+                repository.getProductById(productId)
+            }.onSuccess { product ->
+                if (product == null) {
+                    _uiState.value =
+                        AdminProductAddEditUiState.Error("Product not found.")
+                } else {
+                    val categories =
+                        (uiState.value as? AdminProductAddEditUiState.Content)
+                            ?.categories
+                            ?: emptyList()
+
+                    _uiState.value =
+                        AdminProductAddEditUiState.Content(
+                            product = product,
+                            categories = categories
+                        )
                 }
-            } catch (e: Exception) {
-                Log.e("AdminAddEditVM", "Error loading product $productId", e)
-                _error.value = "Failed to load product: ${e.message}"
-            } finally {
-                _isLoading.value = false
+            }.onFailure {
+                Log.e("AdminAddEditVM", "Error loading product", it)
+                _uiState.value =
+                    AdminProductAddEditUiState.Error(it.message ?: "Unknown error")
             }
         }
     }
 
     private fun loadCategories() {
         viewModelScope.launch {
-            try {
-                _categories.value = repository.getAllCategoriesFromFirestore()
-            } catch (e: Exception) {
-                Log.e("AdminAddEditVM", "Error loading categories", e)
-                _error.value = "Failed to load categories: ${e.message}"
+            runCatching {
+                repository.getAllCategoriesFromFirestore()
+            }.onSuccess { categories ->
+                _uiState.value =
+                    AdminProductAddEditUiState.Content(
+                        product = null,
+                        categories = categories
+                    )
+            }.onFailure {
+                Log.e("AdminAddEditVM", "Error loading categories", it)
+                _uiState.value =
+                    AdminProductAddEditUiState.Error(it.message ?: "Error loading categories")
             }
         }
     }
@@ -74,56 +83,48 @@ class AdminProductAddEditViewModel @Inject constructor(
         imageUrl: String,
         category: String
     ) {
-        if (name.isBlank() || description.isBlank() || priceStr.isBlank() || category.isBlank() || imageUrl.isBlank()) {
-            _error.value = "All fields must be filled."
+        if (name.isBlank() || description.isBlank() || priceStr.isBlank()
+            || category.isBlank() || imageUrl.isBlank()
+        ) {
+            _uiState.value =
+                AdminProductAddEditUiState.Error("All fields must be filled.")
             return
         }
+
         val price = priceStr.toDoubleOrNull()
         if (price == null || price <= 0) {
-            _error.value = "Invalid price."
+            _uiState.value =
+                AdminProductAddEditUiState.Error("Invalid price.")
             return
         }
 
         viewModelScope.launch {
-            _isLoading.value = true
-            _error.value = null
-            _saveSuccess.value = false
-
-            val productIdToSave = currentProductId ?: Random.nextInt(1, Int.MAX_VALUE)
-            val isNewProduct = currentProductId == null
+            _uiState.value = AdminProductAddEditUiState.Loading
 
             val product = Product(
-                id = productIdToSave,
+                id = currentProductId ?: Random.nextInt(1, Int.MAX_VALUE),
                 name = name,
                 price = price,
                 description = description,
                 category = category,
                 imageUrl = imageUrl,
-                rating = null // Admin cannot set rating
+                rating = null
             )
 
-            val success = if (isNewProduct) {
-                repository.addProduct(product)
-            } else {
-                repository.updateProduct(product)
-            }
+            val success = runCatching {
+                if (currentProductId == null)
+                    repository.addProduct(product)
+                else
+                    repository.updateProduct(product)
+            }.getOrElse { false }
 
-            if (success) {
-                _saveSuccess.value = true
-            } else {
-                _error.value =
-                    if (isNewProduct) "Failed to add product." else "Failed to update product."
-            }
-            _isLoading.value = false
+            _uiState.value =
+                if (success) {
+                    AdminProductAddEditUiState.SaveSuccess
+                } else {
+                    AdminProductAddEditUiState.Error("Failed to save product.")
+                }
         }
     }
-
-    fun consumeError() {
-        _error.value = null
-    }
-
-    fun consumeSaveSuccess() {
-        _saveSuccess.value = false
-        _productToEdit.value = null
-    }
 }
+``
